@@ -1,19 +1,19 @@
 import java.util.*;
-public class Queues {
+public class Matrixs {
     private int n;
-    private Queue[] currentQueues;
+    private Matrix[] currentQueues;
 
-    public Queues(Queue[] x) {
+    public Matrixs(Matrix[] x) {
         this.currentQueues=x;
         this.n=x.length;
 
     }
-    public static void sort (Queues x){
+    public static void sort (Matrixs x){
         Arrays.sort(x.currentQueues);
     }
-    public static void print (Queues x){
+    public static void print (Matrixs x){
         for (int i = 0; i < x.n; i++) {
-            Queue.print(x.currentQueues[i]);
+            Matrix.print(x.currentQueues[i]);
             System.out.println();
         }
         System.out.println();

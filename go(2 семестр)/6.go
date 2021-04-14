@@ -1,5 +1,7 @@
 package main
 
+import "github.com/skorobogatov/input"
+
 type Tag int
 
 const (
@@ -23,5 +25,8 @@ func lexer(expr string, lexems chan Lexem) {
 	//...
 }
 func main() {
-
+	var lexems chan Lexem
+	a := input.Gets()
+	input.Scanf("\n")
+	lexer(a, lexems)
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="01b8a04e-8023-4107-a616-f0e2865b09cf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../lab3/testlab3.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab3d/testlab3.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lab4.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../go(2 семестр)/6.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../go(2 семестр)/6.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/testlab3/Queue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/testlab3/Queues.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/testlab3/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Queue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Queues.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testlab3.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/out/production/testlab3/Queue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/out/production/testlab3/Queues.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/out/production/testlab3/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/src/Queue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/src/Queues.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/src/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testlab3/testlab3.iml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1qWDLvKpPcGklMsClPxOEUIGwpt" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="lab4" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="01b8a04e-8023-4107-a616-f0e2865b09cf" name="Default Changelist" comment="" />
+      <created>1617186413078</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617186413078</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>
