@@ -9,6 +9,22 @@ public class PictureForm {
     private JSpinner spinner1;
     private JTextField textField1;
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
+
+    public  class  CanvasPanel extends JPanel {
+        private int radius = 20;
+        public void setRadius(int r){
+            radius = r ;
+            repaint();
+        }
+        protected  void  paintComponent(Graphics g){
+            super . paintComponent ( g ) ;
+            g.setColor(Color.RED);
+            g.drawOval(10,10,radius,radius);
+        }
+    }
     public PictureForm() {
         spinner1.addChangeListener(new ChangeListener() {
             @Override
