@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ter/git/BMSTU/c++(2 семестр)/lab8/main.cpp
+iostream
+-
+structStack.h
+/home/ter/git/BMSTU/c++(2 семестр)/lab8/structStack.h
+
+/home/ter/git/BMSTU/c++(2 семестр)/lab8/structStack.h
+iostream
+-
+cassert
+-
+iomanip
+-
+
