@@ -8,23 +8,23 @@ using namespace std;
 #include <cassert>
 
 #include <iomanip>
-template <class SType> class stack {
+template <class T> class stack {
     int size;
-    SType *vals;
+    T *vals;
     int top;
 public:
     stack(int);
-    void push(SType i);
-    SType pop();
+    void push(T i);
+    T pop();
 };
-template <class SType> stack<SType>::stack(int s)
+template <class T> stack<T>::stack(int s)
 {
     size=s;
-    vals= new SType[size];
+    vals= new T[size];
     top = 0;
     cout << "Initialized\n";
 }
-template <class SType> void stack<SType>::push(SType i)
+template <class T> void stack<T>::push(T i)
 {
     if (top == size) {
         cout << "error - stack is full. \n";
@@ -35,7 +35,7 @@ template <class SType> void stack<SType>::push(SType i)
         top++;
     }
 }
-template <class SType> SType stack<SType>::pop()
+template <class T> T stack<T>::pop()
 {
     if(top == 0) {
         cout << "error - stack empty \n";
