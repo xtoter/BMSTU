@@ -29,12 +29,6 @@ public:
         denominator = 1;
     }
 
-/*public:
-    String toString() {
-        int thisGcd = gcd(numerator, denominator);
-
-        return (numerator/thisGcd + "/" + denominator/thisGcd);
-    }*/
 private:
     static int gcd (int n, int d) {
         if (d==0)
@@ -89,5 +83,6 @@ public:
     Fractions static multiply(Matrix matrix, int m, int k);
     int static get_num_of_lines(Matrix matrix);
     int static get_num_of_columns(Matrix matrix);
+
 };
 #endif //LAB7_DECLARATION_H

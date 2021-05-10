@@ -17,9 +17,7 @@ int main() {
     Matrix matrix(n, m);
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-            std::cin >> a;
-            std::cin >> b;
-            matrix[i][j] = *new Fractions(a, b);
+            matrix[i][j] = *new Fractions(rand(), rand());
         }
     }
     std::cout << matrix;

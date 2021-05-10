@@ -17,9 +17,6 @@ Matrix::Matrix(int m, int n) {
     for (int i = 0; i < n; i++) {
         matrix[i] = new Fractions(n);
     }
-
-
-
 }
 
 /*Matrix::~Matrix() {
@@ -34,33 +31,7 @@ Matrix::Row::Row(Matrix *matrix, int i) {
     this->i = i;
 }
 
-/*Matrix::Matrix(const Matrix &obj): n(obj.n)  {
-    a = new Fractions *[m];
-    for (int j=0; j<obj.m; j++)
-        a = new Fractions *[obj.n];
 
-    std::copy(obj.a, obj.a + m, a);
-}
-
-Matrix& Matrix::operator= (const Matrix &obj) {
-    if (this != &obj) {
-
-        Fractions **new_a = new Fractions *[obj.m];
-        for (int i=0; i<obj.m; i++)
-            new_a = new Fractions *[obj.n];
-
-        std::copy(obj.a, obj.a + obj.m, new_a);
-        for (int i = 0; i < m; i++) {
-            delete[] a[i];
-        }
-        delete[] a;
-        n = obj.n;
-        m = obj.m;
-
-        a = new_a;
-    }
-    return *this;
-}*/
 
 Fractions Matrix::multiply(Matrix matrix, int m, int k) {
     for (int i=0; i<matrix.n; i++) {

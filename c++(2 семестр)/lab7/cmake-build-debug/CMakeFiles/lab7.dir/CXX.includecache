@@ -10,7 +10,9 @@
 iostream
 -
 
-/home/ter/git/BMSTU/c++(2 семестр)/lab7/main.cpp
+/home/ter/git/BMSTU/c++(2 семестр)/lab7/implementation.cpp
+algorithm
+-
 iostream
 -
 declaration.h
