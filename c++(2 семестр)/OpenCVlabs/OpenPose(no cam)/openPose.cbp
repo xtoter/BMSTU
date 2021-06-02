@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="openPose"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/ter/git/learnopencv/OpenPose"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/ter/git/learnopencv/OpenPose"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="OpenPoseVideo">
+				<Option output="/home/ter/git/learnopencv/OpenPose/OpenPoseVideo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ter/git/learnopencv/OpenPose"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include/opencv4"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 OpenPoseVideo"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="OpenPoseVideo/fast">
+				<Option output="/home/ter/git/learnopencv/OpenPose/OpenPoseVideo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ter/git/learnopencv/OpenPose"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include/opencv4"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 OpenPoseVideo/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/ter/git/learnopencv/OpenPose"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="OpenPoseImage">
+				<Option output="/home/ter/git/learnopencv/OpenPose/OpenPoseImage" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ter/git/learnopencv/OpenPose"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include/opencv4"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 OpenPoseImage"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="OpenPoseImage/fast">
+				<Option output="/home/ter/git/learnopencv/OpenPose/OpenPoseImage" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ter/git/learnopencv/OpenPose"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include/opencv4"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 OpenPoseImage/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/ter/git/learnopencv/OpenPose/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/ter/git/learnopencv/OpenPose/OpenPoseImage.cpp">
+			<Option target="OpenPoseImage"/>
+		</Unit>
+		<Unit filename="/home/ter/git/learnopencv/OpenPose/OpenPoseVideo.cpp">
+			<Option target="OpenPoseVideo"/>
+		</Unit>
+		<Unit filename="/home/ter/git/learnopencv/OpenPose/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/ter/git/learnopencv/OpenPose/../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
+		</Unit>
+		<Unit filename="/home/ter/git/learnopencv/OpenPose/../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
+		</Unit>
+		<Unit filename="/home/ter/git/learnopencv/OpenPose/../../../../../usr/local/lib/cmake/opencv4/OpenCVModules-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
+		</Unit>
+		<Unit filename="/home/ter/git/learnopencv/OpenPose/../../../../../usr/local/lib/cmake/opencv4/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
