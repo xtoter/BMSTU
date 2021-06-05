@@ -73,3 +73,4 @@ func main() {
 	x = find_bridges(x)
 	fmt.Println(x.counter)
 }
+
