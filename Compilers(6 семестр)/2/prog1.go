@@ -19,10 +19,6 @@ func replace(file *ast.File) {
 
 		if node, ok := node.(*ast.Ident); ok {
 			if node.Name == "FUNCNAME" {
-
-				// Parent is stack[len(stack)-1]
-
-				//				fmt.Println("found name")
 				if reflect.TypeOf(node.Name) != reflect.TypeOf("") {
 					fmt.Println("error")
 				}
@@ -30,9 +26,6 @@ func replace(file *ast.File) {
 				for i := len(stack) - 1; i >= 0; i-- {
 					if k, ok := stack[i].(*ast.FuncDecl); ok {
 						replacestring = k.Name.String()
-						//fmt.Println("axaxa ", k.Name)
-					} else {
-						//fmt.Printf("%T\n", stack[i])
 					}
 				}
 				if !was && replacestring == "(global)" {
@@ -54,7 +47,6 @@ func replace(file *ast.File) {
 		if err != nil {
 			fmt.Println("An error occurred:", err)
 			os.Exit(1)
-			//return false
 		}
 
 	}
@@ -72,7 +64,6 @@ func main() {
 		if format.Node(os.Stdout, fset, file) != nil {
 			fmt.Printf("Formatter error: %v\n", err)
 		}
-		//ast.Fprint(os.Stdout, fset, file, nil)
 	} else {
 		fmt.Printf("Errors in %s\n", os.Args[1])
 	}
