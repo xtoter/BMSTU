@@ -1,0 +1,18 @@
+$EXTERN LoadFile;
+$EXTERN LoadExpr;
+$ENTRY GO {
+	=<Prout <PostfixDecompile <LoadExpr  <Arg 1>>>>;
+}
+IsBinOp {
+ "+" = True;
+ "-" = True;
+ "*" = True;
+ "/" = True;
+ e.0 = False;
+}
+PostfixDecompile {
+	e.prev0 t.val1 t.val2 s.Op e.other2, <IsBinOp s.Op> : True =
+	 <PostfixDecompile e.prev0 (t.val1 s.Op t.val2) e.other2 > ; 
+	e.0 = e.0;
+}
+

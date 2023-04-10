@@ -73,7 +73,7 @@ func nextToken(in []lexem) (lexem, bool) {
 }
 func lexer(in []lexem) {
 	pattern1 := regexp.MustCompile(`mov|eax`)
-	pattern2 := regexp.MustCompile(`[0-9a-fA-F]+h`)
+	pattern2 := regexp.MustCompile(`[0-9]+[0-9a-fA-F]*h`)
 	pattern3 := regexp.MustCompile(`[0-9]+`)
 	pattern4 := regexp.MustCompile(`[a-zA-Z\p{L}]+[a-zA-Z\p{L}0-9]*`)
 	lexem, cond := lexem{}, true
