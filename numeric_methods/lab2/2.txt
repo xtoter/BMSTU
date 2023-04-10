@@ -1,0 +1,147 @@
+eps:  0.1
+iterations:  2
+result:  1.7272219045575166
+with Richardson:  1.718318841921747
+iterations:  2
+result:  1.713815279771087
+with Richardson:  1.7182494674780466
+iterations:  2
+result:  1.7182841546998966
+with Richardson:  1.7182818422184398
+
+
+eps:  0.01
+iterations:  2
+result:  1.7272219045575166
+with Richardson:  1.718318841921747
+iterations:  2
+result:  1.713815279771087
+with Richardson:  1.7182494674780466
+iterations:  2
+result:  1.7182841546998966
+with Richardson:  1.7182818422184398
+
+
+eps:  0.001
+iterations:  4
+result:  1.7188411285799945
+with Richardson:  1.718281974051892
+iterations:  4
+result:  1.7180021920526605
+with Richardson:  1.7182817010716516
+iterations:  2
+result:  1.7182841546998966
+with Richardson:  1.7182818422184398
+
+
+eps:  0.0001
+iterations:  6
+result:  1.7183167868500941
+with Richardson:  1.7182818290280164
+iterations:  5
+result:  1.7182119133838587
+with Richardson:  1.718281820494258
+iterations:  2
+result:  1.7182841546998966
+with Richardson:  1.7182818422184398
+
+
+eps:  1e-05
+iterations:  7
+result:  1.718290568083478
+with Richardson:  1.7182818284946058
+iterations:  7
+result:  1.7182774586501623
+with Richardson:  1.7182818284279289
+iterations:  2
+result:  1.7182841546998966
+with Richardson:  1.7182818422184398
+
+
+eps:  1.0000000000000002e-06
+iterations:  9
+result:  1.7182823746860942
+with Richardson:  1.7182818284591856
+iterations:  9
+result:  1.718281555345535
+with Richardson:  1.718281828458925
+iterations:  3
+result:  1.718281974051892
+with Richardson:  1.7182818286753583
+
+
+
+---------------------------------------------------
+
+eps:  0.1
+iterations:  2
+result:  1.2809736553046536
+with Richardson:  1.3377246288930076
+iterations:  2
+result:  1.3598743791759202
+with Richardson:  1.3294236468779885
+iterations:  1
+result:  1.3377246288930074
+with Richardson:  1.426906270819208
+
+
+eps:  0.01
+iterations:  4
+result:  1.3301169516003375
+with Richardson:  1.3333479297203543
+iterations:  3
+result:  1.339809885960388
+with Richardson:  1.3331217215552105
+iterations:  2
+result:  1.333574137885498
+with Richardson:  1.3332974384849974
+
+
+eps:  0.001
+iterations:  5
+result:  1.3325299169678395
+with Richardson:  1.3333342387570069
+iterations:  5
+result:  1.3337351262403574
+with Richardson:  1.3333325408753625
+iterations:  2
+result:  1.333574137885498
+with Richardson:  1.3332974384849974
+
+
+eps:  0.0001
+iterations:  7
+result:  1.3332831330474162
+with Richardson:  1.3333333368618554
+iterations:  7
+result:  1.3333584338070514
+with Richardson:  1.3333333302458232
+iterations:  3
+result:  1.333347929720354
+with Richardson:  1.3333328491760112
+
+
+eps:  1e-05
+iterations:  9
+result:  1.3333301958671442
+with Richardson:  1.3333333333471138
+iterations:  8
+result:  1.3333396083070557
+with Richardson:  1.3333333331403905
+iterations:  4
+result:  1.3333342387570069
+with Richardson:  1.333333326026117
+
+
+eps:  1.0000000000000002e-06
+iterations:  10
+result:  1.333332548967433
+with Richardson:  1.333333333334196
+iterations:  10
+result:  1.3333337255163624
+with Richardson:  1.3333333333325763
+iterations:  4
+result:  1.3333342387570069
+with Richardson:  1.333333326026117
+
+

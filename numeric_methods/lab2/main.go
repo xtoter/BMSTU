@@ -53,24 +53,31 @@ func calculate(eps float64, k int, f func(a, b float64, n int, x func(x float64)
 		r = richardson(h1, h2, k)
 		iteration++
 	}
-	fmt.Println("iterations: ", iteration)
-	fmt.Println("result: ", h1)
+	fmt.Println("Iterations: ", iteration)
+	fmt.Println("Result: ", h1)
+	fmt.Println("Richardson: ", r)
 	fmt.Println("with Richardson: ", h1+r)
 }
 func main() {
 	for eps := 0.1; eps > 0.000001; eps /= 10 {
-		fmt.Println("eps: ", eps)
+		fmt.Println("\033[34m", "eps: ", eps, "\033[0m")
+		fmt.Println("\033[31m", "\ttrapezoid: ", "\033[0m")
 		calculate(eps, 2, trapezoid, 0, 1, fx)
+		fmt.Println("\033[31m", "\tmiddleRectangle: ", "\033[0m")
 		calculate(eps, 2, middleRectangle, 0, 1, fx)
+		fmt.Println("\033[31m", "\tSimpson: ", "\033[0m")
 		calculate(eps, 4, simpson, 0, 1, fx)
 		fmt.Println("\n")
 	}
 	///
 	fmt.Println("\n---------------------------------------------------\n")
 	for eps := 0.1; eps > 0.000001; eps /= 10 {
-		fmt.Println("eps: ", eps)
+		fmt.Println("\033[34m", "eps: ", eps, "\033[0m")
+		fmt.Println("\033[31m", "\ttrapezoid: ", "\033[0m")
 		calculate(eps, 2, trapezoid, 0, math.Pi, fx1)
+		fmt.Println("\033[31m", "\tmiddleRectangle: ", "\033[0m")
 		calculate(eps, 2, middleRectangle, 0, math.Pi, fx1)
+		fmt.Println("\033[31m", "\tSimpson: ", "\033[0m")
 		calculate(eps, 4, simpson, 0, math.Pi, fx1)
 		fmt.Println("\n")
 	}
