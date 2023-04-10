@@ -1,0 +1,32 @@
+$EXTERN LoadFile;
+$EXTERN ArgList;
+$ENTRY GO {
+	=<OpenFile <ArgList>>
+	;=<Prout <Arg 1>>
+	;=<Prout <LoadFile '1.txt'>>
+}
+OpenFile {
+	(e.prog)(e.arg)(e.filename) = <Bruteforce  e.arg(<LoadFile e.filename>)>;
+	(e.prog)(e.arg)(e.filename)e.other = <OpenFileRec (e.prog)(e.arg)(e.filename)e.other>;
+	e.0 = <ReadConsole e.0>	
+}
+ReadConsole {
+	(e.prog)(e.arg) = <ReadConsole (e.prog)(e.arg)<Bruteforce  e.arg((<Card>))>> ;
+	e.0 = 
+}
+OpenFileRec {
+	(e.prog)(e.arg)(e.filename)e.other,<Bruteforce  (e.filename)e.arg(<LoadFile e.filename>)> : '' = <OpenFileRec (e.prog)(e.arg)e.other>;
+	e.0 = 
+}
+Bruteforce {
+	e.value((0 ))= 1;
+	(e.namefile)e.value((e.1)e.other),<Search (e.namefile)e.value(e.1)> : '' = <Bruteforce (e.namefile)e.value(e.other)>;
+	e.value((e.1)e.other),<Search e.value(e.1)> : '' = <Bruteforce e.value(e.other)>;
+	e.value = 
+}
+Search {
+
+	(e.namefile)e.value(e.first e.value e.second) = <Prout e.namefile':' e.first e.value e.second>;
+	e.value(e.first e.value e.second) = <Prout  e.first e.value e.second>;
+	e.1 =
+}

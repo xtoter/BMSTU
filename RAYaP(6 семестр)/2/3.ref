@@ -1,0 +1,59 @@
+$EXTERN LoadExpr;
+$ENTRY GO {
+	=<Prout <Parse ((X "*" Y) "+" ((2 "*" X) "+" (3 "*" Y))) X>>
+	<Prout <Parse ((X "*" Y) "+" ((2 "*" X) "+" (3 "*" Y))) Y>>
+	<Prout <Parse (1 "/" X) X>>
+	<Prout <Parse<LoadExpr  <Arg 1>>>>;
+}
+
+Parse{
+	(e.0) e.1 = <ParseNew (e.0)(e.1)>;
+}
+
+MulOp{
+
+	(e.expr1)(e.expr2), e.expr1 : 0 = 0;
+	(e.expr1)(e.expr2), e.expr2 : 0 = 0;
+	(e.expr1)(e.expr2), e.expr1 : 1 = e.expr2;
+	(e.expr1)(e.expr2), e.expr2 : 1 = e.expr1;
+	(e.expr1)(e.expr2) = (e.expr1 "*" e.expr2);
+
+}
+SumOp{
+	((e.1) (e.2)), e.2 : 0 = e.1;
+	((e.1) (e.2)), e.1 : 0 = e.2;
+	((e.1) (e.2)) = (e.1 "+" e.2);
+}
+SubOp{
+	((e.1)  (e.2)), e.2 : 0 = (e.1);
+	((e.1)  (e.2)), e.1 : 0 = ("-" e.2);
+	((e.1)  (e.2)) = (e.1 "-" e.2);
+}
+DivOp{
+	(e.expr1)(e.expr2), e.expr2 : 0 = <Prout "Error divide on zero">;
+	(e.expr1)(e.expr2), e.expr1 : 0 = 0;
+	(e.expr1)(e.expr2), e.expr2 : 1 = e.expr1;
+	(e.expr1)(e.expr2) = (e.expr1 "/" e.expr2);
+}
+
+ParseNew{
+	e.0 =/*<Prout e.0>*/ <ParseNewO e.0>;
+}
+ParseNewO{
+	
+	(t.minus (e.0))(e.val), t.minus :"-"  = (t.minus <ParseNew e.0(e.val)>);
+	(e.expr1 t.sign e.expr2)(e.val), t.sign :"+" = <SumOp ((<ParseNew e.expr1(e.val)>)  (<ParseNew e.expr2(e.val)>))>; /* при + и - разбиваем на подвыражения */
+	(e.expr1 t.sign e.expr2)(e.val), t.sign :"-" = <SubOp ((<ParseNew e.expr1(e.val)>)  (<ParseNew e.expr2(e.val)>))>;
+	(e.expr1 t.sign e.expr2)(e.val), t.sign :"*" = <SumOp ((<MulOp (<ParseNew e.expr1(e.val)>) (e.expr2)>)(<MulOp (e.expr1)  (<ParseNew e.expr2(e.val)>)>))>;
+	(e.expr1 t.sign e.expr2)(e.val), t.sign :"/" = 
+		<DivOp
+			(<MulOp (<SubOp((<MulOp (<ParseNew e.expr1(e.val)>) (e.expr2)>) (e.expr1))>) (<ParseNew e.expr2(e.val)>)>)
+			(<MulOp (e.expr2) (e.expr2)>)
+		>;
+	e.0(e.0) = 1;
+	(e.0) = 0 <Prout e.0>;
+	(e.0)(e.0) = 1;
+	e.0 = 0;
+	= ;
+	e.0 = <Prout 'a'><Prout e.0>;
+}
