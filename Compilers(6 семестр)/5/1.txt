@@ -1,0 +1,42 @@
+digraph {
+    rankdir=LR ;
+    Start0 [shape=circle]
+    Number1 [shape=doublecircle]
+    WhiteSpace2 [shape=doublecircle]
+    Ident3 [shape=doublecircle]
+    keyword4 [shape=doublecircle]
+    u7 [shape=circle]
+    n8 [shape=circle]
+    s9 [shape=circle]
+    e10 [shape=circle]
+    word5 [shape=circle]
+    STR_Literal6 [shape=doublecircle]
+    
+    Start0 -> Number1[label = "DIGIT"]
+    Number1 -> Number1[label = "DIGIT"]
+    
+    Start0 -> WhiteSpace2[label = "_,\\t,\\n"]
+    WhiteSpace2 -> WhiteSpace2[label =  "_,\\t,\\n"]
+
+    Start0 -> Ident3[label = "Letter\\u"]
+    
+    Start0 -> u7[label = "u"]
+    u7 -> n8[label = "n"]
+    n8 -> s9[label = "s"]
+    s9 -> e10[label = "e"]
+    e10 -> keyword4[label = "t"]
+    
+    Start0 -> s9[label = "s"]
+    
+    Start0 -> word5[label = "("]
+    word5 -> word5[label = "Letter"]
+    word5 -> STR_Literal6[label = ")"]
+    
+    u7 -> Ident3[label = "{Letter|digit}{\\n}"]
+    n8 -> Ident3[label = "{Letter|digit}{\\s}"]
+    s9 -> Ident3[label = "{Letter|digit}{\\e}"]
+    e10 -> Ident3[label = "{Letter|digit}{\\t}"]
+    keyword4 -> Ident3[label = "Letter"]
+    
+    Ident3 -> Ident3[label = "Letter|digit"]
+}
