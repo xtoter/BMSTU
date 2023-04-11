@@ -6,7 +6,7 @@ import (
 )
 
 func fx(x float64) float64 {
-	return math.Exp(x)
+	return math.Sin(x)*math.Cos(x/2)
 }
 func fx1(x float64) float64 {
 	return math.Sin(x) * math.Cos(x/2)
