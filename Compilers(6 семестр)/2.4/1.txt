@@ -1,0 +1,31 @@
+grammar  ->  rule { rule } ;
+
+rule  ->  Nonterminal  "(" expression ")" ;
+
+expression  ->  term { (",") term } ;
+
+term  ->  factor { factor } ;
+
+factor  ->  Terminal | Terminal NonTerminal | option | "(" Nonterminal ")" ;
+
+option  -> NonTerminal "{" "(" Terminals")" NonTerminal"}" ;
+
+Terminals -> Terminal { (",") Terminal }
+
+Nonterminal  ->  uppercase_letter { uppercase_letter } ;
+
+Terminal  ->    '"' character '"' ;
+
+uppercase_letter  ->  "A" | "B" | ... | "Z" ;
+
+lowercase_letter  ->  "a" | "b" | ... | "z" ;
+
+
+character  ->  lowercase_letter { lowercase_letter } ;
+
+
+/* варианты разделяются запятыми */
+E  ( T {("+","-") T} )
+T  ( F {("*","/") F} )
+F  ( "n", "-" F,
+     "(" E ")" )

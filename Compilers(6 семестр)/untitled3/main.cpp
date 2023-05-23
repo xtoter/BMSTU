@@ -314,7 +314,7 @@ int main() {
     }
     program.erase(program.size()-1,1);
     in.close();     // закрываем файл
-    cout<< program<<"\n";
+    //cout<< program<<"\n";
     Compiler compiler;
     Scanner scanner(program, &compiler);
     Token token;

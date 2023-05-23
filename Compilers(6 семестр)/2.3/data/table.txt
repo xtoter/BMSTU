@@ -1,0 +1,20 @@
+/* аксиома помечена звёздочкой */
+  F  ("n")
+     ("(" E ")")
+  T  (F T')
+  T' ("*" F T') ()
+* E  (T E')
+  E' ("+" T E') ()
+
+Grammar -> Rule Grammar|
+Rule -> Nonterm Exprbracket | Axiom Nonterm Exprbracket
+Exprbracket -> ( Expr) Exprbracket |
+Expr -> Operation Nonterms | Nonterms | NestedNonTerm | Terminal
+NestedNonTerm -> "(" NonTerm ")"
+Nonterms -> Nonterm Nonterm
+Operation -> "+" | "*"
+Terminal -> " a-z "
+Axiom -> *
+Nonterm -> A-Z
+
+
