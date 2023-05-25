@@ -1,0 +1,169 @@
+$EXTERN LoadFile;
+$EXTERN LoadExpr;
+$ENTRY GO {
+    
+	= <Start <LoadExpr 'gcd.txt'>> 
+    /*= <Prout<Epilog () () >>*/
+    /*= <Start>*/
+   
+}
+
+
+GenExpr {
+    s.Number, <Type s.Number> : 'N' e.1 = s.Number;
+    s.Name, <GetConst s.Name> : Found s.Value = s.Value;
+    s.Name, <GetLocal s.Name> : Found s.Sign s.Offset,
+        ('+' ADD) ('-' SUB) : e.1 (s.Sign s.Operation) e.2
+            = GETBP s.Offset s.Operation;
+    s.Name = '_' s.Name; 
+    (L t.Expr) = <GenExpr t.Expr> READ;
+    ("-" t.Expr) = <GenExpr t.Expr> NEG;
+    (t.Left s.BinOp t.Right),
+        ("+" ADD) ("-" SUB) ("*" MUL) ("/" DIV) ("%" MOD)
+        ("|" BITOR) ("&" BITAND) ("~" BITNOT)
+        : e.1 (s.BinOp s.Command) e.2
+            = <GenExpr t.Left> <GenExpr t.Right> s.Command;
+    (call t.Func e.Args)
+        = <CompileArgs e.Args> <GenExpr t.Func> CALL;   
+        e.0 = <Prout "DEBUG" e.0>
+}
+CompileArgs {
+    e.Args t.Arg = <GenExpr t.Arg> <CompileArgs e.Args>;
+    =;
+}
+GetConst{
+    e.adr, <Dg e.adr> :  {
+          = "NotFound";
+    e.any =<Br e.adr '=' e.any>  "Found" e.any;
+    }
+}
+/*todo*/
+GetLocal{
+    e.adr, <Dg e.adr> :  {
+          = "NotFound";
+    e.any = <Br e.adr '=' e.any>  "Found" "-" e.any;
+    }
+}
+CalculateBool{
+    TRUE = TRUE;
+    FALSE = FALSE;
+    (t.expr1 s.Op t.expr2), s.Op :{
+        '<', <Compare t.expr1 t.expr2> : {
+            '-' = TRUE;
+            e.oth = FALSE;
+        };
+        '>', <Compare t.expr1 t.expr2> : {
+            '+' = TRUE;
+            e.oth = FALSE;
+        };
+        "==", <Compare t.expr1 t.expr2> : {
+            '0' = TRUE;
+            e.oth = FALSE;
+        };
+        "<>", <Compare t.expr1 t.expr2> : {
+            '0' = FALSE;
+            e.oth = TRUE;
+        };
+        "<=", <Compare t.expr1 t.expr2> : {
+            '+' = FALSE;
+            e.oth = TRUE;
+        };
+        ">=", <Compare t.expr1 t.expr2> : {
+            '-' = FALSE;
+            e.oth = TRUE;
+        };
+    };
+    (not t.BoolExpr),t.BoolExpr : {
+        TRUE = FALSE;
+        FALSE = TRUE;
+    };
+    (t.expr1 'and' t.expr2), t.expr1 :{
+        TRUE, t.expr2 : {
+            TRUE = TRUE;
+            FALSE = FALSE;
+        };
+        FALSE, t.expr2 : {
+            FALSE = FALSE;
+            TRUE = FALSE;
+        };
+    };
+    (t.expr1 'or' t.expr2), t.expr1 :{
+        TRUE, t.expr2 : {
+            TRUE = TRUE;
+            FALSE = TRUE;
+        };
+        FALSE, t.expr2 : {
+            FALSE = FALSE;
+            TRUE = TRUE;
+        };
+    };
+
+} 
+FunctionCompile{ 
+    ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
+    ":_ " s.Name <Prolog (e.Params)(e.Vars)>  <Code (e.Body)> 
+        <Epilog (e.Params) (e.Vars)>; 
+}
+CalculateSizeVar{
+    ( e.other (e.val)) t.Counter,<Br e.val '=' t.Counter>: = <CalculateSizeVar (e.other)  <Add 1 t.Counter>> ;
+    () t.Counter = t.Counter;
+}
+CalculateSizeParam{
+    ( e.other t.val) t.Counter,<Br t.val '=' t.Counter>: = <CalculateSizeParam (e.other)  <Add 1 t.Counter>> ;
+    () t.Counter = t.Counter;
+}
+Prolog{
+    (e.Params) (e.Vars), <CalculateSizeVar (e.Vars) 0>:{
+        0 = <OutProgram "DUP" "GETBP" "GETSP" "SETBP" >;
+        t.size = <OutProgram "DUP" "GETBP" "GETSP" "SETBP"> <OutProgram t.size "PUSHN">;
+    }
+}
+Epilog{
+    (e.Params) (e.Vars) , <CalculateSizeParam (e.Params) 0>:{
+        1 = <OutProgram ":return1"> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
+        0 = <OutProgram>;
+        t.Count = <OutProgram ":returnany"> <OutProgram "GETBP" "SETSP" "SETBP">
+            <OutProgram t.Count RETN>;
+    }
+}
+Code{
+   
+    () = ;
+    (t.1 e.other) = <Prout <Statement t.1>> <Code (e.other)>;
+}
+
+OutProgram{
+    e.any = ;
+    e.any = <Prout e.any>
+}
+
+Start{
+    e.prog = <FunctionCompile e.prog>
+    <Main>
+        
+        
+}
+Main{
+    =<OutProgram "_main CALL"> <OutProgram "HALT">
+    <OutProgram ":_in"> <OutProgram "IN"> <OutProgram "SWAP"> <OutProgram "JMP">
+    <OutProgram ":_out"> <OutProgram "SWAP"> <OutProgram "OUT"> <OutProgram "JMP">
+    <OutProgram ":_getbp"> <OutProgram "GETBP"> <OutProgram "SWAP"> <OutProgram "JMP">
+    <OutProgram ":_halt"> <OutProgram "OVER"> <OutProgram "HALT"> 
+}
+Statement{
+    ( t.expr1 "=" t.expr2) = 
+    <OutProgram <GenExpr t.expr1>>
+        <OutProgram <GenExpr t.expr2>>
+            <OutProgram "WRITE">;
+    ("call" t.expr t.expr*) = 
+            <OutProgram "Drop">; /*fix*/
+    ("return" t.expr) = 
+        <OutProgram "Return">;/*fix*/
+    ("if" t.BoolExpr e.Code) = 
+        <OutProgram "Return">;/*fix*/
+    ("if" t.BoolExpr e.Code1 "else" e.Code2) = 
+        <OutProgram "Return">;/*fix*/
+    ("while" t.BoolExpr e.Code) = 
+        <OutProgram "Return">;/*fix*/
+    e.0 = e.0;
+}
