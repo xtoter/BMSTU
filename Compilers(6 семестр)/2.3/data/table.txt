@@ -8,13 +8,26 @@
 
 Grammar -> Rule Grammar|
 Rule -> Nonterm Exprbracket | Axiom Nonterm Exprbracket
-Exprbracket -> ( Expr) Exprbracket |
+Exprbracket -> '(' Expr')' Exprbracket |
 Expr -> Operation Nonterms | Nonterms | NestedNonTerm | Terminal
-NestedNonTerm -> "(" NonTerm ")"
-Nonterms -> Nonterm Nonterm
-Operation -> "+" | "*"
-Terminal -> " a-z "
-Axiom -> *
-Nonterm -> A-Z
+NestedNonTerm -> '"("' NonTerm '")"'
+Nonterms -> Nonterm Nonterms
+Operation -> '"+"' | '"*"'
+Terminal -> " 'a'-'z' "
+Axiom -> '*'
+Nonterm -> 'A'-'Z'
+
+First(Grammar) {'A'-'Z'} '*' eps
+First(Rule) {'A'-'Z' *}
+First(Exprbracket) '(' eps
+First(Expr) '"+"', '"*'",{'A'-'Z'},'"("',{"'a'-'z'"}
+First(NestedNonTerm) '"("'
+First(Nonterms)  {'A'-'Z'}
+First(Operation) -> '"+"', '"*'"
+First(Terminal) {"'a'-'z'"}
+First(Axiom) {*}
+First(Nonterm) {A-Z}
 
 
+Follow(Grammar)  $
+Follow(Exprbracket)  $
