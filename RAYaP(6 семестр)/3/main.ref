@@ -1,13 +1,25 @@
 $EXTERN LoadFile;
 $EXTERN LoadExpr;
 $ENTRY GO {
-    
 	= <Start <LoadExpr 'gcd.txt'>> 
     /*= <Prout<Epilog () () >>*/
     /*= <Start>*/
    
 }
-
+NextId {
+    e.Prefix , <Dg NextIdCounter>: {
+        = <Br NextIdCounter '=' 0> <NextId e.Prefix>;
+    s.N = <Implode e.Prefix <Symb s.N>>
+            <Br NextIdCounter '=' <+ s.N 1>>;
+    };
+}
+NextIdNotAdd{
+    e.Prefix , <Dg NextIdCounter>: {
+        = <Br NextIdCounter '=' 0> <NextIdNotAdd e.Prefix>;
+    s.N = <Implode e.Prefix <Symb s.N>>
+            <Br NextIdCounter '=' s.N >;
+    };
+}
 
 GenExpr {
     s.Number, <Type s.Number> : 'N' e.1 = s.Number;
@@ -101,8 +113,11 @@ CalculateBool{
 } 
 FunctionCompile{ 
     ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
+    <Code (e.Body)> ;
+    ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
     ":_ " s.Name <Prolog (e.Params)(e.Vars)>  <Code (e.Body)> 
-        <Epilog (e.Params) (e.Vars)>; 
+        <Epilog (e.Params) (e.Vars)> <FunctionCompile e.other>; 
+    e.any = <Prout e.any>;
 }
 CalculateSizeVar{
     ( e.other (e.val)) t.Counter,<Br e.val '=' t.Counter>: = <CalculateSizeVar (e.other)  <Add 1 t.Counter>> ;
@@ -120,26 +135,54 @@ Prolog{
 }
 Epilog{
     (e.Params) (e.Vars) , <CalculateSizeParam (e.Params) 0>:{
-        1 = <OutProgram ":return1"> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
+        1 = <OutProgram <NextId ':return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
         0 = <OutProgram>;
-        t.Count = <OutProgram ":returnany"> <OutProgram "GETBP" "SETSP" "SETBP">
+        t.Count = <OutProgram <NextId ':return'>> <OutProgram "GETBP" "SETSP" "SETBP">
             <OutProgram t.Count RETN>;
     }
 }
 Code{
-   
+    ((e.expr1) e.other) = <Instruction e.expr1><Code (e.other)>;
+
     () = ;
-    (t.1 e.other) = <Prout <Statement t.1>> <Code (e.other)>;
+    e.any = <Prout e.any>;
+}
+Instruction{
+    e.any = <Prout e.any>;
+    t.Target "=" t.Value = <OutProgram "Code t.Target"><OutProgram "Code t.Value"><OutProgram "WRITE">;
+    "while" e.other = <While "while" e.other>;
+    "call" e.other = <OutProgram <GenExpr "call" e.other> "DROP">;
+    "if" e.other1 "else" e.other2 = <IfElse "if" e.other1 "else" e.other2 >;
+    "if" e.other1  = <If "if" e.other1>;
+    "return" t.expr= <OutProgram "[Npar+1] GETBP ADD"> <OutProgram <Code t.expr>> <OutProgram "WRITE" <NextIdNotAdd 'return'> "JMP">;
+    e.any = <Prout e.any>;
+
+}
+While{
+    'while' (e.BoolExpr) e.Body=  <OutProgram ":<metka-cycle>">  <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
+    <OutProgram ":<metka-true>">  <OutProgram "[[" "code ebody" "]]"> <OutProgram ":<metka-cycle>" "JMP"> <OutProgram ":<metka-exit>"> 
+}
+Call{
+    e.any = <Prout e.any "2">;
+}
+IfElse{
+    "if" (e.BoolExpr) e.Body1 "else" e.Body2=   <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metkafalse> ) ]]">
+    <OutProgram ":<metkatrue>">  <OutProgram "[[" "code ebody1" "]]"> <OutProgram ":<metka-exit>" "JMP"> 
+    <OutProgram ":<metkafalse>">  <OutProgram "[[" "code ebody2" "]]"> <OutProgram ":<metka-exit>" "JMP"> <OutProgram ":<metka-exit>"> 
+}
+If{
+    "if" (e.BoolExpr) e.Body1 =   <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
+    <OutProgram ":<metkatrue>">  <OutProgram "[[" "code ebody1" "]]">  <OutProgram ":<metka-exit>"> 
 }
 
 OutProgram{
+    e.any = <Prout e.any>;
     e.any = ;
-    e.any = <Prout e.any>
 }
 
 Start{
     e.prog = <FunctionCompile e.prog>
-    <Main>
+    /*<Main>*/
         
         
 }
@@ -155,7 +198,7 @@ Statement{
     <OutProgram <GenExpr t.expr1>>
         <OutProgram <GenExpr t.expr2>>
             <OutProgram "WRITE">;
-    ("call" t.expr t.expr*) = 
+    ("call" t.expr t.expr) = 
             <OutProgram "Drop">; /*fix*/
     ("return" t.expr) = 
         <OutProgram "Return">;/*fix*/
