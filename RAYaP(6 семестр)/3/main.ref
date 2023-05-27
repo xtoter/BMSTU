@@ -56,6 +56,32 @@ GetLocal{
     e.any = <Br e.adr '=' e.any>  "Found" "-" e.any;
     }
 }
+CompileBool{
+    TRUE (met1 / met2) = <OutProgram met1 "JMP">;
+    FALSE (met1 / met2) = <OutProgram met2 "JMP">;
+    (t.expr1 s.Op t.expr2), s.Op :{
+        '<'= <OutProgram met1 "JLT"> <OutProgram met2 "JMP">;
+        '>'=<OutProgram met1 "JGT"> <OutProgram met2 "JMP">;
+        "==" =<OutProgram met1 "JEQ"> <OutProgram met2 "JMP">;
+        "<>" =<OutProgram met1 "JNE"> <OutProgram met2 "JMP">;
+        "<=" =<OutProgram met1 "JLE"> <OutProgram met2 "JMP">;
+        ">=" =<OutProgram met1 "JGE"> <OutProgram met2 "JMP">;
+    };
+    (not t.BoolExpr) (met1 / met2),t.BoolExpr : {
+        TRUE  = <OutProgram met2 "JMP">;
+        FALSE = <OutProgram met1 "JMP">;
+    };
+    (t.expr1 'and' t.expr2), t.expr1 :{
+        TRUE, t.expr2 : {
+            TRUE = TRUE;
+            FALSE = FALSE;
+        };
+        FALSE, t.expr2 : {
+            FALSE = FALSE;
+            TRUE = FALSE;
+        };
+    };
+}
 CalculateBool{
     TRUE = TRUE;
     FALSE = FALSE;
@@ -148,7 +174,6 @@ Code{
     e.any = <Prout e.any>;
 }
 Instruction{
-    e.any = <Prout e.any>;
     t.Target "=" t.Value = <OutProgram "Code t.Target"><OutProgram "Code t.Value"><OutProgram "WRITE">;
     "while" e.other = <While "while" e.other>;
     "call" e.other = <OutProgram <GenExpr "call" e.other> "DROP">;
@@ -159,11 +184,11 @@ Instruction{
 
 }
 While{
-    'while' (e.BoolExpr) e.Body=  <OutProgram ":<metka-cycle>">  <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
-    <OutProgram ":<metka-true>">  <OutProgram "[[" "code ebody" "]]"> <OutProgram ":<metka-cycle>" "JMP"> <OutProgram ":<metka-exit>"> 
+    "while" (e.BoolExpr) e.Body=  <OutProgram ':cycle'<NextIdNotAdd 'while'>>  <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
+    <OutProgram ":<metka-true>">  <OutProgram "[[" "code ebody" "]]"> <OutProgram 'cycle'<NextIdNotAdd 'while'> "JMP"> <OutProgram ":<metka-exit>"> ;
 }
 Call{
-    e.any = <Prout e.any "2">;
+    e.any = <Prout e.any "call">;
 }
 IfElse{
     "if" (e.BoolExpr) e.Body1 "else" e.Body2=   <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metkafalse> ) ]]">
