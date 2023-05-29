@@ -1,0 +1,237 @@
+$EXTERN LoadFile;
+$EXTERN LoadExpr;
+$ENTRY GO {
+	= <Start <LoadExpr 'gcd.txt'>> 
+    /*= <Prout<Epilog () () >>*/
+    /*= <Start>*/
+   
+}
+NextId {
+    e.Prefix , <Dg NextIdCounter>: {
+        = <Br NextIdCounter '=' 0> <NextId e.Prefix>;
+    s.N = <Implode e.Prefix <Symb s.N>>
+            <Br NextIdCounter '=' <+ s.N 1>>;
+    };
+}
+NextIdNotAdd{
+    e.Prefix , <Dg NextIdCounter>: {
+        = <Br NextIdCounter '=' 0> <NextIdNotAdd e.Prefix>;
+    s.N = <Implode e.Prefix <Symb s.N>>
+            <Br NextIdCounter '=' s.N >;
+    };
+}
+
+GenExpr {
+    s.Number, <Type s.Number> : 'N' e.1 = s.Number;
+    s.Name, <GetConst s.Name> : Found s.Value = s.Value;
+    s.Name, <GetLocal s.Name> : Found s.Sign s.Offset,
+        ('+' ADD) ('-' SUB) : e.1 (s.Sign s.Operation) e.2
+            = GETBP s.Offset s.Operation;
+    s.Name = '_' s.Name; 
+    (L t.Expr) = <GenExpr t.Expr> READ;
+    ("-" t.Expr) = <GenExpr t.Expr> NEG;
+    (t.Left s.BinOp t.Right),
+        ("+" ADD) ("-" SUB) ("*" MUL) ("/" DIV) ("%" MOD)
+        ("|" BITOR) ("&" BITAND) ("~" BITNOT)
+        : e.1 (s.BinOp s.Command) e.2
+            = <GenExpr t.Left> <GenExpr t.Right> s.Command;
+    (call t.Func e.Args)
+        = <CompileArgs e.Args> <GenExpr t.Func> CALL;   
+        e.0 = <Prout "DEBUG" e.0>
+}
+CompileArgs {
+    e.Args t.Arg = <GenExpr t.Arg> <CompileArgs e.Args>;
+    =;
+}
+GetConst{
+    e.adr, <Dg e.adr> :  {
+          = "NotFound";
+    e.any =<Br e.adr '=' e.any>  "Found" e.any;
+    }
+}
+/*todo*/
+GetLocal{
+    e.adr, <Dg e.adr> :  {
+          = "NotFound";
+    e.any = <Br e.adr '=' e.any>  "Found" "-" e.any;
+    }
+}
+CompileBool{
+    TRUE (met1 / met2) = <OutProgram met1 "JMP">;
+    FALSE (met1 / met2) = <OutProgram met2 "JMP">;
+    (t.expr1 s.Op t.expr2), s.Op :{
+        '<'= <OutProgram met1 "JLT"> <OutProgram met2 "JMP">;
+        '>'=<OutProgram met1 "JGT"> <OutProgram met2 "JMP">;
+        "==" =<OutProgram met1 "JEQ"> <OutProgram met2 "JMP">;
+        "<>" =<OutProgram met1 "JNE"> <OutProgram met2 "JMP">;
+        "<=" =<OutProgram met1 "JLE"> <OutProgram met2 "JMP">;
+        ">=" =<OutProgram met1 "JGE"> <OutProgram met2 "JMP">;
+    };
+    (not t.BoolExpr) (met1 / met2),t.BoolExpr : {
+        TRUE  = <OutProgram met2 "JMP">;
+        FALSE = <OutProgram met1 "JMP">;
+    };
+    (t.expr1 'and' t.expr2), t.expr1 :{
+        TRUE, t.expr2 : {
+            TRUE = TRUE;
+            FALSE = FALSE;
+        };
+        FALSE, t.expr2 : {
+            FALSE = FALSE;
+            TRUE = FALSE;
+        };
+    };
+}
+CalculateBool{
+    TRUE = TRUE;
+    FALSE = FALSE;
+    (t.expr1 s.Op t.expr2), s.Op :{
+        '<', <Compare t.expr1 t.expr2> : {
+            '-' = TRUE;
+            e.oth = FALSE;
+        };
+        '>', <Compare t.expr1 t.expr2> : {
+            '+' = TRUE;
+            e.oth = FALSE;
+        };
+        "==", <Compare t.expr1 t.expr2> : {
+            '0' = TRUE;
+            e.oth = FALSE;
+        };
+        "<>", <Compare t.expr1 t.expr2> : {
+            '0' = FALSE;
+            e.oth = TRUE;
+        };
+        "<=", <Compare t.expr1 t.expr2> : {
+            '+' = FALSE;
+            e.oth = TRUE;
+        };
+        ">=", <Compare t.expr1 t.expr2> : {
+            '-' = FALSE;
+            e.oth = TRUE;
+        };
+    };
+    (not t.BoolExpr),t.BoolExpr : {
+        TRUE = FALSE;
+        FALSE = TRUE;
+    };
+    (t.expr1 'and' t.expr2), t.expr1 :{
+        TRUE, t.expr2 : {
+            TRUE = TRUE;
+            FALSE = FALSE;
+        };
+        FALSE, t.expr2 : {
+            FALSE = FALSE;
+            TRUE = FALSE;
+        };
+    };
+    (t.expr1 'or' t.expr2), t.expr1 :{
+        TRUE, t.expr2 : {
+            TRUE = TRUE;
+            FALSE = TRUE;
+        };
+        FALSE, t.expr2 : {
+            FALSE = FALSE;
+            TRUE = TRUE;
+        };
+    };
+
+} 
+FunctionCompile{ 
+    ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
+    <Code (e.Body)> ;
+    ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
+    ":_ " s.Name <Prolog (e.Params)(e.Vars)>  <Code (e.Body)> 
+        <Epilog (e.Params) (e.Vars)> <FunctionCompile e.other>; 
+    e.any = <Prout e.any>;
+}
+CalculateSizeVar{
+    ( e.other (e.val)) t.Counter,<Br e.val '=' t.Counter>: = <CalculateSizeVar (e.other)  <Add 1 t.Counter>> ;
+    () t.Counter = t.Counter;
+}
+CalculateSizeParam{
+    ( e.other t.val) t.Counter,<Br t.val '=' t.Counter>: = <CalculateSizeParam (e.other)  <Add 1 t.Counter>> ;
+    () t.Counter = t.Counter;
+}
+Prolog{
+    (e.Params) (e.Vars), <CalculateSizeVar (e.Vars) 0>:{
+        0 = <OutProgram "DUP" "GETBP" "GETSP" "SETBP" >;
+        t.size = <OutProgram "DUP" "GETBP" "GETSP" "SETBP"> <OutProgram t.size "PUSHN">;
+    }
+}
+Epilog{
+    (e.Params) (e.Vars) , <CalculateSizeParam (e.Params) 0>:{
+        1 = <OutProgram <NextId ':return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
+        0 = <OutProgram>;
+        t.Count = <OutProgram <NextId ':return'>> <OutProgram "GETBP" "SETSP" "SETBP">
+            <OutProgram t.Count RETN>;
+    }
+}
+Code{
+    ((e.expr1) e.other) = <Instruction e.expr1><Code (e.other)>;
+
+    () = ;
+    e.any = <Prout e.any>;
+}
+Instruction{
+    t.Target "=" t.Value = <OutProgram "Code t.Target"><OutProgram "Code t.Value"><OutProgram "WRITE">;
+    "while" e.other = <While "while" e.other>;
+    "call" e.other = <OutProgram <GenExpr "call" e.other> "DROP">;
+    "if" e.other1 "else" e.other2 = <IfElse "if" e.other1 "else" e.other2 >;
+    "if" e.other1  = <If "if" e.other1>;
+    "return" t.expr= <OutProgram "[Npar+1] GETBP ADD"> <OutProgram <Code t.expr>> <OutProgram "WRITE" <NextIdNotAdd 'return'> "JMP">;
+    e.any = <Prout e.any>;
+
+}
+While{
+    "while" (e.BoolExpr) e.Body=  <OutProgram ':cycle'<NextIdNotAdd 'while'>>  <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
+    <OutProgram ":<metka-true>">  <OutProgram "[[" "code ebody" "]]"> <OutProgram 'cycle'<NextIdNotAdd 'while'> "JMP"> <OutProgram ":<metka-exit>"> ;
+}
+Call{
+    e.any = <Prout e.any "call">;
+}
+IfElse{
+    "if" (e.BoolExpr) e.Body1 "else" e.Body2=   <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metkafalse> ) ]]">
+    <OutProgram ":<metkatrue>">  <OutProgram "[[" "code ebody1" "]]"> <OutProgram ":<metka-exit>" "JMP"> 
+    <OutProgram ":<metkafalse>">  <OutProgram "[[" "code ebody2" "]]"> <OutProgram ":<metka-exit>" "JMP"> <OutProgram ":<metka-exit>"> 
+}
+If{
+    "if" (e.BoolExpr) e.Body1 =   <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
+    <OutProgram ":<metkatrue>">  <OutProgram "[[" "code ebody1" "]]">  <OutProgram ":<metka-exit>"> 
+}
+
+OutProgram{
+    e.any = <Prout e.any>;
+    e.any = ;
+}
+
+Start{
+    e.prog = <FunctionCompile e.prog>
+    /*<Main>*/
+        
+        
+}
+Main{
+    =<OutProgram "_main CALL"> <OutProgram "HALT">
+    <OutProgram ":_in"> <OutProgram "IN"> <OutProgram "SWAP"> <OutProgram "JMP">
+    <OutProgram ":_out"> <OutProgram "SWAP"> <OutProgram "OUT"> <OutProgram "JMP">
+    <OutProgram ":_getbp"> <OutProgram "GETBP"> <OutProgram "SWAP"> <OutProgram "JMP">
+    <OutProgram ":_halt"> <OutProgram "OVER"> <OutProgram "HALT"> 
+}
+Statement{
+    ( t.expr1 "=" t.expr2) = 
+    <OutProgram <GenExpr t.expr1>>
+        <OutProgram <GenExpr t.expr2>>
+            <OutProgram "WRITE">;
+    ("call" t.expr t.expr) = 
+            <OutProgram "Drop">; /*fix*/
+    ("return" t.expr) = 
+        <OutProgram "Return">;/*fix*/
+    ("if" t.BoolExpr e.Code) = 
+        <OutProgram "Return">;/*fix*/
+    ("if" t.BoolExpr e.Code1 "else" e.Code2) = 
+        <OutProgram "Return">;/*fix*/
+    ("while" t.BoolExpr e.Code) = 
+        <OutProgram "Return">;/*fix*/
+    e.0 = e.0;
+}

@@ -1,0 +1,41 @@
+e.Program ::= t.Definition*
+t.Definition ::= t.Struct | t.Const | t.GlobalVar | t.Function
+t.Struct ::= (struct s.Name (s.Name t.ConstExpr)*)
+t.Const ::= (const s.Name "=" t.ConstExpr)
+t.GlobalVar ::= (var s.Name t.ConstExpr e.Init?)
+e.Init ::= "=" t.ConstExpr*
+s.Name ::= s.WORD
+
+t.Function ::= (function s.Name (s.Name*) t.LocalVars? e.Code)
+t.LocalVars ::= (var (s.Name t.ConstExpr)*)
+e.Code ::= t.Statement*
+t.Statement ::=
+(t.Expr "=" t.Expr)
+| (call t.Expr t.Expr*)
+| (return t.Expr)
+| (if t.BoolExpr e.Code)
+| (if t.BoolExpr e.Code else e.Code)
+| (while t.BoolExpr e.Code)
+
+t.Expr ::=
+s.Name
+| s.NUMBER
+| (L t.Expr)
+| ("-" t.Expr)
+| (t.Expr s.BinOp t.Expr)
+| (call t.Expr t.Expr*)
+s.BinOp ::= "+" | "-" | "*" | "/" | "%" | "&" | "|" | "~"
+t.BoolExpr ::=
+TRUE | FALSE
+| (t.Expr s.RelOp t.Expr)
+| (not t.BoolExpr)
+| (t.BoolExpr and t.BoolExpr)
+| (t.BoolExpr or t.BoolExpr)
+s.RelOp ::= "<" | ">" | "^=" | "<>" | "^=" | "^="
+
+t.ConstExpr ::=
+s.Name
+| s.NUMBER
+| ("-" t.ConstExpr)
+| (t.ConstExpr s.BinOp t.ConstExpr)
+s.BinOp ::= "+" | "-" | "*" | "/" | "%" | "&" | "|" | "~"
