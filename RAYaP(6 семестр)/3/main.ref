@@ -110,10 +110,8 @@ CompileBool{
 }
 FunctionCompile{ 
   
-    ("union" e.any) e.other= <Prout "union" e.any> <FunctionCompile e.other>;
-    ("procedure" e.any) e.other= <Prout "procedure" e.any> <FunctionCompile e.other>;
     ("struct" e.any) e.other= <Prout <Struct e.any>> <FunctionCompile e.other>;
-    ("const" e.any) e.other= <Prout "const" e.any> <FunctionCompile e.other>;
+    ("const" e.any) e.other= <Prout <Const e.any>> <FunctionCompile e.other>;
     ("var" e.any) e.other= <Prout <GlobalVar ("var" e.any)>> <FunctionCompile e.other>;
    /* ("function" e.any) e.other= <Prout  ("function" e.any)> <FunctionCompile e.other>;
     */
@@ -128,8 +126,11 @@ FunctionCompile{
     =;
     e.any = <Prout e.any " FunctionCompile">;
 }
+Const{
+    s.Name e.Val =  <Br s.Name '=' e.Val> ;
+}
 Struct{
-    s.Name e.Fields =  <Br s.Name '=' <StructField (0) e.Fields> > ;
+    s.Name e.Fields =  <Br s.Name '=' <StructField (0) e.Fields> >;
 }
 StructField{
     (s.allSize) ("-" s.size) e.oth  =<StructField (<+ s.allSize <GenExpr s.size>>) e.oth>;
@@ -214,15 +215,15 @@ OutProgram{
 }
 
 Start{
-    e.prog = <FunctionCompile e.prog>
-    <Main>
+    e.prog = <Main> <FunctionCompile e.prog>
+    
         
         
 }
 Main{
     =<OutProgram "_main CALL"> <OutProgram "HALT">
     <OutProgram ":_in"> <OutProgram "IN"> <OutProgram "SWAP"> <OutProgram "JMP">
-    <OutProgram ":_out"> <OutProgram "SWAP"> <OutProgram "OUT"> <OutProgram "JMP">
+    <OutProgram ":_out"> <OutProgram "SWAP"> <OutProgram "OUT"> <OutProgram "JMP"> 
     <OutProgram ":_getbp"> <OutProgram "GETBP"> <OutProgram "SWAP"> <OutProgram "JMP">
     <OutProgram ":_halt"> <OutProgram "OVER"> <OutProgram "HALT"> 
 }

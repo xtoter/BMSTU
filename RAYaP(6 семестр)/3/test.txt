@@ -1,0 +1,97 @@
+(struct Point
+    (Point_x int)
+    (Point_y int)
+)
+(struct Line
+    (Line_start Point)
+    (Line_end Point)
+)
+(struct ListNode
+    (ListNode_value int)
+    (ListNode_next ptr)
+)
+
+(struct ColorPoint
+("-" Point)
+(ColorPoint_color int)
+)
+
+(union U 101 int ListNode 100)
+
+(var Counter 1)
+(var Items 5 "=" 1 2 3 4 5)
+(var Items1 "=" 1 2 3 4 5 75 3783475)
+(var rising Line "=" 0 0 10 10)
+(var result_array 4)
+(var count int)
+(var list_head ptr)
+
+(procedure print_number (x)
+    (if ((L x) "<" 0)
+        (call out '-')
+        (pcall print_number ("-" (L x)))
+        (preturn)
+    )
+    (if ((L x) "<" 10)
+        (call out ('0' "+" (L x)))
+        (preturn)
+    )
+    (pcall print_number ((L x) "/" 10))
+    (call out ('0' "+" ((L x) "%" 10)))
+    (preturn)
+)
+
+
+(procedure print_number_n (x)
+    (pcall print_number (L x))
+    (call newline)
+    (preturn)
+)
+
+(function gcd (x y)
+    (var (rem 1))
+    (while ((L y) "<>" 0)
+        (rem "=" ((L x) "%" (L y)))
+        (x "=" (L y))
+        (y "=" (L rem))
+    )
+    (return (L x))
+)
+
+(procedure foo (p)
+    (((L p) "-" Point_y) "=" 34)
+    (preturn)
+)
+
+
+(procedure foo1 (x y)
+    (pcall print_number_n (call gcd 652343125 125))
+    (preturn)
+)
+
+(function main ()
+    (var (p Point) (l Line) (x 1) (y 1))
+
+    (pcall foo1 1 2)
+
+    (pcall foo p)
+
+    (((l "-" Line_end) "-" Point_y) "=" 45)
+    ((p "-" Point_x) "=" 33)
+
+    (pcall print_number_n 
+        (
+        ((L (p "-" Point_y)) "=" 34)
+        "?"
+        100
+        ":"
+        ("-" 100)
+        ))
+
+    (x "=" (y "=" 3))
+
+    (pcall print_number_n (L x))
+    (pcall print_number_n (L y))
+
+    (return 0)
+)

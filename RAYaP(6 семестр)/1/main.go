@@ -97,9 +97,9 @@ func call_instruction(x int) {
 		push(stack[x])
 
 	case -16:
-		v := pop()
 		a := pop()
-		stack[a] = v
+		v := pop()
+		stack[v] = a
 
 	case -17:
 		y := pop()
@@ -113,7 +113,7 @@ func call_instruction(x int) {
 		}
 
 	case -18:
-		CP = pop()
+		CP = pop() -1
 	case -19:
 		a := pop()
 		x := pop()
@@ -172,7 +172,7 @@ func call_instruction(x int) {
 		for i := 0; i < n; i++ {
 			pop()
 		}
-		CP = a
+		CP = a-1
 	case -27:
 		push(SP)
 
@@ -181,6 +181,7 @@ func call_instruction(x int) {
 		SP = a
 
 	case -29:
+		fmt.Println("BP",BP)
 		push(BP)
 
 	case -30:
@@ -191,8 +192,8 @@ func call_instruction(x int) {
 		push(CP)
 
 	case -32:
-		pop()
 		os.Exit(0)
+		pop()
 	case -33:
 		var a rune
 		fmt.Scanf("%c", &a)
@@ -211,8 +212,9 @@ func call_instruction(x int) {
 	case -36:
 		n := pop()
 		for i := 0; i < n; i++ {
-			push(0)
+			push(-55)
 		}
+		SP-=n-1
 	case -37:
 		a := pop()
 		CP = a - 1
@@ -313,10 +315,10 @@ func push_str_prog(x string) {
 func push(x int) {
 	SP--
 	stack[SP] = x
-
 }
 func pop() int {
 	res := stack[SP]
+	stack[SP] = 0
 	SP++
 	return res
 }
@@ -337,8 +339,8 @@ func InitProgram() []string {
 		SP = intVar
 		return os.Args[2:]
 	}
-	stack = make([]int, 1000000)
-	SP = 1000000
+	stack = make([]int, 200)
+	SP = 200
 	return os.Args[1:]
 
 }
@@ -399,7 +401,7 @@ func generateCode() {
 	}
 }
 func seestack() {
-	fmt.Println(CP, "CP", SP, "SP", BP, "BP", P, "P")
+	fmt.Println("->",CP, "CP", SP, "SP", BP, "BP", P, "P")
 	for i := len(stack) - 1; i >= SP; i-- {
 		fmt.Print(stack[i], " ")
 	}
@@ -408,11 +410,14 @@ func seestack() {
 }
 func run_interpreter() {
 	for {
-		//fmt.Println("command ", stack[CP])
-		//seestack()
+		fmt.Println("command ", stack[CP])
+		fmt.Println("all",stack,"until")
+		seestack()
 		call_instruction(stack[CP])
 		CP++
-		//seestack()
+
+		fmt.Println("after")
+		seestack()
 	}
 }
 func main() {
@@ -427,7 +432,7 @@ func main() {
 	calculateConstant()
 
 	generateCode()
-	//fmt.Println("run")
+	fmt.Println("run")
 	run_interpreter()
 	//for i := 0; i < len(buffer); i++ {
 	//	fmt.Println(buffer[i])
