@@ -24,11 +24,11 @@ NextIdNotAdd{
 GenExpr {
     s.Number, <Type s.Number> : 'N' e.1 = s.Number;
     s.Name, <GetConst s.Name> : Found s.Value = s.Value;
-    s.Name, <GetLocal s.Name> : Found s.Sign s.Offset,
+    s.Name, <GetLocal s.Name> : Found (s.Sign s.Offset),
         ('+' ADD) ('-' SUB) : e.1 (s.Sign s.Operation) e.2
             = GETBP s.Offset s.Operation;
     s.Name = '_' s.Name; 
-    (L t.Expr) = <GenExpr t.Expr> READ;
+    (L t.Expr) = <GenExpr t.Expr> READ ;
     ("-" t.Expr) = <GenExpr t.Expr> NEG;
     (t.Left s.BinOp t.Right),
         ("+" ADD) ("-" SUB) ("*" MUL) ("/" DIV) ("%" MOD)
@@ -37,155 +37,163 @@ GenExpr {
             = <GenExpr t.Left> <GenExpr t.Right> s.Command;
     (call t.Func e.Args)
         = <CompileArgs e.Args> <GenExpr t.Func> CALL;   
-        e.0 = <Prout "DEBUG" e.0>
+        e.0 = <Prout "DEBUGf" e.0>
 }
 CompileArgs {
     e.Args t.Arg = <GenExpr t.Arg> <CompileArgs e.Args>;
     =;
 }
 GetConst{
-    e.adr, <Dg e.adr> :  {
+    e.adr, <Cp e.adr> :  {
           = "NotFound";
-    e.any =<Br e.adr '=' e.any>  "Found" e.any;
+    e.any =  Found e.any;
     }
 }
 /*todo*/
 GetLocal{
-    e.adr, <Dg e.adr> :  {
+    e.adr, <Cp e.adr> :  {
           = "NotFound";
-    e.any = <Br e.adr '=' e.any>  "Found" "-" e.any;
+    e.any =  Found e.any;
     }
 }
 CompileBool{
-    TRUE (met1 / met2) = <OutProgram met1 "JMP">;
-    FALSE (met1 / met2) = <OutProgram met2 "JMP">;
-    (t.expr1 s.Op t.expr2), s.Op :{
-        '<'= <OutProgram met1 "JLT"> <OutProgram met2 "JMP">;
-        '>'=<OutProgram met1 "JGT"> <OutProgram met2 "JMP">;
-        "==" =<OutProgram met1 "JEQ"> <OutProgram met2 "JMP">;
-        "<>" =<OutProgram met1 "JNE"> <OutProgram met2 "JMP">;
-        "<=" =<OutProgram met1 "JLE"> <OutProgram met2 "JMP">;
-        ">=" =<OutProgram met1 "JGE"> <OutProgram met2 "JMP">;
+    TRUE (e.met1 ) = ;
+    FALSE (e.met1) = <OutProgram e.met1 "JMP">;
+    (t.expr1 s.Op 0) (e.met1), s.Op :{
+        '<'= <OutProgram <GenExpr t.expr1>>
+                <OutProgram e.met1 "JGE"> ;
+        '>'= <OutProgram <GenExpr t.expr1>>
+                <OutProgram e.met1 "JLE"> ;
+        "==" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram e.met1 "JNE">;
+        "<>" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram e.met1 "JEQ">;
+        "<=" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram e.met1 "JGT">;
+        ">=" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram  e.met1 "JLT">;
     };
-    (not t.BoolExpr) (met1 / met2),t.BoolExpr : {
-        TRUE  = <OutProgram met2 "JMP">;
-        FALSE = <OutProgram met1 "JMP">;
+    (t.expr1 s.Op t.expr2) (e.met1), s.Op :{
+        '<'= <OutProgram <GenExpr t.expr1>>
+                <OutProgram <GenExpr t.expr2>>
+                <OutProgram "CMP" e.met1 "JGE"> ;
+        '>'= <OutProgram <GenExpr t.expr1>>
+                <OutProgram <GenExpr t.expr2>>
+                <OutProgram  "CMP" e.met1 "JLE"> ;
+        "==" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram <GenExpr t.expr2>>
+                <OutProgram  "CMP" e.met1 "JNE">;
+        "<>" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram <GenExpr t.expr2>>
+                <OutProgram "CMP"  e.met1 "JEQ">;
+        "<=" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram <GenExpr t.expr2>>
+                <OutProgram "CMP"  e.met1 "JGT">;
+        ">=" = <OutProgram <GenExpr t.expr1>>
+                <OutProgram <GenExpr t.expr2>>
+                <OutProgram "CMP"  e.met1 "JLT">;
     };
-    (t.expr1 'and' t.expr2), t.expr1 :{
-        TRUE, t.expr2 : {
-            TRUE = TRUE;
-            FALSE = FALSE;
-        };
-        FALSE, t.expr2 : {
-            FALSE = FALSE;
-            TRUE = FALSE;
-        };
-    };
-}
-CalculateBool{
-    TRUE = TRUE;
-    FALSE = FALSE;
-    (t.expr1 s.Op t.expr2), s.Op :{
-        '<', <Compare t.expr1 t.expr2> : {
-            '-' = TRUE;
-            e.oth = FALSE;
-        };
-        '>', <Compare t.expr1 t.expr2> : {
-            '+' = TRUE;
-            e.oth = FALSE;
-        };
-        "==", <Compare t.expr1 t.expr2> : {
-            '0' = TRUE;
-            e.oth = FALSE;
-        };
-        "<>", <Compare t.expr1 t.expr2> : {
-            '0' = FALSE;
-            e.oth = TRUE;
-        };
-        "<=", <Compare t.expr1 t.expr2> : {
-            '+' = FALSE;
-            e.oth = TRUE;
-        };
-        ">=", <Compare t.expr1 t.expr2> : {
-            '-' = FALSE;
-            e.oth = TRUE;
-        };
-    };
-    (not t.BoolExpr),t.BoolExpr : {
-        TRUE = FALSE;
-        FALSE = TRUE;
-    };
-    (t.expr1 'and' t.expr2), t.expr1 :{
-        TRUE, t.expr2 : {
-            TRUE = TRUE;
-            FALSE = FALSE;
-        };
-        FALSE, t.expr2 : {
-            FALSE = FALSE;
-            TRUE = FALSE;
-        };
-    };
-    (t.expr1 'or' t.expr2), t.expr1 :{
-        TRUE, t.expr2 : {
-            TRUE = TRUE;
-            FALSE = TRUE;
-        };
-        FALSE, t.expr2 : {
-            FALSE = FALSE;
-            TRUE = TRUE;
-        };
+    (t.expr1 'and' t.expr2)(e.met1)=
+                <OutProgram <CompileBool ('not' t.expr1)> (e.met1)>
+                <OutProgram <CompileBool t.expr2> (e.met1)>;
+    (t.expr1 'or' t.expr2) (e.met1)=
+                <OutProgram <CompileBool t.expr1> (<NextIdNotAdd e.met1>)>
+                <OutProgram <CompileBool t.expr2> (e.met1)>
+                <OutProgram ':'<NextIdNotAdd e.met1>>;
+    ('not' t.BoolExpr) (e.met1 '/' e.met2),t.BoolExpr : {
+        e.0 = <Prout e.0>;
+        TRUE  = <OutProgram e.met2 "JMP">;
+        FALSE = <OutProgram e.met1 "JMP">;
     };
 
-} 
+    e.0 = <Prout e.0 "testt">
+}
 FunctionCompile{ 
+  
+    ("union" e.any) e.other= <Prout "union" e.any> <FunctionCompile e.other>;
+    ("procedure" e.any) e.other= <Prout "procedure" e.any> <FunctionCompile e.other>;
+    ("struct" e.any) e.other= <Prout <Struct e.any>> <FunctionCompile e.other>;
+    ("const" e.any) e.other= <Prout "const" e.any> <FunctionCompile e.other>;
+    ("var" e.any) e.other= <Prout <GlobalVar ("var" e.any)>> <FunctionCompile e.other>;
+   /* ("function" e.any) e.other= <Prout  ("function" e.any)> <FunctionCompile e.other>;
+    */
     ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
-    <Code (e.Body)> ;
-    ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
-    ":_ " s.Name <Prolog (e.Params)(e.Vars)>  <Code (e.Body)> 
-        <Epilog (e.Params) (e.Vars)> <FunctionCompile e.other>; 
-    e.any = <Prout e.any>;
+        <Br Npar '='  <- <CalculateSizeParam (e.Params) 2> 2>> 
+        <OutProgram ':_' s.Name> <Prolog (e.Params)(e.Vars)>  <Code (e.Body)>
+            <Epilog (e.Params) (e.Vars)> <FunctionCompile e.other>; 
+    ("function" s.Name (e.Params)  e.Body) e.other= 
+        <Br Npar '='  <- <CalculateSizeParam (e.Params) 2> 2>> 
+        <OutProgram ':_' s.Name> <Prolog (e.Params)>  <Code (e.Body)> 
+            <Epilog (e.Params) > <FunctionCompile e.other>;  
+    =;
+    e.any = <Prout e.any " FunctionCompile">;
+}
+Struct{
+    s.Name e.Fields =  <Br s.Name '=' <StructField (0) e.Fields> > ;
+}
+StructField{
+    (s.allSize) ("-" s.size) e.oth  =<StructField (<+ s.allSize <GenExpr s.size>>) e.oth>;
+    (s.allSize) (s.name s.size) e.oth  = <Br s.name '=' <GenExpr s.allSize> > <StructField (<+ s.allSize <GenExpr s.size>>) e.oth>;
+    (s.allSize) = s.allSize;
+    e.0 = <Prout e.0 "StructField">;
+}
+CreateVars{
+    0 =;
+    s.size,<Type s.size> : 'N' e.1 = 0 <CreateVars <- s.size 1>>;
+    e.0 = 0;
+}
+CreateInitVars{
+    e.0 =  e.0;
+    s.val e.Any = s.val <CreateInitVars e.Any>;
+     = ;
+}
+GlobalVar{
+    ("var" s.Name t.ConstExpr)  = ':_'s.Name <CreateVars <GenExpr t.ConstExpr>>;
+    ("var" s.Name t.ConstExpr "=" e.Init)  = ':_'s.Name <CreateInitVars e.Init> ;
+    e.0 = <Prout e.0 "GlobalVar">
+
 }
 CalculateSizeVar{
-    ( e.other (e.val)) t.Counter,<Br e.val '=' t.Counter>: = <CalculateSizeVar (e.other)  <Add 1 t.Counter>> ;
-    () t.Counter = t.Counter;
+    (  (s.val s.valsize) e.other)  (t.size),<Br s.val '=' ('-' t.size)> : = <CalculateSizeVar (e.other)  (<Add t.size s.valsize>) >;
+    ()   (t.size)=  t.size;
 }
 CalculateSizeParam{
-    ( e.other t.val) t.Counter,<Br t.val '=' t.Counter>: = <CalculateSizeParam (e.other)  <Add 1 t.Counter>> ;
+    (  t.val e.other) t.Counter,<Br t.val '=' ('+' t.Counter)> : = <CalculateSizeParam (e.other)  <Add 1 t.Counter>> ;
     () t.Counter = t.Counter;
 }
 Prolog{
-    (e.Params) (e.Vars), <CalculateSizeVar (e.Vars) 0>:{
-        0 = <OutProgram "DUP" "GETBP" "GETSP" "SETBP" >;
-        t.size = <OutProgram "DUP" "GETBP" "GETSP" "SETBP"> <OutProgram t.size "PUSHN">;
-    }
+    (e.Params) (e.Vars), <- <CalculateSizeVar (e.Vars) (1)> 1> :{
+        0 = <OutProgram  "GETBP" "GETSP" "SETBP" >;
+        t.size = <OutProgram "GETBP" "GETSP" "SETBP"> <OutProgram t.size "PUSHN">;
+    };
+    (e.Params)  =<OutProgram  "GETBP" "GETSP" "SETBP" >;
 }
 Epilog{
-    (e.Params) (e.Vars) , <CalculateSizeParam (e.Params) 0>:{
-        1 = <OutProgram <NextId ':return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
-        0 = <OutProgram>;
-        t.Count = <OutProgram <NextId ':return'>> <OutProgram "GETBP" "SETSP" "SETBP">
+    (e.Params) e.oth , <CalculateSizeParam (e.Params) 0>:  {
+        1 = <OutProgram ':'<NextId 'return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
+        
+        t.Count = <OutProgram ':'<NextId 'return'>> <OutProgram "GETBP" "SETSP" "SETBP">
             <OutProgram t.Count RETN>;
-    }
+    };
 }
 Code{
     ((e.expr1) e.other) = <Instruction e.expr1><Code (e.other)>;
-
     () = ;
-    e.any = <Prout e.any>;
+    e.any = <Prout e.any 'Code1'>;
 }
 Instruction{
-    t.Target "=" t.Value = <OutProgram "Code t.Target"><OutProgram "Code t.Value"><OutProgram "WRITE">;
+    t.Target "=" t.Value = <OutProgram <GenExpr t.Target>><OutProgram <GenExpr t.Value>><OutProgram "WRITE">;
     "while" e.other = <While "while" e.other>;
-    "call" e.other = <OutProgram <GenExpr "call" e.other> "DROP">;
+    "call" e.other = <OutProgram <GenExpr (call e.other)> "DROP">;
     "if" e.other1 "else" e.other2 = <IfElse "if" e.other1 "else" e.other2 >;
     "if" e.other1  = <If "if" e.other1>;
-    "return" t.expr= <OutProgram "[Npar+1] GETBP ADD"> <OutProgram <Code t.expr>> <OutProgram "WRITE" <NextIdNotAdd 'return'> "JMP">;
-    e.any = <Prout e.any>;
+    "return" t.expr= <OutProgram <+ <Dg Npar> 1> " GETBP ADD"> <OutProgram <GenExpr t.expr>> <OutProgram "WRITE" <NextIdNotAdd 'return'> "JMP">;
+    e.any = <OutProgram <GenExpr (e.any)>>;
 
 }
 While{
-    "while" (e.BoolExpr) e.Body=  <OutProgram ':cycle'<NextIdNotAdd 'while'>>  <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
-    <OutProgram ":<metka-true>">  <OutProgram "[[" "code ebody" "]]"> <OutProgram 'cycle'<NextIdNotAdd 'while'> "JMP"> <OutProgram ":<metka-exit>"> ;
+    "while" (e.BoolExpr) e.Body=  <OutProgram ':cycle'<NextIdNotAdd 'while'>>  <OutProgram <CompileBool (e.BoolExpr) ('exit'<NextIdNotAdd 'while'>)>>
+     <OutProgram <Code (e.Body)>> <OutProgram 'cycle'<NextIdNotAdd 'while'> "JMP"> <OutProgram ':exit'<NextId 'while'>> ;
 }
 Call{
     e.any = <Prout e.any "call">;
@@ -207,7 +215,7 @@ OutProgram{
 
 Start{
     e.prog = <FunctionCompile e.prog>
-    /*<Main>*/
+    <Main>
         
         
 }
