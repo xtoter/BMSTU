@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="11a1def1-0ebd-4e7b-86da-7675c521f6fa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/table.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/table.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/task.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/task.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexer/lexer.go" beforeDir="false" afterPath="$PROJECT_DIR$/lexer/lexer.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main1.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/parser/parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser/parser.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../3.2/parser.y" beforeDir="false" afterPath="$PROJECT_DIR$/../3.2/parser.y" afterDir="false" />
     </list>

@@ -91,25 +91,12 @@ var tokens []string = []string{"TERM", "NONT", "LEFT_bracket", "RIGHT_bracket", 
 func (in Inner) Print(ident string, rules *Inner) {
 	if in.tp == "LEAF" {
 		fmt.Println(ident + "Лист: " + in.nterm.Value)
-		// child := &Inner{in.tp, in.nterm, 0, nil}
-		// rules.children = append(rules.children, child)
-		if tokens[in.nterm.Type] == "POINT" {
-			rut.children = append(rut.children, start_rule)
-		}
 		return
 	}
 
-	if tokens[in.nterm.Type] == "RA" || tokens[in.nterm.Type] == "PROG_end" {
-		start_rule = &Inner{in.tp, in.nterm, 0, nil}
-		rules = start_rule
-	}
-
 	fmt.Println(ident + "Внутренний узел: " + in.nterm.Value + ", Правило: " + in.tp)
-	//fmt.Println(in.children)
 	for i := 0; i < len(in.children); i++ {
 		child := &Inner{in.children[i].tp, in.children[i].nterm, 0, nil}
-		//rules.children = append(rules.children, child)
-
 		in.children[i].Print(ident+"	", child)
 	}
 }
