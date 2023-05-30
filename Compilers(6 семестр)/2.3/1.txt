@@ -1,0 +1,96 @@
+test x Grammar token COMMENT [COMMENT Grammar] a {4 /* аксиома помечена звёздочкой */ 0 0}
+test x COMMENT token COMMENT [] a {4 /* аксиома помечена звёздочкой */ 0 0}
+test x Grammar token NONT [Rule Grammar] a {1 F 1 0}
+test x Rule token NONT [NONT Exprbracket] a {1 F 1 0}
+test x NONT token NONT [] a {1 F 1 0}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2   ( 1 1}
+test x LEFT_bracket token LEFT_bracket [] a {2   ( 1 1}
+test x Expr token TERM [TERM Expr] a {0 "n" 1 4}
+test x TERM token TERM [] a {0 "n" 1 4}
+test x Expr token RIGHT_bracket [] a {3 ) 1 7}
+test x  token RIGHT_bracket [] a {3 ) 1 7}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 1 7}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2 ( 2 0}
+test x LEFT_bracket token LEFT_bracket [] a {2 ( 2 0}
+test x Expr token TERM [TERM Expr] a {0 "(" 2 1}
+test x TERM token TERM [] a {0 "(" 2 1}
+test x Expr token NONT [NONT Expr] a {1  E 2 4}
+test x NONT token NONT [] a {1  E 2 4}
+test x Expr token TERM [TERM Expr] a {0  ")" 2 6}
+test x TERM token TERM [] a {0  ")" 2 6}
+test x Expr token RIGHT_bracket [] a {3 ) 2 10}
+test x  token RIGHT_bracket [] a {3 ) 2 10}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 2 10}
+test x Exprbracket token NONT [] a {1 T 3 0}
+test x  token NONT [] a {1 T 3 0}
+test x Grammar token NONT [Rule Grammar] a {1 T 3 0}
+test x Rule token NONT [NONT Exprbracket] a {1 T 3 0}
+test x NONT token NONT [] a {1 T 3 0}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2   ( 3 1}
+test x LEFT_bracket token LEFT_bracket [] a {2   ( 3 1}
+test x Expr token NONT [NONT Expr] a {1 F 3 4}
+test x NONT token NONT [] a {1 F 3 4}
+test x Expr token NONT [NONT Expr] a {1  T' 3 5}
+test x NONT token NONT [] a {1  T' 3 5}
+test x Expr token RIGHT_bracket [] a {3 ) 3 8}
+test x  token RIGHT_bracket [] a {3 ) 3 8}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 3 8}
+test x Exprbracket token NONT [] a {1 T' 4 0}
+test x  token NONT [] a {1 T' 4 0}
+test x Grammar token NONT [Rule Grammar] a {1 T' 4 0}
+test x Rule token NONT [NONT Exprbracket] a {1 T' 4 0}
+test x NONT token NONT [] a {1 T' 4 0}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2  ( 4 2}
+test x LEFT_bracket token LEFT_bracket [] a {2  ( 4 2}
+test x Expr token TERM [TERM Expr] a {0 "*" 4 4}
+test x TERM token TERM [] a {0 "*" 4 4}
+test x Expr token NONT [NONT Expr] a {1  F 4 7}
+test x NONT token NONT [] a {1  F 4 7}
+test x Expr token NONT [NONT Expr] a {1  T' 4 9}
+test x NONT token NONT [] a {1  T' 4 9}
+test x Expr token RIGHT_bracket [] a {3 ) 4 12}
+test x  token RIGHT_bracket [] a {3 ) 4 12}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 4 12}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2  ( 4 13}
+test x LEFT_bracket token LEFT_bracket [] a {2  ( 4 13}
+test x Expr token RIGHT_bracket [] a {3 ) 4 15}
+test x  token RIGHT_bracket [] a {3 ) 4 15}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 4 15}
+test x Exprbracket token axiom [] a {5 * 5 0}
+test x  token axiom [] a {5 * 5 0}
+test x Grammar token axiom [axiom Rule Grammar] a {5 * 5 0}
+test x axiom token axiom [] a {5 * 5 0}
+test x Rule token NONT [NONT Exprbracket] a {1  E 5 1}
+test x NONT token NONT [] a {1  E 5 1}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2   ( 5 3}
+test x LEFT_bracket token LEFT_bracket [] a {2   ( 5 3}
+test x Expr token NONT [NONT Expr] a {1 T 5 6}
+test x NONT token NONT [] a {1 T 5 6}
+test x Expr token NONT [NONT Expr] a {1  E' 5 7}
+test x NONT token NONT [] a {1  E' 5 7}
+test x Expr token RIGHT_bracket [] a {3 ) 5 10}
+test x  token RIGHT_bracket [] a {3 ) 5 10}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 5 10}
+test x Exprbracket token NONT [] a {1 E' 6 0}
+test x  token NONT [] a {1 E' 6 0}
+test x Grammar token NONT [Rule Grammar] a {1 E' 6 0}
+test x Rule token NONT [NONT Exprbracket] a {1 E' 6 0}
+test x NONT token NONT [] a {1 E' 6 0}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2  ( 6 2}
+test x LEFT_bracket token LEFT_bracket [] a {2  ( 6 2}
+test x Expr token TERM [TERM Expr] a {0 "+" 6 4}
+test x TERM token TERM [] a {0 "+" 6 4}
+test x Expr token NONT [NONT Expr] a {1  T 6 7}
+test x NONT token NONT [] a {1  T 6 7}
+test x Expr token NONT [NONT Expr] a {1  E' 6 9}
+test x NONT token NONT [] a {1  E' 6 9}
+test x Expr token RIGHT_bracket [] a {3 ) 6 12}
+test x  token RIGHT_bracket [] a {3 ) 6 12}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 6 12}
+test x Exprbracket token LEFT_bracket [LEFT_bracket Expr RIGHT_bracket Exprbracket] a {2  ( 6 13}
+test x LEFT_bracket token LEFT_bracket [] a {2  ( 6 13}
+test x Expr token RIGHT_bracket [] a {3 ) 6 15}
+test x  token RIGHT_bracket [] a {3 ) 6 15}
+test x RIGHT_bracket token RIGHT_bracket [] a {3 ) 6 15}
+test x Exprbracket token ENDOF [$] a {7  6 16}
+[{4 /* аксиома помечена звёздочкой */ 0 0} {1 F 1 0} {2   ( 1 1} {0 "n" 1 4} {3 ) 1 7} {2 ( 2 0} {0 "(" 2 1} {1  E 2 4} {0  ")" 2 6} {3 ) 2 10} {1 T 3 0} {2   ( 3 1} {1 F 3 4} {1  T' 3 5} {3 ) 3 8} {1 T' 4 0} {2  ( 4 2} {0 "*" 4 4} {1  F 4 7} {1  T' 4 9} {3 ) 4 12} {2  ( 4 13} {3 ) 4 15} {5 * 5 0} {1  E 5 1} {2   ( 5 3} {1 T 5 6} {1  E' 5 7} {3 ) 5 10} {1 E' 6 0} {2  ( 6 2} {0 "+" 6 4} {1  T 6 7} {1  E' 6 9} {3 ) 6 12} {2  ( 6 13} {3 ) 6 15} {7  6 16}]

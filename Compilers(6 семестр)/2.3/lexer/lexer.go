@@ -12,14 +12,11 @@ import (
 type TokenType int
 
 const (
-	Star TokenType = iota
-	Plus
-	Leftbracket
-	Rightbracket
-	Terminal
+	Terminal TokenType = iota
 	NonTerminal
 	Left
 	Right
+	Comment
 	Aksiom
 	Dollar
 	TokenEOF
@@ -34,7 +31,7 @@ func (t TokenType) String() string {
 type Token struct {
 	Type        TokenType
 	Value       string
-	row, column int
+	Row, Column int
 }
 
 var ptr int = 0
@@ -57,9 +54,12 @@ func GetData() []lexem {
 	for _, curRune := range string(data) {
 		switch curRune {
 		case '\n':
-
 			if size := sb.Len(); size > 0 {
-				lexem := lexem{string(sb.String()), row, column - size}
+				ss := column - size
+				if ss < 0 {
+					ss = 0
+				}
+				lexem := lexem{string(sb.String()), row, ss}
 				out = append(out, lexem)
 				sb.Reset()
 			}
@@ -71,12 +71,12 @@ func GetData() []lexem {
 				out = append(out, lexem)
 			}
 			sb.Reset()
-		case ' ':
-			if size := sb.Len(); size > 0 {
-				lexem := lexem{string(sb.String()), row, column - size}
-				out = append(out, lexem)
-			}
-			sb.Reset()
+		/*case ' ':
+		if size := sb.Len(); size > 0 {
+			lexem := lexem{string(sb.String()), Row, Column - size}
+			out = append(out, lexem)
+		}
+		sb.Reset()*/
 		default:
 			sb.WriteRune(curRune)
 		}
@@ -90,7 +90,7 @@ func GetData() []lexem {
 	}
 	return out
 }
-func out(typee string, x, y int, value string) {
+func out(typee int, x, y int, value string) {
 	fmt.Printf("%s (%d, %d): %s\n", typee, x, y, value)
 }
 func nextToken(in []lexem) (lexem, bool) {
@@ -105,15 +105,12 @@ func nextToken(in []lexem) (lexem, bool) {
 func lexer(in []lexem) []Token {
 	var result []Token
 	pattern := []*regexp.Regexp{
-		regexp.MustCompile(`\"\*\"`),
-		regexp.MustCompile(`\"\+\"`),
-		regexp.MustCompile(`\"\(\"`),
-		regexp.MustCompile(`\"\)\"`),
-		regexp.MustCompile(`\"[a-z0-9]\"`),
-		regexp.MustCompile(`[A-Z]\'?`),
-		regexp.MustCompile(`\(`),
-		regexp.MustCompile(`\)`),
-		regexp.MustCompile(`\*`)}
+		regexp.MustCompile(`( )*\"[a-z0-9/+/*/(/)]\"`),
+		regexp.MustCompile(`( )*[A-Z]\'?`),
+		regexp.MustCompile(`( )*\(`),
+		regexp.MustCompile(`( )*\)`),
+		regexp.MustCompile(`( )*\/\*\s*(.*?)\s*\*\/`),
+		regexp.MustCompile(`( )*\*`)}
 	lexem, cond := lexem{}, true
 	for cond {
 		lexem, cond = nextToken(in)
@@ -123,14 +120,16 @@ func lexer(in []lexem) []Token {
 			loc = [][]int{}
 			for i := 0; i < len(pattern); i++ {
 				loc = append(loc, pattern[i].FindIndex([]byte(lexem.data)))
+				//fmt.Println("loc,", loc, lexem.data)
 			}
 			cond := true
 			for i := 0; i < len(loc) && cond; i++ {
+				//fmt.Println(lexem)
 				if len(loc[i]) > 0 && loc[i][0] == 0 {
 					//	fmt.Println("test", loc)
 					cur := Token{TokenType(i), lexem.data[:loc[i][1]], lexem.row, lexem.column}
 					result = append(result, cur)
-					//out(i, lexem.row, lexem.column, lexem.data[:loc[i][1]])
+					//out(i, lexem.Row, lexem.Column, lexem.data[:loc[i][1]])
 					lexem.data = lexem.data[loc[i][1]:]
 					lexem.column += loc[i][1]
 					cond = false

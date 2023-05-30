@@ -6,28 +6,22 @@
 * E  (T E')
   E' ("+" T E') ()
 
-Grammar -> Rule Grammar|
+Grammar -> COMMENT Grammar | Rule Grammar|
 Rule -> Nonterm Exprbracket | Axiom Nonterm Exprbracket
 Exprbracket -> '(' Expr')' Exprbracket |
-Expr -> Operation Nonterms | Nonterms | NestedNonTerm | Terminal
-NestedNonTerm -> '"("' NonTerm '")"'
-Nonterms -> Nonterm Nonterms
-Operation -> '"+"' | '"*"'
-Terminal -> " 'a'-'z' "
-Axiom -> '*'
+Expr ->   Nonterm Expr | Terminal Expr |
+Terminal ->  'a'-'z' '+' '-' '(' ')'
 Nonterm -> 'A'-'Z'
+Axiom -> '*'
 
-First(Grammar) {'A'-'Z'} '*' eps
-First(Rule) {'A'-'Z' *}
-First(Exprbracket) '(' eps
-First(Expr) '"+"', '"*'",{'A'-'Z'},'"("',{"'a'-'z'"}
-First(NestedNonTerm) '"("'
-First(Nonterms)  {'A'-'Z'}
-First(Operation) -> '"+"', '"*'"
-First(Terminal) {"'a'-'z'"}
-First(Axiom) {*}
-First(Nonterm) {A-Z}
+FIRST(Grammar) eps '*'  'A'-'Z'
+FIRST(Rule) '*'  'A'-'Z'
+FIRST(Exprbracket) = '(' eps
+FIRST(Expr) = eps 'a'-'z' '+' '-' '(' ')' 'A'-'Z'
+FIRST(Terminal) = 'a'-'z' '+' '-' '(' ')'
+FIRST(Nonterm) = 'A'-'Z'
+FIRST(Axiom) = '*'
 
-
-Follow(Grammar)  $
-Follow(Exprbracket)  $
+FOLLOW(Grammar) = $
+FOLLOW(Exprbracket) = $
+FOLLOW(Expr) = ')'
