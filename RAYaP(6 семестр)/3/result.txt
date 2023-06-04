@@ -16,17 +16,6 @@ JMP
 OVER 
 HALT 
 
-
-
-
-
-:_Counter 0 
-:_Items 1 2 3 4 5 
-:_rising 0 0 10 10 
-:_result_array 0 0 0 0 
-:_count 0 
-:_list_head 0 
-
 :_gcd 
 GETBP GETSP SETBP 
 1 PUSHN 
@@ -54,10 +43,10 @@ GETBP SETSP SETBP
 2 RETN 
 
 :_main 
+DUP
 GETBP GETSP SETBP 
-
-2 2 _gcd CALL DROP 
-1  GETBP ADD 
+2 2 _gcd CALL DROP
+2  GETBP ADD
 0 
 WRITE return2 JMP 
 :return2 

@@ -15,7 +15,6 @@ func GetFirst(tree syntaxAnalizer.Tree) {
 	for i := 0; i < len(tree.Leaves); i++ {
 		GetFirstRecRule(tree.Leaves[i])
 	}
-
 	firstSets := make(map[string]Set)
 	for symbol := range first {
 		firstSets[symbol] = make(Set)
@@ -32,6 +31,8 @@ func GetFirst(tree syntaxAnalizer.Tree) {
 		}
 		fmt.Println()
 	}
+
+	//fmt.Println(first)
 }
 
 func expandFirstSet(symbol string, firstSets map[string]Set) {
@@ -59,6 +60,12 @@ func union(setA, setB Set) Set {
 	}
 	return result
 }
+func GetFirstRecRule(tree syntaxAnalizer.Tree) {
+	if tree.Str == "Rule" {
+		fmt.Println(tree.Leaves[0].Leaves[0].CurrentToken.Value)
+		first[tree.Leaves[0].Leaves[0].CurrentToken.Value] = getRules(tree.Leaves[2])
+	}
+}
 func getRules(tree syntaxAnalizer.Tree) []string {
 	var result []string
 	for i := 0; i < len(tree.Leaves); i++ {
@@ -68,25 +75,15 @@ func getRules(tree syntaxAnalizer.Tree) []string {
 	}
 	return result
 }
-func GetFirstRecRule(tree syntaxAnalizer.Tree) {
-	if tree.Str == "Rule" {
-		first[tree.Leaves[0].Leaves[0].CurrentToken.Value] = getRules(tree.Leaves[2])
 
-	}
-}
 func GetFirstRecTerm(tree syntaxAnalizer.Tree) []string {
 	var result []string
-	for i := 0; i < len(tree.Leaves); i++ {
-
-		subtree := tree.Leaves[i]
-		subsubtree := subtree.Leaves[0]
-		if subsubtree.CurrentToken.Value != "" {
-			result = append(result, subsubtree.CurrentToken.Value)
-		} else if subsubtree.Str == "Terminal" {
-			result = append(result, subsubtree.Leaves[0].CurrentToken.Value)
-		} else if subsubtree.Str == "Option" {
-			result = append(result, subsubtree.Leaves[0].Leaves[0].CurrentToken.Value)
-
+	fmt.Println(tree.ToString())
+	if len(tree.Leaves) > 0 {
+		if tree.Leaves[0].CurrentToken.Value != "" {
+			result = append(result, tree.Leaves[0].CurrentToken.Value)
+		} else {
+			result = append(result, GetFirstRecTerm(tree.Leaves[0])...)
 		}
 	}
 

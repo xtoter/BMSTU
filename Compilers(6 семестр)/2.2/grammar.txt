@@ -4,26 +4,31 @@ Comment -> "@" String | eps
 
 FunctionSignature → FUNCNAME Type "::" Type
 
-Type       → Addr "(" TypeList ")" | Addr TypeName
-Addr -> '*' | '*' '*' | eps
-TypeList   → Type "," TypeList | Type "," Type
+Type       → Addr "(" TypeList ")" | Addr TypeADDr
+Addr -> '*' | eps
+TypeList   → TypeADDr "," TypeList | TypeADDr "," TypeADDr
+TypeADDr -> Addr TypeName
 TypeName  -> 'int' | 'float' | 'string' | 'bool'
 
-Statements → Statement | Statement ";" Statements
+Statements → Statement ";" | Statement ";" Statements
 Statement  → Sample "=" Expr
 
-Sample -> Val
-Val -> VARNAME | '(' Vals ')' | '{' Vals '}' | '[' Val ']' | Val ':' Val
-Vals -> eps | Val | Vals'
-Vals' -> Val ',' Val | Val ',' Vals'
+Sample -> Pattermatch
+Pattermatch -> Val 
+Pattermatch -> Val ":" Pattermatch
+Val -> VARNAME | '(' Vals ')' | '{' Vals '}' | '[' Pattermatch ']' 
+Vals -> eps | Pattermatch | Vals'
+Vals' -> Pattermatch ',' Pattermatch | Pattermatch ',' Vals'
 
 
-Expr -> Val | CallExpr | Calculate | Num | Tuple
-CallExpr   → VARNAME Val
+Expr -> Pattermatch | CallExpr | Calculate | Num | Tuple
+Alt-> Expr
+ALT->EXPR OP ALT
+CallExpr   → VARNAME Pattermatch
 Calculate -> Expr Op Expr
 Num -> DIGIT+
 Tuple -> '(' ValList ')'
-ValList -> Val | Val ',' ValList
+ValList -> Pattermatch | Pattermatch ',' ValList
  
 
 Op -> '*' | '/' | '+' | '-'

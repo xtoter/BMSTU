@@ -9,5 +9,6 @@ a := 'a';b:='b';
 for i:=1 to 10 do begin
 WriteLn(a);
 c:=a;a:=b;b:=c+b;
+a:=a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a+a;
 end
 end.

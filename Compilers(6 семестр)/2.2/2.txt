@@ -1,0 +1,752 @@
+State 0
+	0    $accept: . Program
+
+	for terminal '@': Shift(state=5)
+
+	for non-terminal Comment: go to state 1
+	for non-terminal EPS: go to state 2
+	for non-terminal FunctionDef: go to state 3
+	for non-terminal Program: go to state 4
+
+State 1
+	3    FunctionDef: Comment . FunctionSignature 'is' Statements 'end'
+
+	for terminal STRING: Shift(state=8)
+
+	for non-terminal FunctionSignature: go to state 6
+	for non-terminal VARNAME: go to state 7
+
+State 2
+	2    Program: EPS .
+	5    Comment: EPS .
+
+	for terminal STRING: Reduce(rule=5)
+	for terminal EOF: Reduce(rule=2)
+
+State 3
+	1    Program: FunctionDef . Program
+
+	for terminal '@': Shift(state=5)
+
+	for non-terminal Comment: go to state 1
+	for non-terminal EPS: go to state 2
+	for non-terminal FunctionDef: go to state 3
+	for non-terminal Program: go to state 9
+
+State 4
+	0    $accept: Program .
+
+	for terminal EOF: Accept()
+
+State 5
+	4    Comment: '@' . STRING
+
+	for terminal STRING: Shift(state=10)
+
+State 6
+	3    FunctionDef: Comment FunctionSignature . 'is' Statements 'end'
+
+	for terminal 'is': Shift(state=11)
+
+State 7
+	6    FunctionSignature: VARNAME . Type '::' Type
+
+	for terminal 'INT': Shift(state=14)
+	for terminal 'STRING': Shift(state=15)
+	for terminal 'FLOAT': Shift(state=16)
+	for terminal '(': Shift(state=17)
+
+	for non-terminal Type: go to state 12
+	for non-terminal TypeName: go to state 13
+
+State 8
+	9    VARNAME: STRING .
+
+	for terminal 'INT': Reduce(rule=9)
+	for terminal ',': Reduce(rule=9)
+	for terminal 'STRING': Reduce(rule=9)
+	for terminal 'FLOAT': Reduce(rule=9)
+	for terminal STRING: Reduce(rule=9)
+	for terminal 'end': Reduce(rule=9)
+	for terminal ')': Reduce(rule=9)
+	for terminal '(': Reduce(rule=9)
+	for terminal ENDBR: Reduce(rule=9)
+	for terminal '*': Reduce(rule=9)
+	for terminal ';': Reduce(rule=9)
+	for terminal '=': Reduce(rule=9)
+	for terminal ':': Reduce(rule=9)
+	for terminal '{': Reduce(rule=9)
+	for terminal '}': Reduce(rule=9)
+	for terminal '[': Reduce(rule=9)
+	for terminal ']': Reduce(rule=9)
+	for terminal '/': Reduce(rule=9)
+	for terminal '+': Reduce(rule=9)
+	for terminal '-': Reduce(rule=9)
+
+State 9
+	1    Program: FunctionDef Program .
+
+	for terminal EOF: Reduce(rule=1)
+
+State 10
+	4    Comment: '@' STRING .
+
+	for terminal STRING: Reduce(rule=4)
+
+State 11
+	3    FunctionDef: Comment FunctionSignature 'is' . Statements 'end'
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Pattermatch: go to state 18
+	for non-terminal Sample: go to state 19
+	for non-terminal Statement: go to state 20
+	for non-terminal Statements: go to state 21
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+
+State 12
+	6    FunctionSignature: VARNAME Type . '::' Type
+
+	for terminal '::': Shift(state=27)
+
+State 13
+	11   Type: TypeName .
+
+	for terminal ',': Reduce(rule=11)
+	for terminal '::': Reduce(rule=11)
+	for terminal 'is': Reduce(rule=11)
+	for terminal ')': Reduce(rule=11)
+
+State 14
+	15   TypeName: 'INT' .
+
+	for terminal ',': Reduce(rule=15)
+	for terminal '::': Reduce(rule=15)
+	for terminal 'is': Reduce(rule=15)
+	for terminal ')': Reduce(rule=15)
+
+State 15
+	17   TypeName: 'STRING' .
+
+	for terminal ',': Reduce(rule=17)
+	for terminal '::': Reduce(rule=17)
+	for terminal 'is': Reduce(rule=17)
+	for terminal ')': Reduce(rule=17)
+
+State 16
+	16   TypeName: 'FLOAT' .
+
+	for terminal ',': Reduce(rule=16)
+	for terminal '::': Reduce(rule=16)
+	for terminal 'is': Reduce(rule=16)
+	for terminal ')': Reduce(rule=16)
+
+State 17
+	10   Type: '(' . TypeList ')'
+
+	for terminal 'INT': Shift(state=14)
+	for terminal 'STRING': Shift(state=15)
+	for terminal 'FLOAT': Shift(state=16)
+	for terminal '(': Shift(state=17)
+
+	for non-terminal Type: go to state 28
+	for non-terminal TypeList: go to state 29
+	for non-terminal TypeName: go to state 13
+
+State 18
+	18   Sample: Pattermatch .
+
+	for terminal '=': Reduce(rule=18)
+
+State 19
+	12   Statement: Sample . '=' Altexpr
+
+	for terminal '=': Shift(state=30)
+
+State 20
+	7    Statements: Statement .
+	8    Statements: Statement . ';' Statements
+
+	for terminal 'end': Reduce(rule=7)
+	for terminal ';': Shift(state=31)
+
+State 21
+	3    FunctionDef: Comment FunctionSignature 'is' Statements . 'end'
+
+	for terminal 'end': Shift(state=32)
+
+State 22
+	31   Val: VARNAME .
+
+	for terminal ',': Reduce(rule=31)
+	for terminal 'end': Reduce(rule=31)
+	for terminal ')': Reduce(rule=31)
+	for terminal ENDBR: Reduce(rule=31)
+	for terminal '*': Reduce(rule=31)
+	for terminal ';': Reduce(rule=31)
+	for terminal '=': Reduce(rule=31)
+	for terminal ':': Reduce(rule=31)
+	for terminal '}': Reduce(rule=31)
+	for terminal ']': Reduce(rule=31)
+	for terminal '/': Reduce(rule=31)
+	for terminal '+': Reduce(rule=31)
+	for terminal '-': Reduce(rule=31)
+
+State 23
+	21   Pattermatch: Val .
+	22   Pattermatch: Val . ':' Pattermatch
+
+	for terminal ',': Reduce(rule=21)
+	for terminal 'end': Reduce(rule=21)
+	for terminal ')': Reduce(rule=21)
+	for terminal ENDBR: Reduce(rule=21)
+	for terminal '*': Reduce(rule=21)
+	for terminal ';': Reduce(rule=21)
+	for terminal '=': Reduce(rule=21)
+	for terminal ':': Shift(state=33)
+	for terminal '}': Reduce(rule=21)
+	for terminal ']': Reduce(rule=21)
+	for terminal '/': Reduce(rule=21)
+	for terminal '+': Reduce(rule=21)
+	for terminal '-': Reduce(rule=21)
+
+State 24
+	32   Val: '(' . Vals ')'
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal EPS: go to state 34
+	for non-terminal Pattermatch: go to state 35
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+	for non-terminal Vals: go to state 36
+	for non-terminal Vals_: go to state 37
+
+State 25
+	33   Val: '{' . Vals '}'
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal EPS: go to state 34
+	for non-terminal Pattermatch: go to state 35
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+	for non-terminal Vals: go to state 38
+	for non-terminal Vals_: go to state 37
+
+State 26
+	34   Val: '[' . Pattermatch ']'
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Pattermatch: go to state 39
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+
+State 27
+	6    FunctionSignature: VARNAME Type '::' . Type
+
+	for terminal 'INT': Shift(state=14)
+	for terminal 'STRING': Shift(state=15)
+	for terminal 'FLOAT': Shift(state=16)
+	for terminal '(': Shift(state=17)
+
+	for non-terminal Type: go to state 40
+	for non-terminal TypeName: go to state 13
+
+State 28
+	13   TypeList: Type . ',' TypeList
+	14   TypeList: Type . ',' Type
+
+	for terminal ',': Shift(state=41)
+
+State 29
+	10   Type: '(' TypeList . ')'
+
+	for terminal ')': Shift(state=42)
+
+State 30
+	12   Statement: Sample '=' . Altexpr
+
+	for terminal INT: Shift(state=51)
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=52)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Altexpr: go to state 43
+	for non-terminal CallExpr: go to state 44
+	for non-terminal DIGIT: go to state 45
+	for non-terminal Expr: go to state 46
+	for non-terminal Num: go to state 47
+	for non-terminal Pattermatch: go to state 48
+	for non-terminal Tuple: go to state 49
+	for non-terminal VARNAME: go to state 50
+	for non-terminal Val: go to state 23
+
+State 31
+	8    Statements: Statement ';' . Statements
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Pattermatch: go to state 18
+	for non-terminal Sample: go to state 19
+	for non-terminal Statement: go to state 20
+	for non-terminal Statements: go to state 53
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+
+State 32
+	3    FunctionDef: Comment FunctionSignature 'is' Statements 'end' .
+
+	for terminal '@': Reduce(rule=3)
+
+State 33
+	22   Pattermatch: Val ':' . Pattermatch
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Pattermatch: go to state 54
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+
+State 34
+	38   Vals: EPS .
+
+	for terminal ')': Reduce(rule=38)
+	for terminal '}': Reduce(rule=38)
+
+State 35
+	39   Vals: Pattermatch .
+	44   Vals_: Pattermatch . ',' Pattermatch
+	45   Vals_: Pattermatch . ',' Vals_
+
+	for terminal ',': Shift(state=55)
+	for terminal ')': Reduce(rule=39)
+	for terminal '}': Reduce(rule=39)
+
+State 36
+	32   Val: '(' Vals . ')'
+
+	for terminal ')': Shift(state=56)
+
+State 37
+	40   Vals: Vals_ .
+
+	for terminal ')': Reduce(rule=40)
+	for terminal '}': Reduce(rule=40)
+
+State 38
+	33   Val: '{' Vals . '}'
+
+	for terminal '}': Shift(state=57)
+
+State 39
+	34   Val: '[' Pattermatch . ']'
+
+	for terminal ']': Shift(state=58)
+
+State 40
+	6    FunctionSignature: VARNAME Type '::' Type .
+
+	for terminal 'is': Reduce(rule=6)
+
+State 41
+	13   TypeList: Type ',' . TypeList
+	14   TypeList: Type ',' . Type
+
+	for terminal 'INT': Shift(state=14)
+	for terminal 'STRING': Shift(state=15)
+	for terminal 'FLOAT': Shift(state=16)
+	for terminal '(': Shift(state=17)
+
+	for non-terminal Type: go to state 59
+	for non-terminal TypeList: go to state 60
+	for non-terminal TypeName: go to state 13
+
+State 42
+	10   Type: '(' TypeList ')' .
+
+	for terminal ',': Reduce(rule=10)
+	for terminal '::': Reduce(rule=10)
+	for terminal 'is': Reduce(rule=10)
+	for terminal ')': Reduce(rule=10)
+
+State 43
+	12   Statement: Sample '=' Altexpr .
+
+	for terminal 'end': Reduce(rule=12)
+	for terminal ';': Reduce(rule=12)
+
+State 44
+	24   Expr: CallExpr .
+
+	for terminal 'end': Reduce(rule=24)
+	for terminal '*': Reduce(rule=24)
+	for terminal ';': Reduce(rule=24)
+	for terminal '/': Reduce(rule=24)
+	for terminal '+': Reduce(rule=24)
+	for terminal '-': Reduce(rule=24)
+
+State 45
+	36   Num: DIGIT .
+
+	for terminal 'end': Reduce(rule=36)
+	for terminal '*': Reduce(rule=36)
+	for terminal ';': Reduce(rule=36)
+	for terminal '/': Reduce(rule=36)
+	for terminal '+': Reduce(rule=36)
+	for terminal '-': Reduce(rule=36)
+
+State 46
+	19   Altexpr: Expr .
+	20   Altexpr: Expr . Op Altexpr
+
+	for terminal 'end': Reduce(rule=19)
+	for terminal '*': Shift(state=62)
+	for terminal ';': Reduce(rule=19)
+	for terminal '/': Shift(state=63)
+	for terminal '+': Shift(state=64)
+	for terminal '-': Shift(state=65)
+
+	for non-terminal Op: go to state 61
+
+State 47
+	25   Expr: Num .
+
+	for terminal 'end': Reduce(rule=25)
+	for terminal '*': Reduce(rule=25)
+	for terminal ';': Reduce(rule=25)
+	for terminal '/': Reduce(rule=25)
+	for terminal '+': Reduce(rule=25)
+	for terminal '-': Reduce(rule=25)
+
+State 48
+	23   Expr: Pattermatch .
+
+	for terminal 'end': Reduce(rule=23)
+	for terminal '*': Reduce(rule=23)
+	for terminal ';': Reduce(rule=23)
+	for terminal '/': Reduce(rule=23)
+	for terminal '+': Reduce(rule=23)
+	for terminal '-': Reduce(rule=23)
+
+State 49
+	26   Expr: Tuple .
+
+	for terminal 'end': Reduce(rule=26)
+	for terminal '*': Reduce(rule=26)
+	for terminal ';': Reduce(rule=26)
+	for terminal '/': Reduce(rule=26)
+	for terminal '+': Reduce(rule=26)
+	for terminal '-': Reduce(rule=26)
+
+State 50
+	31   Val: VARNAME .
+	35   CallExpr: VARNAME . Pattermatch
+
+	for terminal STRING: Shift(state=8)
+	for terminal 'end': Reduce(rule=31)
+	for terminal '(': Shift(state=24)
+	for terminal '*': Reduce(rule=31)
+	for terminal ';': Reduce(rule=31)
+	for terminal ':': Reduce(rule=31)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+	for terminal '/': Reduce(rule=31)
+	for terminal '+': Reduce(rule=31)
+	for terminal '-': Reduce(rule=31)
+
+	for non-terminal Pattermatch: go to state 66
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+
+State 51
+	41   DIGIT: INT .
+
+	for terminal 'end': Reduce(rule=41)
+	for terminal '*': Reduce(rule=41)
+	for terminal ';': Reduce(rule=41)
+	for terminal '/': Reduce(rule=41)
+	for terminal '+': Reduce(rule=41)
+	for terminal '-': Reduce(rule=41)
+
+State 52
+	32   Val: '(' . Vals ')'
+	37   Tuple: '(' . ValList ENDBR
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal EPS: go to state 34
+	for non-terminal Pattermatch: go to state 67
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+	for non-terminal ValList: go to state 68
+	for non-terminal Vals: go to state 36
+	for non-terminal Vals_: go to state 37
+
+State 53
+	8    Statements: Statement ';' Statements .
+
+	for terminal 'end': Reduce(rule=8)
+
+State 54
+	22   Pattermatch: Val ':' Pattermatch .
+
+	for terminal ',': Reduce(rule=22)
+	for terminal 'end': Reduce(rule=22)
+	for terminal ')': Reduce(rule=22)
+	for terminal ENDBR: Reduce(rule=22)
+	for terminal '*': Reduce(rule=22)
+	for terminal ';': Reduce(rule=22)
+	for terminal '=': Reduce(rule=22)
+	for terminal '}': Reduce(rule=22)
+	for terminal ']': Reduce(rule=22)
+	for terminal '/': Reduce(rule=22)
+	for terminal '+': Reduce(rule=22)
+	for terminal '-': Reduce(rule=22)
+
+State 55
+	44   Vals_: Pattermatch ',' . Pattermatch
+	45   Vals_: Pattermatch ',' . Vals_
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Pattermatch: go to state 69
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+	for non-terminal Vals_: go to state 70
+
+State 56
+	32   Val: '(' Vals ')' .
+
+	for terminal ',': Reduce(rule=32)
+	for terminal 'end': Reduce(rule=32)
+	for terminal ')': Reduce(rule=32)
+	for terminal ENDBR: Reduce(rule=32)
+	for terminal '*': Reduce(rule=32)
+	for terminal ';': Reduce(rule=32)
+	for terminal '=': Reduce(rule=32)
+	for terminal ':': Reduce(rule=32)
+	for terminal '}': Reduce(rule=32)
+	for terminal ']': Reduce(rule=32)
+	for terminal '/': Reduce(rule=32)
+	for terminal '+': Reduce(rule=32)
+	for terminal '-': Reduce(rule=32)
+
+State 57
+	33   Val: '{' Vals '}' .
+
+	for terminal ',': Reduce(rule=33)
+	for terminal 'end': Reduce(rule=33)
+	for terminal ')': Reduce(rule=33)
+	for terminal ENDBR: Reduce(rule=33)
+	for terminal '*': Reduce(rule=33)
+	for terminal ';': Reduce(rule=33)
+	for terminal '=': Reduce(rule=33)
+	for terminal ':': Reduce(rule=33)
+	for terminal '}': Reduce(rule=33)
+	for terminal ']': Reduce(rule=33)
+	for terminal '/': Reduce(rule=33)
+	for terminal '+': Reduce(rule=33)
+	for terminal '-': Reduce(rule=33)
+
+State 58
+	34   Val: '[' Pattermatch ']' .
+
+	for terminal ',': Reduce(rule=34)
+	for terminal 'end': Reduce(rule=34)
+	for terminal ')': Reduce(rule=34)
+	for terminal ENDBR: Reduce(rule=34)
+	for terminal '*': Reduce(rule=34)
+	for terminal ';': Reduce(rule=34)
+	for terminal '=': Reduce(rule=34)
+	for terminal ':': Reduce(rule=34)
+	for terminal '}': Reduce(rule=34)
+	for terminal ']': Reduce(rule=34)
+	for terminal '/': Reduce(rule=34)
+	for terminal '+': Reduce(rule=34)
+	for terminal '-': Reduce(rule=34)
+
+State 59
+	13   TypeList: Type . ',' TypeList
+	14   TypeList: Type . ',' Type
+	14   TypeList: Type ',' Type .
+
+	for terminal ',': Shift(state=41)
+	for terminal ')': Reduce(rule=14)
+
+State 60
+	13   TypeList: Type ',' TypeList .
+
+	for terminal ')': Reduce(rule=13)
+
+State 61
+	20   Altexpr: Expr Op . Altexpr
+
+	for terminal INT: Shift(state=51)
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=52)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Altexpr: go to state 71
+	for non-terminal CallExpr: go to state 44
+	for non-terminal DIGIT: go to state 45
+	for non-terminal Expr: go to state 46
+	for non-terminal Num: go to state 47
+	for non-terminal Pattermatch: go to state 48
+	for non-terminal Tuple: go to state 49
+	for non-terminal VARNAME: go to state 50
+	for non-terminal Val: go to state 23
+
+State 62
+	27   Op: '*' .
+
+	for terminal INT: Reduce(rule=27)
+	for terminal STRING: Reduce(rule=27)
+	for terminal '(': Reduce(rule=27)
+	for terminal '{': Reduce(rule=27)
+	for terminal '[': Reduce(rule=27)
+
+State 63
+	28   Op: '/' .
+
+	for terminal INT: Reduce(rule=28)
+	for terminal STRING: Reduce(rule=28)
+	for terminal '(': Reduce(rule=28)
+	for terminal '{': Reduce(rule=28)
+	for terminal '[': Reduce(rule=28)
+
+State 64
+	29   Op: '+' .
+
+	for terminal INT: Reduce(rule=29)
+	for terminal STRING: Reduce(rule=29)
+	for terminal '(': Reduce(rule=29)
+	for terminal '{': Reduce(rule=29)
+	for terminal '[': Reduce(rule=29)
+
+State 65
+	30   Op: '-' .
+
+	for terminal INT: Reduce(rule=30)
+	for terminal STRING: Reduce(rule=30)
+	for terminal '(': Reduce(rule=30)
+	for terminal '{': Reduce(rule=30)
+	for terminal '[': Reduce(rule=30)
+
+State 66
+	35   CallExpr: VARNAME Pattermatch .
+
+	for terminal 'end': Reduce(rule=35)
+	for terminal '*': Reduce(rule=35)
+	for terminal ';': Reduce(rule=35)
+	for terminal '/': Reduce(rule=35)
+	for terminal '+': Reduce(rule=35)
+	for terminal '-': Reduce(rule=35)
+
+State 67
+	39   Vals: Pattermatch .
+	42   ValList: Pattermatch .
+	43   ValList: Pattermatch . ',' ValList
+	44   Vals_: Pattermatch . ',' Pattermatch
+	45   Vals_: Pattermatch . ',' Vals_
+
+	for terminal ',': Shift(state=72)
+	for terminal ')': Reduce(rule=39)
+	for terminal ENDBR: Reduce(rule=42)
+
+State 68
+	37   Tuple: '(' ValList . ENDBR
+
+	for terminal ENDBR: Shift(state=73)
+
+State 69
+	44   Vals_: Pattermatch . ',' Pattermatch
+	44   Vals_: Pattermatch ',' Pattermatch .
+	45   Vals_: Pattermatch . ',' Vals_
+
+	for terminal ',': Shift(state=55)
+	for terminal ')': Reduce(rule=44)
+	for terminal '}': Reduce(rule=44)
+
+State 70
+	45   Vals_: Pattermatch ',' Vals_ .
+
+	for terminal ')': Reduce(rule=45)
+	for terminal '}': Reduce(rule=45)
+
+State 71
+	20   Altexpr: Expr Op Altexpr .
+
+	for terminal 'end': Reduce(rule=20)
+	for terminal ';': Reduce(rule=20)
+
+State 72
+	43   ValList: Pattermatch ',' . ValList
+	44   Vals_: Pattermatch ',' . Pattermatch
+	45   Vals_: Pattermatch ',' . Vals_
+
+	for terminal STRING: Shift(state=8)
+	for terminal '(': Shift(state=24)
+	for terminal '{': Shift(state=25)
+	for terminal '[': Shift(state=26)
+
+	for non-terminal Pattermatch: go to state 74
+	for non-terminal VARNAME: go to state 22
+	for non-terminal Val: go to state 23
+	for non-terminal ValList: go to state 75
+	for non-terminal Vals_: go to state 70
+
+State 73
+	37   Tuple: '(' ValList ENDBR .
+
+	for terminal 'end': Reduce(rule=37)
+	for terminal '*': Reduce(rule=37)
+	for terminal ';': Reduce(rule=37)
+	for terminal '/': Reduce(rule=37)
+	for terminal '+': Reduce(rule=37)
+	for terminal '-': Reduce(rule=37)
+
+State 74
+	42   ValList: Pattermatch .
+	43   ValList: Pattermatch . ',' ValList
+	44   Vals_: Pattermatch . ',' Pattermatch
+	44   Vals_: Pattermatch ',' Pattermatch .
+	45   Vals_: Pattermatch . ',' Vals_
+
+	for terminal ',': Shift(state=72)
+	for terminal ')': Reduce(rule=44)
+	for terminal ENDBR: Reduce(rule=42)
+
+State 75
+	43   ValList: Pattermatch ',' ValList .
+
+	for terminal ENDBR: Reduce(rule=43)
+

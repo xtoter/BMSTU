@@ -20,7 +20,9 @@ class FunctionDef:
     comment: Union['Comment', None]
     signature: 'FunctionSignature'
     statements: 'Statements'
-
+@dataclass
+class EMPTY(abc.ABC):
+    pass
 @dataclass
 class Comment:
     string: str
@@ -90,17 +92,12 @@ class VariableType(Enum):
     INT = 'INT'
     FLOAT = 'FLOAT'
     STRING = 'STRING'
-@dataclass
-class EmptyStar:
-    pass
-
 
 
 INT = pe.Terminal('INT', '[0-9]+', int, priority=7)
 FLOAT = pe.Terminal('FLOAT', '[0-9]+(\\.[0-9]*)?(e[-+]?[0-9]+)?', float)
-STRING = pe.Terminal('STRING', '[A-Za-z][A-Za-z0-9]*', str.upper)
-DoubleStar = pe.Terminal('DoubleStar', r'\*\*', lambda name: None, priority=12)
-Star = pe.Terminal('Star', r'\*', lambda name: None, priority=11)
+STRING = pe.Terminal('STRING', '[A-Za-z][A-Za-z0-9 ]*', str.upper)
+ENDBR = pe.Terminal('ENDBR', '\)', str.upper,priority=7)
 
 def make_keyword(image):
     return pe.Terminal(image, image, lambda name: None,
@@ -111,33 +108,32 @@ def make_keyword(image):
 Program, FunctionDef, Comment, FunctionSignature, Type = \
     map(pe.NonTerminal, 'Program FunctionDef Comment FunctionSignature Type'.split())
 
-Addr,Addr_, TypeList, TypeName, Statements, Statement = \
-    map(pe.NonTerminal, 'Addr Addr_ TypeList TypeName Statements Statement'.split())
+Addr,Addr_, Altexpr,TypeList, TypeName, Statements, Statement = \
+    map(pe.NonTerminal, 'Addr Addr_ Altexpr TypeList TypeName Statements Statement'.split())
 
-Sample, Val, Vals, Vals_, Expr, CallExpr = \
-    map(pe.NonTerminal, 'Sample Val Vals Vals_ Expr CallExpr'.split())
+Sample, Val,Pattermatch, Vals, Vals_, Expr, CallExpr = \
+    map(pe.NonTerminal, 'Sample Val Pattermatch Vals Vals_ Expr CallExpr'.split())
 
 Calculate, Num, Tuple, ValList, Op ,DIGIT, VARNAME, EPS = \
     map(pe.NonTerminal, 'Calculate Num Tuple ValList Op DIGIT VARNAME EPS'.split())
 
 #BLBLBLBL
 
-
-Program |= FunctionDef, Program
 Program |= EPS
+Program |= FunctionDef, Program
 
 FunctionDef |= Comment, FunctionSignature, 'is', Statements, 'end'
 
 Comment |= '@', STRING
-Comment |= EPS
+Comment |= EMPTY
 
 FunctionSignature |= VARNAME, Type, '::', Type
 
-Type |= Addr, '(', TypeList, ')'
-Type |= Addr, TypeName
+Type |= '(', TypeList, ')'
+Type |=  TypeName
 
-Addr |= Star
-Addr |= EmptyStar
+#Addr |= Star
+#Addr |= EmptyStar
 #Addr |=  EPS
 
 TypeList |= Type, ',', TypeList
@@ -150,38 +146,41 @@ TypeName |= 'STRING'
 Statements |= Statement
 Statements |= Statement, ';', Statements
 
-Statement |= Sample, '=', Expr
+Statement |= Sample, '=', Altexpr
 
-Sample |= Val
+Sample |= Pattermatch
+
+Pattermatch |= Val
+Pattermatch |= Val, ':', Pattermatch
 
 Val |= VARNAME
 Val |= '(', Vals, ')'
 Val |= '{', Vals, '}'
-Val |= '[', Val, ']'
-Val |= Val, ':', Val
+Val |= '[', Pattermatch, ']'
 
 Vals |= EPS
-Vals |= Val
+Vals |= Pattermatch
 Vals |= Vals_
-Vals_ |= Val, ',', Val
-Vals_ |= Val, ',', Vals_
+Vals_ |= Pattermatch, ',', Pattermatch
+Vals_ |= Pattermatch, ',', Vals_
 
-Expr |= Val
+Altexpr |= Expr
+Altexpr |= Expr, Op,Altexpr 
+Expr |= Pattermatch
 Expr |= CallExpr
-Expr |= Calculate
 Expr |= Num
 Expr |= Tuple
 
-CallExpr |= VARNAME, Val
+CallExpr |= VARNAME, Pattermatch
 
-Calculate |= Expr, Op, Expr
+
 
 Num |= DIGIT
 
-Tuple |= '(', ValList, ')'
+Tuple |= '(', ValList, ENDBR
 
-ValList |= Val
-ValList |= Val, ',', ValList
+ValList |= Pattermatch
+ValList |= Pattermatch, ',', ValList
 
 Op |= '*'
 Op |= '/'
@@ -189,12 +188,12 @@ Op |= '+'
 Op |= '-'
 
 DIGIT |= INT
-VARNAME |= VARNAME
+VARNAME |= STRING
 
 
 p = pe.Parser(Program)
 p.add_skipped_domain('\\s')        # пробельные символы
-p.print_table()
+#p.print_table()
 assert p.is_lalr_one()
 
 

@@ -10,8 +10,9 @@ func main() {
 	T  ( F {("*","/") F} )
 	F  ( "n", "-" F,
 	     "(" E ")" )`
-
 	parser := syntaxAnalizer.NewParser(input)
+
 	tree := parser.Parse()
+	//fmt.Println(tree.ToString())
 	first.GetFirst(tree)
 }

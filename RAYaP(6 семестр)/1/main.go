@@ -72,10 +72,10 @@ func call_instruction(x int) {
 		pop()
 
 	case -12:
-		x := pop()
 		y := pop()
-		push(x)
+		x := pop()
 		push(y)
+		push(x)
 
 	case -13:
 		z := pop()
@@ -113,7 +113,7 @@ func call_instruction(x int) {
 		}
 
 	case -18:
-		CP = pop() -1
+		CP = pop() - 1
 	case -19:
 		a := pop()
 		x := pop()
@@ -172,7 +172,7 @@ func call_instruction(x int) {
 		for i := 0; i < n; i++ {
 			pop()
 		}
-		CP = a-1
+		CP = a - 1
 	case -27:
 		push(SP)
 
@@ -181,7 +181,7 @@ func call_instruction(x int) {
 		SP = a
 
 	case -29:
-		fmt.Println("BP",BP)
+		//fmt.Println("BP", BP)
 		push(BP)
 
 	case -30:
@@ -214,7 +214,7 @@ func call_instruction(x int) {
 		for i := 0; i < n; i++ {
 			push(-55)
 		}
-		SP-=n-1
+		//SP -= n - 1
 	case -37:
 		a := pop()
 		CP = a - 1
@@ -318,7 +318,7 @@ func push(x int) {
 }
 func pop() int {
 	res := stack[SP]
-	stack[SP] = 0
+	stack[SP] = -47
 	SP++
 	return res
 }
@@ -339,8 +339,8 @@ func InitProgram() []string {
 		SP = intVar
 		return os.Args[2:]
 	}
-	stack = make([]int, 200)
-	SP = 200
+	stack = make([]int, 1000)
+	SP = 1000
 	return os.Args[1:]
 
 }
@@ -401,7 +401,7 @@ func generateCode() {
 	}
 }
 func seestack() {
-	fmt.Println("->",CP, "CP", SP, "SP", BP, "BP", P, "P")
+	fmt.Println("->", CP, "CP", SP, "SP", BP, "BP", P, "P")
 	for i := len(stack) - 1; i >= SP; i-- {
 		fmt.Print(stack[i], " ")
 	}
@@ -409,15 +409,18 @@ func seestack() {
 
 }
 func run_interpreter() {
+	i := 0
 	for {
-		fmt.Println("command ", stack[CP])
-		fmt.Println("all",stack,"until")
-		seestack()
+
+		fmt.Println("command ", stack[CP], "len", 1000-SP)
+		fmt.Println("all", stack, "until")
+		//seestack()
 		call_instruction(stack[CP])
 		CP++
-
-		fmt.Println("after")
-		seestack()
+		fmt.Println("index", i)
+		i++
+		//fmt.Println("after")
+		//seestack()
 	}
 }
 func main() {
@@ -432,7 +435,7 @@ func main() {
 	calculateConstant()
 
 	generateCode()
-	fmt.Println("run")
+	//fmt.Println("run")
 	run_interpreter()
 	//for i := 0; i < len(buffer); i++ {
 	//	fmt.Println(buffer[i])

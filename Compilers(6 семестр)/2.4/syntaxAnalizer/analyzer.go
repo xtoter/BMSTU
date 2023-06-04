@@ -1,8 +1,9 @@
 package syntaxAnalizer
 
 import (
-	"2.4/lexer"
 	"fmt"
+
+	"2.4/lexer"
 )
 
 type Parser struct {
@@ -79,7 +80,7 @@ func (p *Parser) parseGrammar() Tree {
 	cur.Num = counter
 	counter++
 	cur.Leaves = append(cur.Leaves, p.parseRule())
-	for p.currentToken.Type == lexer.TokenNonterminal {
+	for p.nextTokenIndex != len(p.tokens) {
 		cur.Leaves = append(cur.Leaves, p.parseRule())
 	}
 
@@ -91,16 +92,20 @@ func (p *Parser) parseRule() Tree {
 	cur.Str = "Rule"
 	cur.Num = counter
 	counter++
-	cur.Leaves = append(cur.Leaves, p.parseNonterminal())
+	if p.currentToken.Type == lexer.TokenNonterminal {
+		cur.Leaves = append(cur.Leaves, p.parseNonterminal())
 
-	if p.currentToken.Type == lexer.TokenLeftParenthesis {
-		cur.Leaves = append(cur.Leaves, p.nextToken())
-		cur.Leaves = append(cur.Leaves, p.parseExpression())
-
-		if p.currentToken.Type == lexer.TokenRightParenthesis {
+		if p.currentToken.Type == lexer.TokenLeftParenthesis {
 			cur.Leaves = append(cur.Leaves, p.nextToken())
+			cur.Leaves = append(cur.Leaves, p.parseExpression())
+
+			if p.currentToken.Type == lexer.TokenRightParenthesis {
+				cur.Leaves = append(cur.Leaves, p.nextToken())
+			} else {
+				fmt.Println("Parsing error: expected ')', but got", p.currentToken)
+			}
 		} else {
-			fmt.Println("Parsing error: expected ')', but got", p.currentToken)
+			fmt.Println("Parsing error: expected '(', but got", p.currentToken)
 		}
 	} else {
 		fmt.Println("Parsing error: expected '(', but got", p.currentToken)
@@ -130,7 +135,7 @@ func (p *Parser) parseTerm() Tree {
 	cur.Num = counter
 	counter++
 	cur.Leaves = append(cur.Leaves, p.parseFactor())
-	for p.currentToken.Type != lexer.TokenEOF && (p.currentToken.Type == lexer.TokenTerminal || p.currentToken.Type == lexer.TokenNonterminal) {
+	for p.currentToken.Type != lexer.TokenEOF && (p.currentToken.Type == lexer.TokenTerminal || p.currentToken.Type == lexer.TokenNonterminal || p.currentToken.Type == lexer.TokenLeftParenthesis || p.currentToken.Type == lexer.TokenCurlyBracketOpen) {
 		cur.Leaves = append(cur.Leaves, p.parseFactor())
 	}
 
@@ -143,37 +148,33 @@ func (p *Parser) parseFactor() Tree {
 	cur.Num = counter
 	counter++
 	if p.currentToken.Type == lexer.TokenNonterminal {
-		cur.Leaves = append(cur.Leaves, p.parseOption())
-	} else if p.currentToken.Type == lexer.TokenTerminal && p.currentToken.Value == "\"(\"" {
-		cur.Leaves = append(cur.Leaves, p.nextToken())
 		cur.Leaves = append(cur.Leaves, p.parseNonterminal())
-		if p.currentToken.Type == lexer.TokenTerminal && p.currentToken.Value == "\")\"" {
-			cur.Leaves = append(cur.Leaves, p.nextToken())
-		} else {
-			fmt.Println("Parsing error: expected ')', but got", p.currentToken.Value)
-		}
 	} else if p.currentToken.Type == lexer.TokenTerminal {
 		cur.Leaves = append(cur.Leaves, p.parseTerminal())
-		cur.Leaves = append(cur.Leaves, p.nextToken())
-		if p.currentToken.Type == lexer.TokenNonterminal {
-			cur.Leaves = append(cur.Leaves, p.parseNonterminal())
-		}
+	} else if p.currentToken.Type == lexer.TokenLeftParenthesis {
+		cur.Leaves = append(cur.Leaves, p.parseGrouping())
+	} else if p.currentToken.Type == lexer.TokenCurlyBracketOpen {
+		cur.Leaves = append(cur.Leaves, p.parseOption())
+
 	} else {
 		fmt.Println("Parsing error: unexpected token", p.currentToken.Value)
 	}
 
 	return cur
 }
-func (p *Parser) parseTerminals() Tree {
+func (p *Parser) parseGrouping() Tree {
 	var cur Tree
-	cur.Str = "Termanals"
+	cur.Str = "Grouping"
 	cur.Num = counter
 	counter++
-	cur.Leaves = append(cur.Leaves, p.parseTerminal())
-	for p.currentToken.Type == lexer.TokenComma {
+	if p.currentToken.Type == lexer.TokenLeftParenthesis {
 		cur.Leaves = append(cur.Leaves, p.nextToken())
-		cur.Leaves = append(cur.Leaves, p.parseTerminal())
+		cur.Leaves = append(cur.Leaves, p.parseExpression())
+		cur.Leaves = append(cur.Leaves, p.nextToken())
+	} else {
+		fmt.Println("Parsing error: expected '(', but got", p.currentToken.Value)
 	}
+
 	return cur
 }
 func (p *Parser) parseOption() Tree {
@@ -181,32 +182,10 @@ func (p *Parser) parseOption() Tree {
 	cur.Str = "Option"
 	cur.Num = counter
 	counter++
-	cur.Leaves = append(cur.Leaves, p.parseNonterminal())
 	if p.currentToken.Type == lexer.TokenCurlyBracketOpen {
 		cur.Leaves = append(cur.Leaves, p.nextToken())
-		if p.currentToken.Type == lexer.TokenLeftParenthesis {
-
-			cur.Leaves = append(cur.Leaves, p.nextToken())
-			cur.Leaves = append(cur.Leaves, p.parseTerminals())
-
-			if p.currentToken.Type == lexer.TokenRightParenthesis {
-				cur.Leaves = append(cur.Leaves, p.nextToken())
-			} else {
-				fmt.Println("Parsing error: expected ')', but got", p.currentToken.Value)
-			}
-		} else {
-			fmt.Println("Parsing error: expected '(', but got", p.currentToken.Value)
-		}
-		if p.currentToken.Type == lexer.TokenNonterminal {
-			cur.Leaves = append(cur.Leaves, p.parseNonterminal())
-		} else {
-			fmt.Println("Parsing error: expected Nonterminal, but got", p.currentToken.Value)
-		}
-		if p.currentToken.Type == lexer.TokenCurlyBracketClose {
-			cur.Leaves = append(cur.Leaves, p.nextToken())
-		} else {
-			fmt.Println("Parsing error: expected '}', but got", p.currentToken.Value)
-		}
+		cur.Leaves = append(cur.Leaves, p.parseExpression())
+		cur.Leaves = append(cur.Leaves, p.nextToken())
 	} else {
 		fmt.Println("Parsing error: expected '{', but got", p.currentToken.Value)
 	}

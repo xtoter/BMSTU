@@ -1,4 +1,3 @@
-@ Объединение двух списков
 zip (*int, *int) :: *(int, int) is
   (x : xs, y : ys) = (x, y) : zip (xs, ys);
   (xs, ys) = {}
