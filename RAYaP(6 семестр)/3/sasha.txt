@@ -1,0 +1,144 @@
+_main CALL 
+HALT 
+:_in 
+IN 
+SWAP 
+JMP 
+:_out 
+SWAP 
+OUT 
+DUP 
+JMP 
+:_outnum 
+SWAP 
+OUTNUM 
+DUP 
+JMP 
+:_getbp 
+GETBP 
+SWAP 
+JMP 
+:_halt 
+OVER 
+HALT 
+:_foo 
+GETBP GETSP SETBP 
+1 PUSHN 
+35 _out  CALL DROP 
+2  GETBP ADD 
+0 
+WRITE return0 JMP 
+:return0 
+GETBP SETSP SETBP 
+JMP 
+:_gcd 
+GETBP GETSP SETBP 
+1 PUSHN 
+:cyclewhile1 
+GETBP 3 ADD READ 
+exitwhile1 JEQ 
+
+GETBP 1 SUB 
+GETBP 2 ADD READ GETBP 3 ADD READ MOD 
+WRITE 
+GETBP 2 ADD 
+GETBP 3 ADD READ 
+WRITE 
+GETBP 3 ADD 
+GETBP 1 SUB READ 
+WRITE 
+
+cyclewhile1 JMP 
+:exitwhile1 
+GETBP 2 ADD READ _outnum  CALL DROP 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return2 JMP 
+:return2 
+GETBP SETSP SETBP 
+2 RETN 
+:_testwhile1 
+GETBP GETSP SETBP 
+1 PUSHN 
+:cyclewhile3 
+GETBP 2 ADD READ 
+GETBP 3 ADD READ 
+CMP exitwhile3 JGE 
+
+GETBP 2 ADD READ _outnum  CALL DROP 
+GETBP 2 ADD 
+GETBP 2 ADD READ 1 ADD 
+WRITE 
+
+cyclewhile3 JMP 
+:exitwhile3 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return4 JMP 
+:return4 
+GETBP SETSP SETBP 
+2 RETN 
+:_testfor1 
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+GETBP 2 ADD READ 
+WRITE 
+:cyclewhile5 
+GETBP 1 SUB READ 
+GETBP 3 ADD READ 
+CMP exitwhile5 JGE 
+
+GETBP 1 SUB READ _outnum  CALL DROP 
+GETBP 1 SUB 
+GETBP 1 SUB READ 1 ADD 
+WRITE 
+
+cyclewhile5 JMP 
+:exitwhile5 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return6 JMP 
+:return6 
+GETBP SETSP SETBP 
+2 RETN 
+:_testfor2 
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+GETBP 2 ADD READ 
+WRITE 
+:cyclewhile7 
+GETBP 1 SUB READ 
+GETBP 3 ADD READ 
+CMP exitwhile7 JEQ 
+
+GETBP 1 SUB READ _outnum  CALL DROP 
+GETBP 1 SUB 
+GETBP 1 SUB READ 1 ADD 
+WRITE 
+
+cyclewhile7 JMP 
+:exitwhile7 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return8 JMP 
+:return8 
+GETBP SETSP SETBP 
+2 RETN 
+:_main 
+DUP
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+1 
+WRITE 
+9 5 _testfor1  CALL DROP 
+9 5 _testfor2  CALL DROP 
+9 5 _testfor2  CALL DROP 
+2  GETBP ADD 
+0 
+WRITE return9 JMP 
+:return9 
+GETBP SETSP SETBP 
+JMP 

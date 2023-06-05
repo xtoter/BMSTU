@@ -1,0 +1,832 @@
++++++++++++++++++
+command  104 len 0
+-> CP 0 SP 1000 BP 0 P 133
+--------stack
+
+----------stack
+
+index 0
+after
+-> CP 1 SP 999 BP 0 P 133
+--------stack
+104 
+----------stack
+
+
++++++++++++++++++
+command  -25 len 1
+-> CP 1 SP 999 BP 0 P 133
+--------stack
+104 
+----------stack
+
+index 1
+after
+-> CP 104 SP 999 BP 0 P 133
+--------stack
+2 
+----------stack
+
+
++++++++++++++++++
+command  -10 len 1
+-> CP 104 SP 999 BP 0 P 133
+--------stack
+2 
+----------stack
+
+index 2
+after
+-> CP 105 SP 998 BP 0 P 133
+--------stack
+2 2 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 2
+-> CP 105 SP 998 BP 0 P 133
+--------stack
+2 2 
+----------stack
+
+index 3
+after
+-> CP 106 SP 997 BP 0 P 133
+--------stack
+0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -27 len 3
+-> CP 106 SP 997 BP 0 P 133
+--------stack
+0 2 2 
+----------stack
+
+index 4
+after
+-> CP 107 SP 996 BP 0 P 133
+--------stack
+997 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -30 len 4
+-> CP 107 SP 996 BP 0 P 133
+--------stack
+997 0 2 2 
+----------stack
+
+index 5
+after
+-> CP 108 SP 997 BP 997 P 133
+--------stack
+0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  1 len 3
+-> CP 108 SP 997 BP 997 P 133
+--------stack
+0 2 2 
+----------stack
+
+index 6
+after
+-> CP 109 SP 996 BP 997 P 133
+--------stack
+1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -36 len 4
+-> CP 109 SP 996 BP 997 P 133
+--------stack
+1 0 2 2 
+----------stack
+
+index 7
+after
+-> CP 110 SP 996 BP 997 P 133
+--------stack
+-55 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 4
+-> CP 110 SP 996 BP 997 P 133
+--------stack
+-55 0 2 2 
+----------stack
+
+index 8
+after
+-> CP 111 SP 995 BP 997 P 133
+--------stack
+997 -55 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  1 len 5
+-> CP 111 SP 995 BP 997 P 133
+--------stack
+997 -55 0 2 2 
+----------stack
+
+index 9
+after
+-> CP 112 SP 994 BP 997 P 133
+--------stack
+1 997 -55 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -2 len 6
+-> CP 112 SP 994 BP 997 P 133
+--------stack
+1 997 -55 0 2 2 
+----------stack
+
+index 10
+after
+-> CP 113 SP 995 BP 997 P 133
+--------stack
+996 -55 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  1 len 5
+-> CP 113 SP 995 BP 997 P 133
+--------stack
+996 -55 0 2 2 
+----------stack
+
+index 11
+after
+-> CP 114 SP 994 BP 997 P 133
+--------stack
+1 996 -55 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -16 len 6
+-> CP 114 SP 994 BP 997 P 133
+--------stack
+1 996 -55 0 2 2 
+----------stack
+
+index 12
+after
+-> CP 115 SP 996 BP 997 P 133
+--------stack
+1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 4
+-> CP 115 SP 996 BP 997 P 133
+--------stack
+1 0 2 2 
+----------stack
+
+index 13
+after
+-> CP 116 SP 995 BP 997 P 133
+--------stack
+997 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  1 len 5
+-> CP 116 SP 995 BP 997 P 133
+--------stack
+997 1 0 2 2 
+----------stack
+
+index 14
+after
+-> CP 117 SP 994 BP 997 P 133
+--------stack
+1 997 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -2 len 6
+-> CP 117 SP 994 BP 997 P 133
+--------stack
+1 997 1 0 2 2 
+----------stack
+
+index 15
+after
+-> CP 118 SP 995 BP 997 P 133
+--------stack
+996 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -15 len 5
+-> CP 118 SP 995 BP 997 P 133
+--------stack
+996 1 0 2 2 
+----------stack
+
+index 16
+after
+-> CP 119 SP 995 BP 997 P 133
+--------stack
+1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  84 len 5
+-> CP 119 SP 995 BP 997 P 133
+--------stack
+1 1 0 2 2 
+----------stack
+
+index 17
+after
+-> CP 120 SP 994 BP 997 P 133
+--------stack
+84 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -25 len 6
+-> CP 120 SP 994 BP 997 P 133
+--------stack
+84 1 1 0 2 2 
+----------stack
+
+index 18
+after
+-> CP 84 SP 994 BP 997 P 133
+--------stack
+121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 6
+-> CP 84 SP 994 BP 997 P 133
+--------stack
+121 1 1 0 2 2 
+----------stack
+
+index 19
+after
+-> CP 85 SP 993 BP 997 P 133
+--------stack
+997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -27 len 7
+-> CP 85 SP 993 BP 997 P 133
+--------stack
+997 121 1 1 0 2 2 
+----------stack
+
+index 20
+after
+-> CP 86 SP 992 BP 997 P 133
+--------stack
+993 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -30 len 8
+-> CP 86 SP 992 BP 997 P 133
+--------stack
+993 997 121 1 1 0 2 2 
+----------stack
+
+index 21
+after
+-> CP 87 SP 993 BP 993 P 133
+--------stack
+997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  1 len 7
+-> CP 87 SP 993 BP 993 P 133
+--------stack
+997 121 1 1 0 2 2 
+----------stack
+
+index 22
+after
+-> CP 88 SP 992 BP 993 P 133
+--------stack
+1 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -36 len 8
+-> CP 88 SP 992 BP 993 P 133
+--------stack
+1 997 121 1 1 0 2 2 
+----------stack
+
+index 23
+after
+-> CP 89 SP 992 BP 993 P 133
+--------stack
+-55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  33 len 8
+-> CP 89 SP 992 BP 993 P 133
+--------stack
+-55 997 121 1 1 0 2 2 
+----------stack
+
+index 24
+after
+-> CP 90 SP 991 BP 993 P 133
+--------stack
+33 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  10 len 9
+-> CP 90 SP 991 BP 993 P 133
+--------stack
+33 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 25
+after
+-> CP 91 SP 990 BP 993 P 133
+--------stack
+10 33 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -25 len 10
+-> CP 91 SP 990 BP 993 P 133
+--------stack
+10 33 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 26
+after
+-> CP 10 SP 990 BP 993 P 133
+--------stack
+92 33 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -12 len 10
+-> CP 10 SP 990 BP 993 P 133
+--------stack
+92 33 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 27
+after
+-> CP 11 SP 990 BP 993 P 133
+--------stack
+33 92 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -34 len 10
+-> CP 11 SP 990 BP 993 P 133
+--------stack
+33 92 -55 997 121 1 1 0 2 2 
+----------stack
+
+!index 28
+after
+-> CP 12 SP 991 BP 993 P 133
+--------stack
+92 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -10 len 9
+-> CP 12 SP 991 BP 993 P 133
+--------stack
+92 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 29
+after
+-> CP 13 SP 990 BP 993 P 133
+--------stack
+92 92 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -18 len 10
+-> CP 13 SP 990 BP 993 P 133
+--------stack
+92 92 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 30
+after
+-> CP 92 SP 991 BP 993 P 133
+--------stack
+92 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -11 len 9
+-> CP 92 SP 991 BP 993 P 133
+--------stack
+92 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 31
+after
+-> CP 93 SP 992 BP 993 P 133
+--------stack
+-55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  2 len 8
+-> CP 93 SP 992 BP 993 P 133
+--------stack
+-55 997 121 1 1 0 2 2 
+----------stack
+
+index 32
+after
+-> CP 94 SP 991 BP 993 P 133
+--------stack
+2 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 9
+-> CP 94 SP 991 BP 993 P 133
+--------stack
+2 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 33
+after
+-> CP 95 SP 990 BP 993 P 133
+--------stack
+993 2 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -1 len 10
+-> CP 95 SP 990 BP 993 P 133
+--------stack
+993 2 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 34
+after
+-> CP 96 SP 991 BP 993 P 133
+--------stack
+995 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  0 len 9
+-> CP 96 SP 991 BP 993 P 133
+--------stack
+995 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 35
+after
+-> CP 97 SP 990 BP 993 P 133
+--------stack
+0 995 -55 997 121 1 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -16 len 10
+-> CP 97 SP 990 BP 993 P 133
+--------stack
+0 995 -55 997 121 1 1 0 2 2 
+----------stack
+
+index 36
+after
+-> CP 98 SP 992 BP 993 P 133
+--------stack
+-55 997 121 0 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  100 len 8
+-> CP 98 SP 992 BP 993 P 133
+--------stack
+-55 997 121 0 1 0 2 2 
+----------stack
+
+index 37
+after
+-> CP 99 SP 991 BP 993 P 133
+--------stack
+100 -55 997 121 0 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -18 len 9
+-> CP 99 SP 991 BP 993 P 133
+--------stack
+100 -55 997 121 0 1 0 2 2 
+----------stack
+
+index 38
+after
+-> CP 100 SP 992 BP 993 P 133
+--------stack
+-55 997 121 0 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 8
+-> CP 100 SP 992 BP 993 P 133
+--------stack
+-55 997 121 0 1 0 2 2 
+----------stack
+
+index 39
+after
+-> CP 101 SP 991 BP 993 P 133
+--------stack
+993 -55 997 121 0 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -28 len 9
+-> CP 101 SP 991 BP 993 P 133
+--------stack
+993 -55 997 121 0 1 0 2 2 
+----------stack
+
+index 40
+after
+-> CP 102 SP 993 BP 993 P 133
+--------stack
+997 121 0 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -30 len 7
+-> CP 102 SP 993 BP 993 P 133
+--------stack
+997 121 0 1 0 2 2 
+----------stack
+
+index 41
+after
+-> CP 103 SP 994 BP 997 P 133
+--------stack
+121 0 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -18 len 6
+-> CP 103 SP 994 BP 997 P 133
+--------stack
+121 0 1 0 2 2 
+----------stack
+
+index 42
+after
+-> CP 121 SP 995 BP 997 P 133
+--------stack
+0 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -11 len 5
+-> CP 121 SP 995 BP 997 P 133
+--------stack
+0 1 0 2 2 
+----------stack
+
+index 43
+after
+-> CP 122 SP 996 BP 997 P 133
+--------stack
+1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  2 len 4
+-> CP 122 SP 996 BP 997 P 133
+--------stack
+1 0 2 2 
+----------stack
+
+index 44
+after
+-> CP 123 SP 995 BP 997 P 133
+--------stack
+2 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 5
+-> CP 123 SP 995 BP 997 P 133
+--------stack
+2 1 0 2 2 
+----------stack
+
+index 45
+after
+-> CP 124 SP 994 BP 997 P 133
+--------stack
+997 2 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -1 len 6
+-> CP 124 SP 994 BP 997 P 133
+--------stack
+997 2 1 0 2 2 
+----------stack
+
+index 46
+after
+-> CP 125 SP 995 BP 997 P 133
+--------stack
+999 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  0 len 5
+-> CP 125 SP 995 BP 997 P 133
+--------stack
+999 1 0 2 2 
+----------stack
+
+index 47
+after
+-> CP 126 SP 994 BP 997 P 133
+--------stack
+0 999 1 0 2 2 
+----------stack
+
+
++++++++++++++++++
+command  -16 len 6
+-> CP 126 SP 994 BP 997 P 133
+--------stack
+0 999 1 0 2 2 
+----------stack
+
+index 48
+after
+-> CP 127 SP 996 BP 997 P 133
+--------stack
+1 0 2 0 
+----------stack
+
+
++++++++++++++++++
+command  129 len 4
+-> CP 127 SP 996 BP 997 P 133
+--------stack
+1 0 2 0 
+----------stack
+
+index 49
+after
+-> CP 128 SP 995 BP 997 P 133
+--------stack
+129 1 0 2 0 
+----------stack
+
+
++++++++++++++++++
+command  -18 len 5
+-> CP 128 SP 995 BP 997 P 133
+--------stack
+129 1 0 2 0 
+----------stack
+
+index 50
+after
+-> CP 129 SP 996 BP 997 P 133
+--------stack
+1 0 2 0 
+----------stack
+
+
++++++++++++++++++
+command  -29 len 4
+-> CP 129 SP 996 BP 997 P 133
+--------stack
+1 0 2 0 
+----------stack
+
+index 51
+after
+-> CP 130 SP 995 BP 997 P 133
+--------stack
+997 1 0 2 0 
+----------stack
+
+
++++++++++++++++++
+command  -28 len 5
+-> CP 130 SP 995 BP 997 P 133
+--------stack
+997 1 0 2 0 
+----------stack
+
+index 52
+after
+-> CP 131 SP 997 BP 997 P 133
+--------stack
+0 2 0 
+----------stack
+
+
++++++++++++++++++
+command  -30 len 3
+-> CP 131 SP 997 BP 997 P 133
+--------stack
+0 2 0 
+----------stack
+
+index 53
+after
+-> CP 132 SP 998 BP 0 P 133
+--------stack
+2 0 
+----------stack
+
+
++++++++++++++++++
+command  -18 len 2
+-> CP 132 SP 998 BP 0 P 133
+--------stack
+2 0 
+----------stack
+
+index 54
+after
+-> CP 2 SP 999 BP 0 P 133
+--------stack
+0 
+----------stack
+
+
++++++++++++++++++
+command  -32 len 1
+-> CP 2 SP 999 BP 0 P 133
+--------stack
+0 
+----------stack
+

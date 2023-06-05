@@ -218,6 +218,9 @@ func call_instruction(x int) {
 	case -37:
 		a := pop()
 		CP = a - 1
+	case -38:
+		fmt.Print(string(pop()+'0'))
+
 
 	default:
 		push(x)
@@ -301,6 +304,8 @@ func get_command_code(x string) int {
 		return -35
 	case "PUSHN":
 		return -36
+	case "OUTNUM":
+		return -38
 	default:
 		intVar, err := strconv.Atoi(x)
 		if err != nil {
@@ -401,26 +406,33 @@ func generateCode() {
 	}
 }
 func seestack() {
-	fmt.Println("->", CP, "CP", SP, "SP", BP, "BP", P, "P")
-	for i := len(stack) - 1; i >= SP; i-- {
-		fmt.Print(stack[i], " ")
-	}
+	fmt.Println("->",  "CP",CP, "SP",SP,  "BP",BP,   "P",P)
+	printstack()
 	fmt.Println()
 
+}
+func printstack(){
+	fmt.Println("--------stack")
+	for i:=SP;i<1000;i++{
+		fmt.Print(stack[i]," ")
+	}
+	fmt.Println()
+	fmt.Println("----------stack")
 }
 func run_interpreter() {
 	i := 0
 	for {
-
-		fmt.Println("command ", stack[CP], "len", 1000-SP)
-		fmt.Println("all", stack, "until")
+		//fmt.Println("+++++++++++++++++")
+		//fmt.Println("command ", stack[CP], "len", 1000-SP)
+		//fmt.Println("all", stack, "until")
 		//seestack()
 		call_instruction(stack[CP])
 		CP++
-		fmt.Println("index", i)
+		//fmt.Println("index", i)
 		i++
 		//fmt.Println("after")
 		//seestack()
+		//fmt.Println()
 	}
 }
 func main() {

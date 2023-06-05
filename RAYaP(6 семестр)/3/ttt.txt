@@ -1,8 +1,14 @@
-_main CALL
+_main
+CALL
 HALT
 :_in
 IN
 SWAP
+JMP
+:_newline
+10
+OUT
+DUP
 JMP
 :_out
 SWAP
@@ -90,29 +96,58 @@ RETN
 ;------—
 ;--------foo (p ) Nargs: 1 (var (x 1 )) LocalVarsSize: 1
 :_foo
-GETBP GETSP SETBP
-1 PUSHN
-33 _out CALL DROP
-2  GETBP ADD
+GETBP
+GETSP
+SETBP
+1
+PUSHN
+33
+_out
+CALL
+DROP
+2
+GETBP
+ADD
 0
-WRITE _l_return_3 JMP
+WRITE
+_l_return_3
+JMP
 :_l_return_3
-GETBP SETSP SETBP
+GETBP
+SETSP
+SETBP
 JMP
 ;------—
 ;--------main () Nargs: 0 (var (y 1 )) LocalVarsSize: 1
 :_main
 DUP
-GETBP GETSP SETBP
-1 PUSHN
-GETBP 1 SUB
+GETBP
+GETSP
+SETBP
+1
+PUSHN
+GETBP
+1
+SUB
 1
 WRITE
-GETBP 1 SUB READ _foo CALL DROP
-2  GETBP ADD
+GETBP
+1
+SUB
+READ
+_foo
+CALL
+DROP
+2
+GETBP
+ADD
 0
-WRITE _l_return_4 JMP
+WRITE
+_l_return_4
+JMP
 :_l_return_4
-GETBP SETSP SETBP
+GETBP
+SETSP
+SETBP
 JMP
 ;--------

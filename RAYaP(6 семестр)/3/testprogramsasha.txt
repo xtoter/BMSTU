@@ -1,0 +1,53 @@
+(function foo (p)
+(var (x 1))
+(call out '#')
+(return 0)
+)
+(function gcd (x y)
+(var (rem 1))
+(while ((L y) "<>" 0)
+(rem "=" ((L x) "%" (L y)))
+(x "=" (L y))
+(y "=" (L rem))
+)
+(call outnum (L x))
+(return (L x))
+)
+
+(function testwhile1 (x y)
+(var (rem 1))
+(while ((L x) "<" (L y))
+
+(call outnum (L x))
+(x "=" ((L x) "+" 1))
+)
+
+(return (L x))
+)
+
+(function testfor1 (x y)
+(var (rem 1))
+(for (L rem) "=" (L x) to (L y) do
+(call outnum (L rem))
+)
+(return (L x))
+)
+
+(function testfor2 (x y)
+(var (rem 1))
+(for ((rem "=" (L x)) ((L rem) "<>" (L y)) (rem "=" ((L rem) "+" 1)))
+(call outnum (L rem))
+)
+(return (L x))
+)
+
+(function main ()
+(var (y 1))
+
+(y "=" 1)
+
+(call testfor1 5 9)
+(call testfor2 5 9)
+(call testfor2 5 9)
+(return 0)
+)

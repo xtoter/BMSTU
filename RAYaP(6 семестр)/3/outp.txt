@@ -1,0 +1,26 @@
+_main CALL 
+HALT 
+:_in 
+IN 
+SWAP 
+JMP 
+:_out 
+SWAP 
+OUT 
+JMP 
+:_getbp 
+GETBP 
+SWAP 
+JMP 
+:_halt 
+OVER 
+HALT 
+:_main 
+0 SWAP
+GETBP GETSP SETBP 
+1  GETBP ADD 
+0 
+WRITE return2 JMP 
+:return2 
+GETBP SETSP SETBP 
+0 RETN 
