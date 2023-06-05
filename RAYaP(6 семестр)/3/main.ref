@@ -1,7 +1,7 @@
 $EXTERN LoadFile;
 $EXTERN LoadExpr;
 $ENTRY GO {
-	= <Start  <Ord<LoadExpr 'testprogramsasha.txt'>>> 
+	= <Start  <Ord<LoadExpr <Arg 1> <Open 'w' 1  <Arg 2>>>>>
     /*= <Prout<Epilog () () >>*/
     /*= <Start>*/
    
@@ -101,7 +101,6 @@ CompileBool{
                 <OutProgram <CompileBool t.expr2> (e.met1)>
                 <OutProgram ':'<NextIdNotAdd e.met1>>;
     ('not' t.BoolExpr) (e.met1 '/' e.met2),t.BoolExpr : {
-        e.0 = <Prout e.0>;
         TRUE  = <OutProgram e.met2 "JMP">;
         FALSE = <OutProgram e.met1 "JMP">;
     };
@@ -114,11 +113,9 @@ PrintDup{
 }
 FunctionCompile{ 
   
-    ("struct" e.any) e.other= <Prout <Struct e.any>> <FunctionCompile e.other>;
-    ("const" e.any) e.other= <Prout <Const e.any>> <FunctionCompile e.other>;
-    ("var" e.any) e.other= <Prout <GlobalVar ("var" e.any)>> <FunctionCompile e.other>;
-   /* ("function" e.any) e.other= <Prout  ("function" e.any)> <FunctionCompile e.other>;
-    */
+    ("struct" e.any) e.other= <OutProgram <Struct e.any>> <FunctionCompile e.other>;
+    ("const" e.any) e.other= <OutProgram <Const e.any>> <FunctionCompile e.other>;
+    ("var" e.any) e.other= <OutProgram <GlobalVar ("var" e.any)>> <FunctionCompile e.other>;
     ("function" s.Name (e.Params) ("var" e.Vars) e.Body) e.other= 
         <Br Npar '='  <- <CalculateSizeParam (e.Params) 2> 2>> 
         <OutProgram ':_' s.Name> <PrintDup <Cp Npar>> <Prolog (e.Params)(e.Vars)>  <Code (e.Body)>
@@ -217,9 +214,6 @@ For{
      <Instruction "while" e.BoolExpr e.Code (e.Step)>;
 
 }
-Call{
-    e.any = <Prout e.any "call">;
-}
 IfElse{
 
     "if" (e.BoolExpr) e.Body1 "else" e.Body2=  <OutProgram <CompileBool (e.BoolExpr) ('ifelsecond'<NextIdNotAdd 'else'>)>>
@@ -232,6 +226,7 @@ If{
 }
 
 OutProgram{
+    e.any = <Put 1 e.any>;
     e.any = <Prout e.any>;
     e.any = ;
 }
