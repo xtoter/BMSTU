@@ -10,117 +10,151 @@ from pprint import pprint
 from dataclasses import dataclass
 from typing import List, Union
 from enum import Enum
-
-
-@dataclass
-class EPS:
+    
+class Element(abc.ABC):
     pass
 
 @dataclass
-class EMPTY(abc.ABC):
+class Comment(Element):
+    value : str
+    
+class Value(abc.ABC):
     pass
 
+@dataclass
+class Variable(Value):
+    varname : str
+    
+@dataclass
+class IntValue(Value):
+    value : int
+    
+@dataclass
+class ValCortage(Value):
+    vals : list[Value]
+    
+@dataclass
+class ValList(Value):
+    vals : list[Value]
+    
+@dataclass
+class Cons(Value) :
+    vals : list[Value]
+    
+class Expr(abc.ABC):
+    pass
+
+@dataclass
+class ExprFunction(Expr):
+    funcname : str
+    value: Value
+    
+@dataclass
+class Operation(Expr):
+    optype: str
+    first : Expr
+    second : Expr
+@dataclass
+class Pattern():
+    sample : Value
+    result : Expr
+
+class UserType(abc.ABC):
+    pass
+
+@dataclass
+class DefaultType(UserType):
+    typename : str
+    
+@dataclass
+class TypeCortage(UserType):
+    types : list[UserType]
+    
+@dataclass
+class ScalaList(UserType):
+    type: UserType
+@dataclass
+class Define(Element):
+    funcname : str
+    intype : UserType
+    outtype: UserType
+    patterns: list[Pattern]
+
+@dataclass
+class Program:
+    defs : list[Element]
 
 INT = pe.Terminal('INT', '[0-9]+', int, priority=7)
-FLOAT = pe.Terminal('FLOAT', '[0-9]+(\\.[0-9]*)?(e[-+]?[0-9]+)?', float)
-
 VARNAME = pe.Terminal('VARNAME', '[A-Za-z][A-Za-z0-9]*', str.upper)
 STRING = pe.Terminal('STRING', '[A-Za-za-яА-Я][A-Za-z0-9a-яА-Я]*', str.upper)
-ENDBR = pe.Terminal('ENDBR', '\)', str.upper,priority=7)
+INTEGER = pe.Terminal('STRING', 'int', str.upper)
 
 def make_keyword(image):
     return pe.Terminal(image, image, lambda name: None,
                        re_flags=re.IGNORECASE, priority=10)
-KW_INTEGER, KW_FLOAT = \
-    map(make_keyword, 'integer float'.split())
+DOUBLECOLON, IS, END = \
+    map(make_keyword, ':: is end'.split())
 
 
-NProgram, NFunctionDef, NComment, NFunctionSignature, NType = \
-    map(pe.NonTerminal, 'Program FunctionDef Comment FunctionSignature Type'.split())
+NProgram, NElement, NComment, NDefine = \
+    map(pe.NonTerminal, 'Program Element Comment Define'.split())
 
-NAddr, NAddr_, NAltexpr, NTypeList, NTypeName, NStatements, NStatement = \
-    map(pe.NonTerminal, 'Addr Addr_ Altexpr TypeList TypeName Statements Statement'.split())
+NTypes, NType, NPatterns, NPattern, NVal, NExpr = \
+    map(pe.NonTerminal, 'Types Type Patterns Pattern Val Expr'.split())
 
-NSample, NVal, NPattermatch, NVals, NVals_, NExpr, NCallExpr = \
-    map(pe.NonTerminal, 'Sample Val Pattermatch Vals Vals_ Expr CallExpr'.split())
-
-NCalculate, NNum, NTuple, NValList, NOp , NDIGIT, NADDR,NCommentStr = \
-    map(pe.NonTerminal, 'Calculate Num Tuple ValList Op DIGIT ADDR NCommentStr'.split())
+NVals, NCons, NFunction = \
+    map(pe.NonTerminal, 'Vals Cons Function'.split())
+    
+NElements = \
+    map(pe.NonTerminal, 'Elements'.split())
 
 #BLBLBLBL
 
-NProgram |= EPS
-NProgram |= NFunctionDef, NProgram
 
-NFunctionDef |= NComment, NFunctionSignature, 'is', NStatements, 'end'
+NProgram |= NElements, Program
 
-NComment |= '@', STRING, NCommentStr,'\n'
-NComment |= EMPTY
-NCommentStr |= EMPTY
-NCommentStr |= STRING,NCommentStr
+NElements |= NElement, lambda x: [x]
+NElements |= NElement, NProgram, lambda x, xs: [x] + xs
 
-NFunctionSignature |= VARNAME, NType, '::', NType
+NElement |= NComment
+NElement |= NDefine
 
-NType |= NAddr, '(', NTypeList, ')'
-NType |=  NAddr, NTypeName
+NComment |= '@', STRING, Comment
 
-NAddr |=  EPS
-NAddr |= '*', NAddr
+NDefine |= VARNAME, NType, DOUBLECOLON, NType, IS, NPatterns, END, Define
 
-NTypeList |= NType, ', ', NType
-NTypeList |= NType, ', ', NTypeList
+NType |= VARNAME, DefaultType
+NType |= INTEGER, DefaultType
+NType |= '(', NTypes, ')', TypeCortage
+NType |= '*', NType, ScalaList
 
+NTypes |= NType, lambda x: [x]
+NTypes |= NTypes, ',', NType, lambda xs, x: [x] + xs
 
-NTypeName |= 'int'
-NTypeName |= 'float'
-NTypeName |= 'string'
+NPatterns |= NPattern, lambda x: [x]
+NPatterns |= NPatterns, ';', NPattern, lambda xs, x: [x] + xs
 
-NStatements |= NStatement
-NStatements |= NStatement, ';', NStatements
-
-NStatement |= NSample, '=', NAltexpr
-
-NSample |= NPattermatch
-
-NPattermatch |= NVal
-NPattermatch |= NVal, ':', NPattermatch
+NPattern |= NVal, '=', NExpr, Pattern
 
 NVal |= VARNAME
-NVal |= '(', NVals, ')'
-NVal |= '{', NVals, '}'
-NVal |= '[', NPattermatch, ']'
+NVal |= INT
+NVal |= '(', NVals, ')', ValCortage
+NVal |= '{', NVals, '}', ValList
+NVal |= NCons, Cons
 
-NVals |= EPS
-NVals |= NPattermatch
-NVals |= NVals_
-NVals_ |= NPattermatch, ',', NPattermatch
-NVals_ |= NPattermatch, ',', NVals_
+NVals |= NVal, lambda x: [x]
+NVals |= NVals, ',', NVal, lambda xs, x: [x] + xs
 
-NAltexpr |= NExpr
-NAltexpr |= NExpr, NOp,NAltexpr 
-NExpr |= NPattermatch
-NExpr |= NCallExpr
-NExpr |= NNum
-NExpr |= NTuple
+NCons |= NVal, ':', NVal, lambda xf, xs: [xf] + [xs]
+NCons |= NCons, ':', NVal, lambda xs, x: [x] + xs
 
-NCallExpr |= VARNAME, NPattermatch
+NExpr |= NFunction
+NExpr |= NExpr, '+', NExpr, Operation
+NExpr |= NExpr, '-', NExpr, Operation
+NExpr |= NExpr, '*', NExpr, Operation
+NExpr |= NExpr, '/', NExpr, Operation
 
-
-
-NNum |= NDIGIT
-
-NTuple |= '(', NValList, ENDBR
-
-NValList |= NPattermatch
-NValList |= NPattermatch, ',', NValList
-
-NOp |= '*'
-NOp |= '/'
-NOp |= '+'
-NOp |= '-'
-
-NDIGIT |= INT
-
+NFunction |= VARNAME, NVal, ExprFunction
 
 p = pe.Parser(NProgram)
 p.add_skipped_domain('\\s')        # пробельные символы

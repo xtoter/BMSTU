@@ -1,37 +1,37 @@
-Program    → FunctionDef | FunctionDef Program
-FunctionDef → Comment FunctionSignature "is" Statements "end"
-Comment -> "@" String | eps
+Program -> Element
+Program -> Program Element
+Element -> Comment
+Element -> Define
+Comment -> '@' STRING
+Define -> FUNCNAME Type DOUBLECOLON Type IS Patterns END
+Type -> TYPENAME
+Type -> '(' Types ')'
+Type -> '*' Type
 
-FunctionSignature → FUNCNAME Type "::" Type
+Types -> Type
+Types -> Types ',' Type
 
-Type       → Addr "(" TypeList ")" | Addr TypeADDr
-Addr -> '*' | eps
-TypeList   → TypeADDr "," TypeList | TypeADDr "," TypeADDr
-TypeADDr -> Addr TypeName
-TypeName  -> 'int' | 'float' | 'string' 
+Patterns -> Pattern
+Patterns -> Patterns ';' Pattern
+Pattern -> Val '=' Expr
 
-Statements → Statement ";" | Statement ";" Statements
-Statement  → Sample "=" Expr
+Val -> VARNAME
+Val -> INT
+Val -> '(' Vals ')'
+Val -> '{' Vals '}'
+Val -> '{' '}'
+Val -> Cons
 
-Sample -> Pattermatch
-Pattermatch -> Val 
-Pattermatch -> Val ":" Pattermatch
-Val -> VARNAME | '(' Vals ')' | '{' Vals '}' | '[' Pattermatch ']' 
-Vals -> eps | Pattermatch | Vals'
-Vals' -> Pattermatch ',' Pattermatch | Pattermatch ',' Vals'
+Vals -> Val
+Vals -> Vals ',' Val
+Cons -> Val ':' Val
+Cons -> Cons ':' Val
 
+Expr -> Function
+Expr -> Expr OP Expr
+Function -> FUNCNAME Val
 
-Expr -> Pattermatch | CallExpr | Calculate | Num | Tuple
-Alt-> Expr
-ALT->EXPR OP ALT
-CallExpr   → VARNAME Pattermatch
-Calculate -> Expr Op Expr
-Num -> DIGIT+
-Tuple -> '(' ValList ')'
-ValList -> Pattermatch | Pattermatch ',' ValList
- 
-
-Op -> '*' | '/' | '+' | '-'
+OP -> '* ' | '/' | '+' | '-'
 DIGIT -> '0' | ... | '9'
 VARNAME -> [a-zA-Z][a-zA-Z0-9_]*
 
