@@ -33,10 +33,30 @@
 (return (L x))
 )
 
-(function testfor2 (x y)
+(function testif (x y)
 (var (rem 1))
-(for ((rem "=" (L x)) ((L rem) "<>" (L y)) (rem "=" ((L rem) "+" 1)))
+(if ((L x) "==" (L y))
+(call outnum (L x))
+else 
+(call outnum (L y))
+)
+(return (L x))
+)
+
+(function testifc (x y)
+(var (rem 1))
+(((L x) "<=" (L y)) "?" (call outnum (L x)) ":" (call outnum (L y)))
+(return (L x))
+)
+
+
+(function testrepeat (x y)
+(var (rem 1))
+(rem "=" (L x))
+(repeat 
 (call outnum (L rem))
+(rem "=" ((L rem) "+" 1))
+until ((L rem) "<" (L y))
 )
 (return (L x))
 )
@@ -46,8 +66,6 @@
 
 (y "=" 1)
 
-(call testfor1 5 9)
-(call testfor2 5 9)
-(call testfor2 5 9)
+(call testrepeat 5 9)
 (return 0)
 )

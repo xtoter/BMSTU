@@ -188,6 +188,8 @@ Code{
 }
 Instruction{
     t.Target "=" t.Value = <OutProgram <GenExpr t.Target>><OutProgram <GenExpr t.Value>><OutProgram "WRITE">;
+    (e.cond) "?" e.true ":" e.false = <IfElse "if" (e.cond) e.true "else" e.false>;
+    "repeat" e.code "until" (e.cond) = <Repeat "repeat" e.code "until" (e.cond)>;
     "while" e.other = <While "while" e.other>;
     "call" e.other = <OutProgram <GenExpr (call e.other)> "DROP">;
     "if" e.other1 "else" e.other2 = <IfElse "if" e.other1 "else" e.other2 >;
@@ -196,6 +198,11 @@ Instruction{
     "return" t.expr= <OutProgram <+ <Dg Npar> 1> " GETBP ADD"> <OutProgram <GenExpr t.expr>> <OutProgram "WRITE" <NextIdNotAdd 'return'> "JMP">;
     e.any = <OutProgram <GenExpr (e.any)>>;
 
+}
+Repeat{
+    "repeat" e.code "until" (e.cond) = <OutProgram ':repeat'<NextIdNotAdd 'start'>>  <OutProgram <Code (e.code)>> 
+    <OutProgram <CompileBool (e.cond) ('repeat'<NextIdNotAdd 'exit'>)>> <OutProgram 'repeat'<NextIdNotAdd 'start'> "JMP"> 
+    <OutProgram ':repeat'<NextIdNotAdd 'exit'>>  
 }
 While{
     "while" (e.BoolExpr) e.Body=  <OutProgram ':cycle'<NextIdNotAdd 'while'>>  <OutProgram <CompileBool (e.BoolExpr) ('exit'<NextIdNotAdd 'while'>)>>
@@ -214,13 +221,14 @@ Call{
     e.any = <Prout e.any "call">;
 }
 IfElse{
-    "if" (e.BoolExpr) e.Body1 "else" e.Body2=   <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metkafalse> ) ]]">
-    <OutProgram ":<metkatrue>">  <OutProgram "[[" "code ebody1" "]]"> <OutProgram ":<metka-exit>" "JMP"> 
-    <OutProgram ":<metkafalse>">  <OutProgram "[[" "code ebody2" "]]"> <OutProgram ":<metka-exit>" "JMP"> <OutProgram ":<metka-exit>"> 
+
+    "if" (e.BoolExpr) e.Body1 "else" e.Body2=  <OutProgram <CompileBool (e.BoolExpr) ('ifelsecond'<NextIdNotAdd 'else'>)>>
+    <OutProgram <Code (e.Body1)>> <OutProgram 'ifelsecond'<NextIdNotAdd 'exit'> "JMP"> <OutProgram ':ifelsecond'<NextIdNotAdd 'else'>> 
+    <OutProgram <Code (e.Body2)>> <OutProgram ':ifelsecond'<NextIdNotAdd 'exit'>> ; 
 }
 If{
-    "if" (e.BoolExpr) e.Body1 =   <OutProgram "[[" "code tboolexpr" "-> ( <metkatrue> / <metka-exit> ) ]]">
-    <OutProgram ":<metkatrue>">  <OutProgram "[[" "code ebody1" "]]">  <OutProgram ":<metka-exit>"> 
+    "if" (e.BoolExpr) e.Body1 = <OutProgram <CompileBool (e.BoolExpr) ('ifcond'<NextIdNotAdd 'exit'>)>>
+    <OutProgram <Code (e.Body1)>> <OutProgram ':ifcond'<NextIdNotAdd 'exit'>>;
 }
 
 OutProgram{
