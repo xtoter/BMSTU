@@ -8,7 +8,7 @@ Type       → Addr "(" TypeList ")" | Addr TypeADDr
 Addr -> '*' | eps
 TypeList   → TypeADDr "," TypeList | TypeADDr "," TypeADDr
 TypeADDr -> Addr TypeName
-TypeName  -> 'int' | 'float' | 'string' | 'bool'
+TypeName  -> 'int' | 'float' | 'string' 
 
 Statements → Statement ";" | Statement ";" Statements
 Statement  → Sample "=" Expr
