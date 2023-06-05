@@ -1,44 +1,44 @@
 @ Декартово произведение
-zip (*int, *int) :: *(int, int) is
-  (x : xs, y : ys) = (x, y) : zip (xs, ys);
+Zip (*int, *int) :: *(int, int) is
+  (x : xs, y : ys) = (x, y) : Zip (xs, ys);
   (xs, ys) = {}
 end
 
 @ Декартово произведение
-cart_prod (*int, *int) :: *(int, int) is
-  (x : xs, ys) = append (bind (x, ys), cart_prod(xs, ys));
+CartProd (*int, *int) :: *(int, int) is
+  (x : xs, ys) = Append (Bind (x, ys), CartProd(xs, ys));
   ({}, ys) = {}
 end
 
-bind (int, *int) :: *(int, int) is
+Bind (int, *int) :: *(int, int) is
   (x, {}) = {};
-  (x, y : ys) = (x, y) : bind (x, ys)
+  (x, y : ys) = (x, y) : Bind (x, ys)
 end
 
 @ Конкатенация списков пар
-append (*(int, int), *(int, int)) :: *(int, int) is
-  (x : xs, ys) = x : append (xs, ys);
+Append (*(int, int), *(int, int)) :: *(int, int) is
+  (x : xs, ys) = x : Append (xs, ys);
   ({}, ys) = ys
 end
 
 @ Расплющивание вложенного списка
-flat **int :: *int is
-  (x : xs) : xss = x : flat [xs : xss];
-  {} : xss = flat xss;
+Flat **int :: *int is
+  (x : xs) : xss = x : Flat [xs : xss];
+  {} : xss = Flat xss;
   {} = {}
 end
 
 @ Сумма элементов списка
-sum *int :: int is
-  x : xs = x + sum xs;
+Sum *int :: int is
+  x : xs = x + Sum xs;
   {} = 0
 end
 
 @ Вычисление полинома по схеме Горнера
-polynom (int, *int) :: int is
+Polynom (int, *int) :: int is
   (x, {}) = 0;
-  (x, coef : coefs) = polynom (x, coefs) * x + coef
+  (x, coef : coefs) = Polynom (x, coefs) * x + coef
 end
 
 @ Вычисление полинома x³+x²+x+1
-polynom1111 int :: int is x = polynom (x, {1, 1, 1, 1}) end
+Polynom1111 int :: int is x = Polynom (x, {1, 1, 1, 1}) end

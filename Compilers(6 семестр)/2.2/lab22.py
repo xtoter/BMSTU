@@ -28,35 +28,47 @@ class Variable(Value):
 @dataclass
 class IntValue(Value):
     value : int
-    
-@dataclass
-class ValCortage(Value):
-    vals : list[Value]
-    
-@dataclass
-class ValList(Value):
-    vals : list[Value]
-    
-@dataclass
-class Cons(Value) :
-    vals : list[Value]
-    
-class Expr(abc.ABC):
-    pass
 
 @dataclass
-class ExprFunction(Expr):
-    funcname : str
+class Cons() :
+    vals : list[Value]
+@dataclass
+class ValCortage(Value):
+    vals : list[Cons]
+    
+@dataclass
+class ValFunc(Value):
+    funcname: str
     value: Value
     
 @dataclass
-class Operation(Expr):
-    optype: str
-    first : Expr
-    second : Expr
+class ValList(Value):
+    vals : list[Cons]
+    
+class ExprElement(abc.ABC):
+    pass
+    
+@dataclass
+class ExprOp():
+    op: str
+    elem: ExprElement
+
+@dataclass
+class Expr():
+    beg: ExprElement
+    elems: list[ExprOp]
+    
+@dataclass
+class ExprVal(ExprElement):
+    value: Cons
+    
+@dataclass
+class ExprBr(Value):
+    value: Expr
+    
 @dataclass
 class Pattern():
-    sample : Value
+    sample : Cons
     result : Expr
 
 class UserType(abc.ABC):
@@ -85,9 +97,10 @@ class Program:
     defs : list[Element]
 
 INT = pe.Terminal('INT', '[0-9]+', int, priority=7)
-VARNAME = pe.Terminal('VARNAME', '[A-Za-z][A-Za-z0-9]*', str.upper)
-STRING = pe.Terminal('STRING', '[A-Za-za-яА-Я][A-Za-z0-9a-яА-Я]*', str.upper)
-INTEGER = pe.Terminal('STRING', 'int', str.upper)
+FUNCNAME = pe.Terminal('FUNCNAME', '[A-Z][A-Za-z0-9]*', str)
+VARNAME = pe.Terminal('VARNAME', '[a-z][A-Za-z0-9]*', str)
+STRING = pe.Terminal('STRING', '[@][^\n]*', str.upper)
+INTEGER = pe.Terminal('INTEGER', 'int', str.upper)
 
 def make_keyword(image):
     return pe.Terminal(image, image, lambda name: None,
@@ -96,32 +109,32 @@ DOUBLECOLON, IS, END = \
     map(make_keyword, ':: is end'.split())
 
 
-NProgram, NElement, NComment, NDefine = \
-    map(pe.NonTerminal, 'Program Element Comment Define'.split())
+NElement, NComment, NDefine = \
+    map(pe.NonTerminal, 'Element Comment Define'.split(' '))
 
 NTypes, NType, NPatterns, NPattern, NVal, NExpr = \
-    map(pe.NonTerminal, 'Types Type Patterns Pattern Val Expr'.split())
+    map(pe.NonTerminal, 'Types Type Patterns Pattern Val Expr'.split(' '))
 
-NVals, NCons, NFunction = \
-    map(pe.NonTerminal, 'Vals Cons Function'.split())
+NVals, NCons, NExprOp, NExprOps = \
+    map(pe.NonTerminal, 'Vals Cons ExprOp ExprOps'.split(' '))
     
-NElements = \
-    map(pe.NonTerminal, 'Elements'.split())
-
-#BLBLBLBL
-
+NProgram, NElements, NOp, NExprElement = \
+    map(pe.NonTerminal, 'Program Elements Op ExprElement'.split(' '))
+    
+NVarnames, NLCons, NLVal, NLVals = \
+    map(pe.NonTerminal, 'Varnames NLCons NLVal NLVals'.split(' '))
 
 NProgram |= NElements, Program
 
 NElements |= NElement, lambda x: [x]
-NElements |= NElement, NProgram, lambda x, xs: [x] + xs
+NElements |= NElements, NElement, lambda xs, x:  xs + [x]
 
 NElement |= NComment
 NElement |= NDefine
 
-NComment |= '@', STRING, Comment
+NComment |= STRING, Comment
 
-NDefine |= VARNAME, NType, DOUBLECOLON, NType, IS, NPatterns, END, Define
+NDefine |= FUNCNAME, NType, DOUBLECOLON, NType, IS, NPatterns, END, Define
 
 NType |= VARNAME, DefaultType
 NType |= INTEGER, DefaultType
@@ -134,27 +147,47 @@ NTypes |= NTypes, ',', NType, lambda xs, x: [x] + xs
 NPatterns |= NPattern, lambda x: [x]
 NPatterns |= NPatterns, ';', NPattern, lambda xs, x: [x] + xs
 
-NPattern |= NVal, '=', NExpr, Pattern
+NPattern |= NLCons, '=', NExpr, Pattern
 
-NVal |= VARNAME
+NLCons |= NLVal, lambda x: [x]
+NLCons |= NLCons, ':', NLVal, lambda xs, x: [x] + xs
+
+NLVal |= VARNAME, Variable
+NLVal |= INT
+NLVal |= '(', NLVals, ')', ValCortage
+NLVal |= '{', NLVals, '}', ValList
+
+NLVals |= lambda: []
+NLVals |= NLCons, lambda x: [x]
+NLVals |= NLVals, ',', NLCons, lambda xs, x: [x] + xs
+
+NVal |= FUNCNAME, NVal, ValFunc
+NVal |= VARNAME, Variable
 NVal |= INT
+NVal |= '[', NExpr, ']'
 NVal |= '(', NVals, ')', ValCortage
 NVal |= '{', NVals, '}', ValList
-NVal |= NCons, Cons
 
-NVals |= NVal, lambda x: [x]
-NVals |= NVals, ',', NVal, lambda xs, x: [x] + xs
+NVals |= lambda: []
+NVals |= NCons, lambda x: [x]
+NVals |= NVals, ',', NCons, lambda xs, x: [x] + xs
 
-NCons |= NVal, ':', NVal, lambda xf, xs: [xf] + [xs]
+NCons |= NVal, lambda x: [x]
 NCons |= NCons, ':', NVal, lambda xs, x: [x] + xs
 
-NExpr |= NFunction
-NExpr |= NExpr, '+', NExpr, Operation
-NExpr |= NExpr, '-', NExpr, Operation
-NExpr |= NExpr, '*', NExpr, Operation
-NExpr |= NExpr, '/', NExpr, Operation
+NExpr |= NExprElement, NExprOps, Expr
 
-NFunction |= VARNAME, NVal, ExprFunction
+NExprOps |= lambda: []
+NExprOps |= NExprOps, NExprOp, lambda xs, x: xs + [x]
+
+NExprOp |= NOp, NExprElement, ExprOp
+
+NExprElement |= NCons
+
+NOp |= '+', lambda: '+'
+NOp |= '-', lambda: '-'
+NOp |= '*', lambda: '*'
+NOp |= '/', lambda: '/'
 
 p = pe.Parser(NProgram)
 p.add_skipped_domain('\\s')        # пробельные символы

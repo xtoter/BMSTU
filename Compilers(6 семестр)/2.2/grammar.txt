@@ -1,8 +1,7 @@
 Program -> Element
 Program -> Program Element
-Element -> Comment
+Element -> COMMENT
 Element -> Define
-Comment -> '@' STRING
 Define -> FUNCNAME Type DOUBLECOLON Type IS Patterns END
 Type -> TYPENAME
 Type -> '(' Types ')'
@@ -13,28 +12,39 @@ Types -> Types ',' Type
 
 Patterns -> Pattern
 Patterns -> Patterns ';' Pattern
-Pattern -> Val '=' Expr
+Pattern -> LCons '=' Expr
 
+LCons -> LVal
+LCons -> LCons ':' LVal
+
+LVal -> VARNAME
+LVal -> INT
+LVal -> '(' LVals ')'
+LVal -> '{' LVals '}'
+LVal -> '{' '}'
+
+LVals -> LCons
+LVals -> LVals ',' LCons
+
+Cons -> Val
+Cons -> Cons ':' Val
+
+Val -> FUNCNAME Val
 Val -> VARNAME
 Val -> INT
+Val -> '[' Expr ']'
 Val -> '(' Vals ')'
 Val -> '{' Vals '}'
 Val -> '{' '}'
-Val -> Cons
 
-Vals -> Val
-Vals -> Vals ',' Val
-Cons -> Val ':' Val
-Cons -> Cons ':' Val
+Vals -> Cons
+Vals -> Vals ',' Cons
 
-Expr -> Function
-Expr -> Expr OP Expr
-Function -> FUNCNAME Val
+Expr -> ExprElement
+Expr -> Expr ExprOps
 
-OP -> '* ' | '/' | '+' | '-'
-DIGIT -> '0' | ... | '9'
-VARNAME -> [a-zA-Z][a-zA-Z0-9_]*
+ExprOps -> ExprOp
+ExprOps -> ExprOps ExprOp
 
-
-
-
+ExprOp -> Op ExprElement
+ExprElement -> Cons
