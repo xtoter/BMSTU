@@ -142,15 +142,15 @@ NType |= '(', NTypes, ')', TypeCortage
 NType |= '*', NType, ScalaList
 
 NTypes |= NType, lambda x: [x]
-NTypes |= NTypes, ',', NType, lambda xs, x: [x] + xs
+NTypes |= NTypes, ',', NType, lambda xs, x:xs+ [x]
 
 NPatterns |= NPattern, lambda x: [x]
-NPatterns |= NPatterns, ';', NPattern, lambda xs, x: [x] + xs
+NPatterns |= NPatterns, ';', NPattern, lambda xs, x: xs + [x] 
 
 NPattern |= NLCons, '=', NExpr, Pattern
 
 NLCons |= NLVal, lambda x: [x]
-NLCons |= NLCons, ':', NLVal, lambda xs, x: [x] + xs
+NLCons |= NLCons, ':', NLVal, lambda xs, x: xs + [x] 
 
 NLVal |= VARNAME, Variable
 NLVal |= INT
@@ -159,7 +159,7 @@ NLVal |= '{', NLVals, '}', ValList
 
 NLVals |= lambda: []
 NLVals |= NLCons, lambda x: [x]
-NLVals |= NLVals, ',', NLCons, lambda xs, x: [x] + xs
+NLVals |= NLVals, ',', NLCons, lambda xs, x: xs + [x] 
 
 NVal |= FUNCNAME, NVal, ValFunc
 NVal |= VARNAME, Variable
@@ -170,10 +170,10 @@ NVal |= '{', NVals, '}', ValList
 
 NVals |= lambda: []
 NVals |= NCons, lambda x: [x]
-NVals |= NVals, ',', NCons, lambda xs, x: [x] + xs
+NVals |= NVals, ',', NCons, lambda xs, x:xs+ [x] 
 
 NCons |= NVal, lambda x: [x]
-NCons |= NCons, ':', NVal, lambda xs, x: [x] + xs
+NCons |= NCons, ':', NVal, lambda xs, x:xs+ [x] 
 
 NExpr |= NExprElement, NExprOps, Expr
 

@@ -1,0 +1,89 @@
+(function newline (p)
+(var (x 1))
+(call out '\n')
+(return 0)
+)
+(function space (p)
+(var (x 1))
+(call out ' ')
+(return 0)
+)
+(function gcd (x y)
+(var (rem 1))
+(while ((L y) "<>" 0)
+(rem "=" ((L x) "%" (L y)))
+(x "=" (L y))
+(y "=" (L rem))
+)
+(call outnum (L x))
+(return (L x))
+)
+
+
+
+(function testfor1 (x y)
+(var (rem 1))
+(for ((rem "=" (L x)) ((L rem) "<" (L y)) (rem "=" ((L rem) "+" 1)))
+(call outnum (L rem))
+(call space 1)
+)
+(return (L x))
+)
+
+
+
+(function testifc (x y)
+(var (rem 1))
+(((L x) "<" (L y)) "?" (call outnum 1) ":" (call outnum 0))
+(return (L x))
+)
+
+
+
+
+(function testfunc (x y)
+(var (rem 1))
+(rem "=" (L x))
+
+(call newline 1)
+
+(repeat 
+(call outnum (L rem))
+(call space 1)
+(rem "=" ((L rem) "+" 1))
+until ((L rem) "<" (L y))
+)
+
+(call newline 1)
+
+
+(for (L rem) "=" (L x) to (L y) do
+(call outnum (L rem))
+(call space 1)
+)
+
+(call newline 1)
+
+
+
+
+(call gcd 5 10)
+
+(call newline 1)
+
+
+
+(return (L x))
+)
+
+(function main ()
+(var (y 1))
+
+(y "=" 9)
+
+(call testfunc 5 (L y))
+(call testifc 5 10)
+(call newline 1)
+
+(return 0)
+)

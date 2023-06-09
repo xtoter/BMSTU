@@ -219,8 +219,7 @@ func call_instruction(x int) {
 		a := pop()
 		CP = a - 1
 	case -38:
-		fmt.Print(string(pop()+'0'))
-
+		fmt.Print(pop())
 
 	default:
 		push(x)
@@ -344,8 +343,8 @@ func InitProgram() []string {
 		SP = intVar
 		return os.Args[2:]
 	}
-	stack = make([]int, 1000)
-	SP = 1000
+	stack = make([]int, 10000)
+	SP = 10000
 	return os.Args[1:]
 
 }
@@ -406,15 +405,15 @@ func generateCode() {
 	}
 }
 func seestack() {
-	fmt.Println("->",  "CP",CP, "SP",SP,  "BP",BP,   "P",P)
+	fmt.Println("->", "CP", CP, "SP", SP, "BP", BP, "P", P)
 	printstack()
 	fmt.Println()
 
 }
-func printstack(){
+func printstack() {
 	fmt.Println("--------stack")
-	for i:=SP;i<1000;i++{
-		fmt.Print(stack[i]," ")
+	for i := SP; i < 10000; i++ {
+		fmt.Print(stack[i], " ")
 	}
 	fmt.Println()
 	fmt.Println("----------stack")
@@ -423,7 +422,7 @@ func run_interpreter() {
 	i := 0
 	for {
 		//fmt.Println("+++++++++++++++++")
-		//fmt.Println("command ", stack[CP], "len", 1000-SP)
+		//fmt.Println("command ", stack[CP], "len", 10000-SP)
 		//fmt.Println("all", stack, "until")
 		//seestack()
 		call_instruction(stack[CP])

@@ -1,0 +1,162 @@
+_main CALL 
+HALT 
+:_in 
+IN 
+SWAP 
+JMP 
+:_out 
+SWAP 
+OUT 
+DUP 
+JMP 
+:_outnum 
+SWAP 
+OUTNUM 
+DUP 
+JMP 
+:_getbp 
+GETBP 
+SWAP 
+JMP 
+:_halt 
+OVER 
+HALT 
+
+
+
+
+
+
+:_heap 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+:_testtemp_ttt 
+GETBP GETSP SETBP 
+97 _out  CALL DROP 
+:return0 
+GETBP SETSP SETBP 
+JMP 
+
+:_testtemp_ddd 
+GETBP GETSP SETBP 
+98 _out  CALL DROP 
+:return1 
+GETBP SETSP SETBP 
+JMP 
+
+
+:_init_heap 
+DUP
+GETBP GETSP SETBP 
+1 PUSHN 
+_heap  0 ADD 
+0 
+WRITE 
+_heap  1 ADD 
+100 2 4 MUL SUB 
+WRITE 
+_heap  2 ADD 
+0 
+WRITE 
+GETBP 1 SUB 
+100 4 SUB 
+WRITE 
+GETBP 1 SUB READ 0 ADD 
+1 
+WRITE 
+GETBP 1 SUB READ 1 ADD 
+0 
+WRITE 
+GETBP 1 SUB READ 2 ADD 
+_heap  
+WRITE 
+2  GETBP ADD 
+0 
+WRITE return2 JMP 
+:return2 
+GETBP SETSP SETBP 
+JMP 
+:_split_block 
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 2 ADD READ 1 ADD READ 
+GETBP 3 ADD READ 4 ADD 
+CMP ifcondexit3 JLE 
+
+GETBP 1 SUB 
+GETBP 2 ADD READ 4 GETBP 3 ADD ADD ADD 
+WRITE 
+GETBP 1 SUB READ 0 ADD 
+0 
+WRITE 
+GETBP 1 SUB READ 1 ADD 
+GETBP 2 ADD READ 1 ADD READ GETBP 3 ADD READ 4 ADD SUB 
+WRITE 
+GETBP 1 SUB READ 2 ADD 
+GETBP 2 ADD READ 
+WRITE 
+GETBP 2 ADD READ 1 ADD 
+GETBP 3 ADD READ 
+WRITE 
+
+:ifcondexit3 
+3  GETBP ADD 
+0 
+WRITE return3 JMP 
+:return3 
+GETBP SETSP SETBP 
+2 RETN 
+:_malloc 
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+_heap  
+WRITE 
+:cyclewhile4 
+GETBP 1 SUB READ 1 ADD READ 
+exitwhile4 JEQ 
+
+GETBP 1 SUB READ 0 ADD READ 
+0 
+CMP ifelsecondelse4 JEQ 
+
+
+GETBP 1 SUB READ 1 ADD READ 
+GETBP 2 ADD READ 
+CMP ifelsecondelse4 JLT 
+
+GETBP 2 ADD READ GETBP 1 SUB READ _split_block  CALL DROP 
+GETBP 1 SUB READ 0 ADD 
+1 
+WRITE 
+2  GETBP ADD 
+GETBP 1 SUB READ 4 ADD 
+WRITE return4 JMP 
+ifelsecondexit4 JMP 
+:ifelsecondelse4 
+GETBP 1 SUB 
+GETBP 1 SUB READ 3 ADD READ 
+WRITE 
+:ifelsecondexit4 
+
+cyclewhile4 JMP 
+:exitwhile4 
+1  GETBP ADD 
+0 
+WRITE return4 JMP 
+:return4 
+GETBP SETSP SETBP 
+JMP 
+:_main 
+DUP
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+9 
+WRITE 
+_init_heap  CALL DROP 
+1 _malloc  CALL DROP 
+2  GETBP ADD 
+0 
+WRITE return5 JMP 
+:return5 
+GETBP SETSP SETBP 
+JMP 

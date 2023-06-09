@@ -1,4 +1,4 @@
-@ Декартово произведение
+@ Объединение двух списков
 Zip (*int, *int) :: *(int, int) is
   (x : xs, y : ys) = (x, y) : Zip (xs, ys);
   (xs, ys) = {}
@@ -42,3 +42,11 @@ end
 
 @ Вычисление полинома x³+x²+x+1
 Polynom1111 int :: int is x = Polynom (x, {1, 1, 1, 1}) end
+
+Cons3 (int, *int) :: *int is
+  (x, xs) = x : x : x : xs
+end
+
+Match *int :: (int, int, *int) is
+  x : y : rest = (x, y, rest)
+end
