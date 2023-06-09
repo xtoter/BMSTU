@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/xtoter/github/BMSTU/GOK/lab3/build",
+  "command": "/usr/bin/g++  -I/usr/lib/llvm-11/include -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -std=gnu++14 -o CMakeFiles/lab3.dir/main.cpp.o -c /home/xtoter/github/BMSTU/GOK/lab3/main.cpp",
+  "file": "/home/xtoter/github/BMSTU/GOK/lab3/main.cpp"
+}
+]

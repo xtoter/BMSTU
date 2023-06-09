@@ -1,0 +1,14 @@
+; правила грамматики
+(E) = (T) [ [\+|-] (T) ]*.
+(T) = (F) [ [\*|/] (F) ]*.
+(F) = n | -(F) | \( (E) \).
+
+
+PROGRAM ::= 'int main()' '{' EXPRS "return" ";" (TERM | NTERM) '}'
+EXPRS ::= EXPR EXPRS | EPS
+EXPR ::= NTERM '=' FACT ';' | 'if' (NTERM) '{' EXPR '}' | 'int' NTERM ';' | "while" FACT_bin '{' EXPR '}' | "return" (TERM | NTERM) ";"
+FACT ::= OPERAND (+ | - | *) OPERAND
+OPERAND ::= TERM | NTERM
+TERM ::= [0-9]+
+NTERM ::= [a-zA-Z]+
+FACT_bin ::= FACT > FACT
