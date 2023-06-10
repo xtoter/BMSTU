@@ -22,6 +22,7 @@ NextIdNotAdd{
 }
 
 GenExpr {
+    ((e.cond) "?" e.true ":" e.false) = <IfElse "if" (e.cond) e.true "else" e.false>;
     s.Number, <Type s.Number> : 'N' e.1 = s.Number;
     s.Name, <GetConst s.Name> : Found s.Value = s.Value;
     s.Name, <GetLocal s.Name> : Found (s.Sign s.Offset),
@@ -210,7 +211,6 @@ Code{
 }
 Instruction{
     t.Target "=" t.Value = <OutProgram <GenExpr t.Target>><OutProgram <GenExpr t.Value>><OutProgram "WRITE">;
-    (e.cond) "?" e.true ":" e.false = <IfElse "if" (e.cond) e.true "else" e.false>;
     "repeat" e.code "until" (e.cond) = <Repeat "repeat" e.code "until" (e.cond)>;
     "while" e.other = <While "while" e.other>;
     "call" e.other = <OutProgram <GenExpr (call e.other)> "DROP">;

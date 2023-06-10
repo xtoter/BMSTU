@@ -34,7 +34,8 @@
 
 (function testifc (x y)
 (var (rem 1))
-(((L x) "<" (L y)) "?" (call outnum 1) ":" (call outnum 0))
+(rem "=" (((L x) "<" (L y)) "?" (L x) ":" (L y)))
+(call outnum (L rem))
 (return (L x))
 )
 
@@ -82,7 +83,7 @@ until ((L rem) "<" (L y))
 (y "=" 9)
 
 (call testfunc 5 (L y))
-(call testifc 5 10)
+(call testifc 7 6)
 (call newline 1)
 
 (return 0)
