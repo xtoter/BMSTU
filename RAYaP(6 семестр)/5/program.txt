@@ -1,76 +1,31 @@
 (const int 1)
 (const ptr 1)
-(const USED "=" 1)
-(const FREE "=" 0)
-(const HEAP_SIZE "=" 100)
-(struct Block
-(Block_flags int)
-(Block_size int)
-(Block_prev ptr)
-(Block_next ptr)
+
+
+
+(class Parent()
+(fields (x int))
+(method say (this) (call out 'say'))
+(method give (this) (return 22))
 )
 
-
-(var heap HEAP_SIZE)
-
-(class testtemp()
-(fields (last ptr))
-(method ttt (this a) (call out 'a'))
-(method ddd (this b) (call out 'b'))
+(class Child(Parent)
+(fields (y int))
+(method say (this) (call out 'c'))
+(method saynumber (this x) (call outnum (L x)))
 )
-
-(function init_heap ()
-(var (last ptr))
-((heap "+" Block_flags) "=" FREE)
-((heap "+" Block_size) "="
-(HEAP_SIZE "-" (2 "*" Block)))
-((heap "+" Block_prev) "=" 0)
-(last "="
-(HEAP_SIZE "-" Block))
-(((L last) "+" Block_flags) "=" USED)
-(((L last) "+" Block_size) "=" 0)
-(((L last) "+" Block_prev) "=" heap)
-(return 0)
-)
-
-(function split_block (b size)
-    (var (nextb ptr))
-    (if ((L ((L b) "+" Block_size)) ">" ((L size) "+" Block))
-        (nextb "=" ((L b) "+" (Block "+" size)))
-        (((L nextb) "+" Block_flags) "=" FREE)
-        (((L nextb) "+" Block_size) "="
-        ((L ((L b) "+" Block_size)) "-" ((L size) "+" Block))
-        )
-        (((L nextb) "+" Block_prev) "=" (L b))
-        (((L b) "+" Block_size) "=" (L size))
-    )
-    (return 0)
-)
-
-(function malloc (size)
-    (var (b ptr))
-    (b "=" heap)
-    (while ((L ((L b) "+" Block_size)) "<>" 0)
-        (if (((L ((L b) "+" Block_flags)) "==" FREE)
-                "and" ((L ((L b) "+" Block_size)) ">=" (L size)))
-            (call split_block (L b) (L size))
-            (((L b) "+" Block_flags) "=" USED)
-            (return ((L b) "+" Block))
-        else
-            (b "=" (L ((L b) "+" Block_next)))
-        )
-    )
-    (return 0)
-)
-
-
 
 (function main ()
 (var (y 1))
 
-(y "=" 9)
-(call init_heap)
-(call malloc 1)
+(init p Parent)
+(mcall p say)
+(init c Child)
+
+(if (c "instanceof" Parent)
+    (mcall c say)
+)
 
 (return 0)
 )
+

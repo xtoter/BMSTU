@@ -1,0 +1,6 @@
+$ENTRY GO {
+	,<TestFunc >:t.1,<Prout 1>:,<Prout 2>:= <Prout t.1>
+}
+TestFunc{
+    e.0 = <Br "test" '=' 5> <Cp "test">;
+}

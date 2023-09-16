@@ -28,17 +28,32 @@ HALT
 
 
 :_heap 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+:_testtemp_ttt 
+GETBP GETSP SETBP 
+97 _out CALL DROP 
+:return0 
+GETBP SETSP SETBP 
+JMP 
+
+:_testtemp_ddd 
+GETBP GETSP SETBP 
+98 _out CALL DROP 
+:return1 
+GETBP SETSP SETBP 
+JMP 
+
+
 :_init_heap 
 DUP
 GETBP GETSP SETBP 
 1 PUSHN 
-_heap  0 ADD 
+_heap 0 ADD 
 0 
 WRITE 
-_heap  1 ADD 
+_heap 1 ADD 
 100 2 4 MUL SUB 
 WRITE 
-_heap  2 ADD 
+_heap 2 ADD 
 0 
 WRITE 
 GETBP 1 SUB 
@@ -51,12 +66,12 @@ GETBP 1 SUB READ 1 ADD
 0 
 WRITE 
 GETBP 1 SUB READ 2 ADD 
-_heap  
+_heap 
 WRITE 
 2  GETBP ADD 
 0 
-WRITE return0 JMP 
-:return0 
+WRITE return2 JMP 
+:return2 
 GETBP SETSP SETBP 
 JMP 
 :_split_block 
@@ -64,8 +79,8 @@ GETBP GETSP SETBP
 1 PUSHN 
 GETBP 2 ADD READ 1 ADD READ 
 GETBP 3 ADD READ 4 ADD 
-CMP ifcondexit1 JLE 
-GETBP 2 ADD READ 1 ADD READ GETBP 3 ADD READ 4 ADD CMP ifcondexit1 JLE 
+CMP if3exit JLE 
+
 GETBP 1 SUB 
 GETBP 2 ADD READ 4 GETBP 3 ADD ADD ADD 
 WRITE 
@@ -81,53 +96,53 @@ WRITE
 GETBP 2 ADD READ 1 ADD 
 GETBP 3 ADD READ 
 WRITE 
-GETBP 1 SUB GETBP 2 ADD READ 4 GETBP 3 ADD ADD ADD WRITE GETBP 1 SUB READ 0 ADD 0 WRITE GETBP 1 SUB READ 1 ADD GETBP 2 ADD READ 1 ADD READ GETBP 3 ADD READ 4 ADD SUB WRITE GETBP 1 SUB READ 2 ADD GETBP 2 ADD READ WRITE GETBP 2 ADD READ 1 ADD GETBP 3 ADD READ WRITE 
-:ifcondexit1 
+
+:if3exit 
 3  GETBP ADD 
 0 
-WRITE return1 JMP 
-:return1 
+WRITE return4 JMP 
+:return4 
 GETBP SETSP SETBP 
 2 RETN 
 :_malloc 
 GETBP GETSP SETBP 
 1 PUSHN 
 GETBP 1 SUB 
-_heap  
+_heap 
 WRITE 
-:cyclewhile2 
+:cyclewhile5 
 GETBP 1 SUB READ 1 ADD READ 
-exitwhile2 JEQ 
-GETBP 1 SUB READ 1 ADD READ exitwhile2 JEQ 
+exitwhile5 JEQ 
+
 GETBP 1 SUB READ 0 ADD READ 
 0 
-CMP ifelsecondelse2 JEQ 
-GETBP 1 SUB READ 0 ADD READ 0 CMP ifelsecondelse2 JEQ 
-GETBP 1 SUB READ 0 ADD READ 0 CMP ifelsecondelse2 JEQ 
+CMP ifelsecond6else JEQ 
+
+
 GETBP 1 SUB READ 1 ADD READ 
 GETBP 2 ADD READ 
-CMP ifelsecondelse2 JLT 
-GETBP 1 SUB READ 1 ADD READ GETBP 2 ADD READ CMP ifelsecondelse2 JLT 
-GETBP 2 ADD READ GETBP 1 SUB READ _split_block  CALL DROP 
+CMP ifelsecond6else JLT 
+
+GETBP 2 ADD READ GETBP 1 SUB READ _split_block CALL DROP 
 GETBP 1 SUB READ 0 ADD 
 1 
 WRITE 
 2  GETBP ADD 
 GETBP 1 SUB READ 4 ADD 
-WRITE return2 JMP 
-ifelsecondexit2 JMP 
-:ifelsecondelse2 
+WRITE return7 JMP 
+ifelsecond6exit JMP 
+:ifelsecond6else 
 GETBP 1 SUB 
 GETBP 1 SUB READ 3 ADD READ 
 WRITE 
-:ifelsecondexit2 
-GETBP 1 SUB READ 0 ADD READ 0 CMP ifelsecondelse2 JEQ GETBP 1 SUB READ 1 ADD READ GETBP 2 ADD READ CMP ifelsecondelse2 JLT GETBP 2 ADD READ GETBP 1 SUB READ _split_block  CALL DROP GETBP 1 SUB READ 0 ADD 1 WRITE 2  GETBP ADD GETBP 1 SUB READ 4 ADD WRITE return2 JMP ifelsecondexit2 JMP :ifelsecondelse2 GETBP 1 SUB GETBP 1 SUB READ 3 ADD READ WRITE :ifelsecondexit2 
-cyclewhile2 JMP 
-:exitwhile2 
+:ifelsecond6exit 
+
+cyclewhile5 JMP 
+:exitwhile5 
 1  GETBP ADD 
 0 
-WRITE return3 JMP 
-:return3 
+WRITE return7 JMP 
+:return7 
 GETBP SETSP SETBP 
 JMP 
 :_main 
@@ -137,11 +152,11 @@ GETBP GETSP SETBP
 GETBP 1 SUB 
 9 
 WRITE 
-GETBP 1 SUB READ _outnum  CALL DROP 
-10 _out  CALL DROP 
+_init_heap CALL DROP 
+1 _malloc CALL DROP 
 2  GETBP ADD 
 0 
-WRITE return4 JMP 
-:return4 
+WRITE return8 JMP 
+:return8 
 GETBP SETSP SETBP 
 JMP 

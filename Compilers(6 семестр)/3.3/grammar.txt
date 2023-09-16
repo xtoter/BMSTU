@@ -1,0 +1,55 @@
+Program -> Element
+Program -> Program Element
+Element -> COMMENT
+Element -> Define
+Define -> FUNCNAME Type DOUBLECOLON Type IS Patterns END //проверка на FUNCNAME 
+Type -> TYPENAME
+Type -> '(' Types ')'
+Type -> '*' Type
+
+Types -> Type
+Types -> Types ',' Type
+
+Patterns -> Pattern
+Patterns -> Patterns ';' Pattern
+Pattern -> LCons '=' Expr
+
+LCons -> LVal
+LCons -> LCons ':' LVal
+
+LVal -> VARNAME
+LVal -> INT
+LVal -> PriorityExpr
+LVal -> '(' LVals ')'
+LVal -> '{' LVals '}'
+LVal -> '{' '}'
+
+PriorityVal -> '[' LVal ']'
+
+LVals -> LCons
+LVals -> LVals ',' LCons
+
+Cons -> Val
+Cons -> Cons ':' Val
+
+Val -> FUNCNAME Val
+Val -> VARNAME
+Val -> INT
+Val -> PriorityExpr
+Val -> '(' Vals ')'
+Val -> '{' Vals '}'
+Val -> '{' '}'
+
+PriorityExpr -> '[' Expr ']'
+
+Vals -> Cons
+Vals -> Vals ',' Cons
+
+Expr -> ExprElement
+Expr -> Expr ExprOps
+
+ExprOps -> ExprOp
+ExprOps -> ExprOps ExprOp
+
+ExprOp -> Op ExprElement
+ExprElement -> Cons

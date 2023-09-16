@@ -30,6 +30,9 @@ class IntValue(Value):
     value : int
 
 @dataclass
+class PriorityVal(Value):
+    vals : list[Value]
+@dataclass
 class Cons() :
     vals : list[Value]
 @dataclass
@@ -57,6 +60,10 @@ class ExprOp():
 class Expr():
     beg: ExprElement
     elems: list[ExprOp]
+    
+@dataclass
+class PriorityExpr(Value):
+    vals : list[Expr]
     
 @dataclass
 class ExprVal(ExprElement):
@@ -115,14 +122,14 @@ NElement, NComment, NDefine = \
 NTypes, NType, NPatterns, NPattern, NVal, NExpr = \
     map(pe.NonTerminal, 'Types Type Patterns Pattern Val Expr'.split(' '))
 
-NVals, NCons, NExprOp, NExprOps = \
-    map(pe.NonTerminal, 'Vals Cons ExprOp ExprOps'.split(' '))
+NVals, NCons, NExprOp, NExprOps, NConsVal = \
+    map(pe.NonTerminal, 'Vals Cons ExprOp ExprOps NConsVal'.split(' '))
     
 NProgram, NElements, NOp, NExprElement = \
     map(pe.NonTerminal, 'Program Elements Op ExprElement'.split(' '))
     
-NVarnames, NLCons, NLVal, NLVals = \
-    map(pe.NonTerminal, 'Varnames NLCons NLVal NLVals'.split(' '))
+NVarnames, NLCons, NLVal, NLVals, NLConsVal= \
+    map(pe.NonTerminal, 'Varnames NLCons NLVal NLVals NLConsVal'.split(' '))
 
 NProgram |= NElements, Program
 
@@ -147,33 +154,37 @@ NTypes |= NTypes, ',', NType, lambda xs, x:xs+ [x]
 NPatterns |= NPattern, lambda x: [x]
 NPatterns |= NPatterns, ';', NPattern, lambda xs, x: xs + [x] 
 
-NPattern |= NLCons, '=', NExpr, Pattern
+NPattern |= NLConsVal, '=', NExpr, Pattern
 
-NLCons |= NLVal, lambda x: [x]
-NLCons |= NLCons, ':', NLVal, lambda xs, x: xs + [x] 
+NLConsVal |= NLVal, NLCons, lambda x, xs: [x] + [(xs)]
+NLCons |= lambda: []
+NLCons |= ':', NLVal, NLCons, lambda x, xs: [x] + [(xs)]
+
 
 NLVal |= VARNAME, Variable
 NLVal |= INT
+NLVal |= '[', NLConsVal, ']'
 NLVal |= '(', NLVals, ')', ValCortage
 NLVal |= '{', NLVals, '}', ValList
 
 NLVals |= lambda: []
-NLVals |= NLCons, lambda x: [x]
-NLVals |= NLVals, ',', NLCons, lambda xs, x: xs + [x] 
+NLVals |= NLConsVal, lambda x: [x]
+NLVals |= NLVals, ',', NLConsVal, lambda xs, x: xs + [x] 
 
 NVal |= FUNCNAME, NVal, ValFunc
 NVal |= VARNAME, Variable
 NVal |= INT
-NVal |= '[', NExpr, ']'
+NVal |= '[', NExpr, ']', PriorityExpr
 NVal |= '(', NVals, ')', ValCortage
 NVal |= '{', NVals, '}', ValList
 
 NVals |= lambda: []
-NVals |= NCons, lambda x: [x]
-NVals |= NVals, ',', NCons, lambda xs, x:xs+ [x] 
+NVals |= NConsVal, lambda x: [x]
+NVals |= NVals, ',', NConsVal, lambda xs, x:xs+ [x] 
 
-NCons |= NVal, lambda x: [x]
-NCons |= NCons, ':', NVal, lambda xs, x:xs+ [x] 
+NConsVal |= NVal, NCons, lambda x, xs: [x] + [(xs)]
+NCons |= lambda: []
+NCons |= ':', NVal, NCons, lambda x, xs: [x] + [(xs)] 
 
 NExpr |= NExprElement, NExprOps, Expr
 
@@ -182,7 +193,7 @@ NExprOps |= NExprOps, NExprOp, lambda xs, x: xs + [x]
 
 NExprOp |= NOp, NExprElement, ExprOp
 
-NExprElement |= NCons
+NExprElement |= NConsVal
 
 NOp |= '+', lambda: '+'
 NOp |= '-', lambda: '-'

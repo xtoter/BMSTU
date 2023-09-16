@@ -24,7 +24,7 @@ HALT
 :_newline 
 GETBP GETSP SETBP 
 1 PUSHN 
-10 _out  CALL DROP 
+10 _out CALL DROP 
 2  GETBP ADD 
 0 
 WRITE return0 JMP 
@@ -34,7 +34,7 @@ JMP
 :_space 
 GETBP GETSP SETBP 
 1 PUSHN 
-32 _out  CALL DROP 
+32 _out CALL DROP 
 2  GETBP ADD 
 0 
 WRITE return1 JMP 
@@ -47,7 +47,7 @@ GETBP GETSP SETBP
 :cyclewhile2 
 GETBP 3 ADD READ 
 exitwhile2 JEQ 
-GETBP 3 ADD READ exitwhile2 JEQ 
+
 GETBP 1 SUB 
 GETBP 2 ADD READ GETBP 3 ADD READ MOD 
 WRITE 
@@ -57,10 +57,10 @@ WRITE
 GETBP 3 ADD 
 GETBP 1 SUB READ 
 WRITE 
-GETBP 1 SUB GETBP 2 ADD READ GETBP 3 ADD READ MOD WRITE GETBP 2 ADD GETBP 3 ADD READ WRITE GETBP 3 ADD GETBP 1 SUB READ WRITE 
+
 cyclewhile2 JMP 
 :exitwhile2 
-GETBP 2 ADD READ _outnum  CALL DROP 
+GETBP 2 ADD READ _outnum CALL DROP 
 3  GETBP ADD 
 GETBP 2 ADD READ 
 WRITE return3 JMP 
@@ -77,13 +77,13 @@ WRITE
 GETBP 1 SUB READ 
 GETBP 3 ADD READ 
 CMP exitwhile4 JGE 
-GETBP 1 SUB READ GETBP 3 ADD READ CMP exitwhile4 JGE 
-GETBP 1 SUB READ _outnum  CALL DROP 
-1 _space  CALL DROP 
+
+GETBP 1 SUB READ _outnum CALL DROP 
+1 _space CALL DROP 
 GETBP 1 SUB 
 GETBP 1 SUB READ 1 ADD 
 WRITE 
-GETBP 1 SUB READ _outnum  CALL DROP 1 _space  CALL DROP GETBP 1 SUB GETBP 1 SUB READ 1 ADD WRITE 
+
 cyclewhile4 JMP 
 :exitwhile4 
 3  GETBP ADD 
@@ -95,18 +95,36 @@ GETBP SETSP SETBP
 :_testifc 
 GETBP GETSP SETBP 
 1 PUSHN 
+GETBP 1 SUB 
 GETBP 2 ADD READ 
 GETBP 3 ADD READ 
-CMP ifelsecondelse6 JGE 
-1 _outnum  CALL DROP 
-ifelsecondexit6 JMP 
-:ifelsecondelse6 
-0 _outnum  CALL DROP 
-:ifelsecondexit6 
+CMP ifelsecond6else JGE 
+GETBP 2 ADD READ 
+ifelsecond6exit JMP 
+:ifelsecond6else 
+GETBP 3 ADD READ 
+:ifelsecond6exit 
+
+WRITE 
+GETBP 1 SUB READ _outnum CALL DROP 
 3  GETBP ADD 
 GETBP 2 ADD READ 
-WRITE return6 JMP 
-:return6 
+WRITE return7 JMP 
+:return7 
+GETBP SETSP SETBP 
+2 RETN 
+:_tern 
+GETBP GETSP SETBP 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+GETBP 3 ADD READ 
+CMP ifelsecond8else JGE 
+ifelsecond8exit JMP 
+:ifelsecond8else 
+:ifelsecond8exit 
+
+WRITE return9 JMP 
+:return9 
 GETBP SETSP SETBP 
 2 RETN 
 :_testfunc 
@@ -115,44 +133,44 @@ GETBP GETSP SETBP
 GETBP 1 SUB 
 GETBP 2 ADD READ 
 WRITE 
-1 _newline  CALL DROP 
-:repeatstart7 
-GETBP 1 SUB READ _outnum  CALL DROP 
-1 _space  CALL DROP 
+1 _newline CALL DROP 
+:repeat10start 
+GETBP 1 SUB READ _outnum CALL DROP 
+1 _space CALL DROP 
 GETBP 1 SUB 
 GETBP 1 SUB READ 1 ADD 
 WRITE 
-GETBP 1 SUB READ _outnum  CALL DROP 1 _space  CALL DROP GETBP 1 SUB GETBP 1 SUB READ 1 ADD WRITE 
+
 GETBP 1 SUB READ 
 GETBP 3 ADD READ 
-CMP repeatexit7 JGE 
-GETBP 1 SUB READ GETBP 3 ADD READ CMP repeatexit7 JGE 
-repeatstart7 JMP 
-:repeatexit7 
-1 _newline  CALL DROP 
+CMP repeat10exit JGE 
+
+repeat10start JMP 
+:repeat10exit 
+1 _newline CALL DROP 
 GETBP 1 SUB 
 GETBP 2 ADD READ 
 WRITE 
-:cyclewhile7 
+:cyclewhile11 
 GETBP 1 SUB READ 
 GETBP 3 ADD READ 
-CMP exitwhile7 JGE 
-GETBP 1 SUB READ GETBP 3 ADD READ CMP exitwhile7 JGE 
-GETBP 1 SUB READ _outnum  CALL DROP 
-1 _space  CALL DROP 
+CMP exitwhile11 JGE 
+
+GETBP 1 SUB READ _outnum CALL DROP 
+1 _space CALL DROP 
 GETBP 1 SUB 
 GETBP 1 SUB READ 1 ADD 
 WRITE 
-GETBP 1 SUB READ _outnum  CALL DROP 1 _space  CALL DROP GETBP 1 SUB GETBP 1 SUB READ 1 ADD WRITE 
-cyclewhile7 JMP 
-:exitwhile7 
-1 _newline  CALL DROP 
-10 5 _gcd  CALL DROP 
-1 _newline  CALL DROP 
+
+cyclewhile11 JMP 
+:exitwhile11 
+1 _newline CALL DROP 
+10 5 _gcd CALL DROP 
+1 _newline CALL DROP 
 3  GETBP ADD 
 GETBP 2 ADD READ 
-WRITE return8 JMP 
-:return8 
+WRITE return12 JMP 
+:return12 
 GETBP SETSP SETBP 
 2 RETN 
 :_main 
@@ -162,12 +180,12 @@ GETBP GETSP SETBP
 GETBP 1 SUB 
 9 
 WRITE 
-GETBP 1 SUB READ 5 _testfunc  CALL DROP 
-10 5 _testifc  CALL DROP 
-1 _newline  CALL DROP 
+GETBP 1 SUB READ 5 _testfunc CALL DROP 
+6 7 _testifc CALL DROP 
+1 _newline CALL DROP 
 2  GETBP ADD 
 0 
-WRITE return9 JMP 
-:return9 
+WRITE return13 JMP 
+:return13 
 GETBP SETSP SETBP 
 JMP 

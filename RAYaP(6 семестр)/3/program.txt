@@ -39,6 +39,18 @@
 (return (L x))
 )
 
+(function tern(x y)
+  (return (((L x) "<" (L y)) "?" 101 ":" 5500))
+)
+
+(function withif(x y)
+  (if ((L x) "<" (L y))
+    ((L x) "+" (L y)
+  else
+    (y "=" 505)
+  )
+)
+
 
 
 

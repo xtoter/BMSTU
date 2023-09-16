@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcfg.a CMakeFiles/cfg.dir/ControlFlowGraph/BasicBlock.cpp.o CMakeFiles/cfg.dir/ControlFlowGraph/ControlFlowGraph.cpp.o CMakeFiles/cfg.dir/ControlFlowGraph/IRStatements.cpp.o
+/usr/bin/ranlib libcfg.a

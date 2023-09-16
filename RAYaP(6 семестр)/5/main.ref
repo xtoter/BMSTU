@@ -6,6 +6,12 @@ $ENTRY GO {
     /*= <Start>*/
    
 }
+
+UnionStr {
+    s.Name e.oth = <Implode_Ext <Explode s.Name> <Explode <UnionStr e.oth>>>;
+    = "";
+
+}
 NextId {
     e.Prefix , <Dg NextIdCounter>: {
         = <Br NextIdCounter '=' 0> <NextId e.Prefix>;
@@ -28,7 +34,7 @@ GenExpr {
     s.Name, <GetLocal s.Name> : Found (s.Sign s.Offset),
         ('+' ADD) ('-' SUB) : e.1 (s.Sign s.Operation) e.2 
             =GETBP s.Offset s.Operation;
-    s.Name = '_' s.Name ' '; 
+    s.Name = <UnionStr "_" s.Name>; 
     (L t.Expr) = <GenExpr t.Expr> READ ;
     ("-" t.Expr) = <GenExpr t.Expr> NEG;
     (t.Left s.BinOp t.Right),
@@ -38,7 +44,21 @@ GenExpr {
             = <GenExpr t.Left> <GenExpr t.Right> s.Command;
     (call t.Func e.Args) 
         = <CompileArgs e.Args> <GenExpr t.Func> CALL;   
-        e.0 = <Prout "DEBUGf" e.0>
+        
+    (mcall t.Object s.Method e.Args) =
+        <CompileArgs e.Args> <GenExpr t.Object> DUP READ <GenExpr s.Method> ADD READ CALL;
+    e.0 = <Prout "DEBUGf" e.0>;
+}
+ConstExpr {
+    s.Number, <Type s.Number> : 'N' e.1 = s.Number;
+    s.Name, <GetConst s.Name> : Found s.Value = s.Value;
+    s.Name = <UnionStr "_" s.Name>; 
+    ("-" t.Expr) = <ConstExpr t.Expr> NEG;
+    (t.Left s.BinOp t.Right),
+        ("+" ADD) ("-" SUB) ("*" MUL) ("/" DIV) ("%" MOD)
+        ("|" BITOR) ("&" BITAND) ("~" BITNOT)
+        : e.1 (s.BinOp s.Command) e.2
+            = <ConstExpr t.Left> <ConstExpr t.Right> s.Command;
 }
 CompileArgs {
     e.Args t.Arg = <GenExpr t.Arg> <CompileArgs e.Args>;
@@ -46,14 +66,14 @@ CompileArgs {
 }
 GetConst{
     e.adr, <Cp e.adr> :  {
-          = "NotFound";
+          = /*<Prout "NotFoundConst" e.adr>*/;
     e.any =  Found e.any;
     }
 }
 /*todo*/
 GetLocal{
     e.adr, <Cp e.adr> :  {
-          = "NotFound";
+          = /*<Prout "NotFoundLocal" e.adr>*/;
     e.any =  Found e.any;
     }
 }
@@ -63,10 +83,13 @@ CompileBool{
     (t.expr1 "and" t.expr2)(e.met1)=
         <OutProgram <CompileBool ("not" t.expr1) (e.met1)> >
         <OutProgram <CompileBool t.expr2 (e.met1)> >;
-    (t.expr1 "or" t.expr2) (e.met1)=
-        <OutProgram <CompileBool t.expr1> (<NextIdNotAdd e.met1>)>
+    (t.expr1 "or" t.expr2) (e.met1),<NextId e.met1>: s.id=
+        <OutProgram <CompileBool t.expr1> (s.id)>
         <OutProgram <CompileBool t.expr2> (e.met1)>
-        <OutProgram ':'<NextIdNotAdd e.met1>>;
+        <OutProgram <UnionStr ":" s.id>>;
+    (t.Expr "instanceof" s.ClassName) (e.Label)/*,<Prout "check"  (t.Expr instanceof s.ClassName) (e.Label)>:*/ =
+        <CompileBool 
+        ((call "instanceof__" t.Expr <UnionStr s.ClassName "_vtbl__">) "<>" 0) (e.Label)>;
     ("not" t.BoolExpr) (e.met1),t.BoolExpr : {
         ("not" t.BoolExpr1) =  <OutProgram <CompileBool t.BoolExpr1 (e.met1)> >;
         TRUE  = <OutProgram <CompileBool FALSE (e.met1)> >;
@@ -139,29 +162,73 @@ FunctionCompile{
         <Br Npar '='  <- <CalculateSizeParam (e.Params) 2> 2>> 
         <OutProgram ':_' s.Name> <PrintDup <Cp Npar>> <Prolog (e.Params)>  <Code (e.Body)> 
             <Epilog (e.Params) > <FunctionCompile e.other>;  
+            =;
     e.any = <Prout e.any " FunctionCompile">;
 }
 Const{
-    s.Name "=" e.Val =  <Br s.Name '=' e.Val> <Prout s.Name "==" e.Val>;
-    s.Name e.Val =  <Br s.Name '=' e.Val> <Prout s.Name "==" e.Val>;
+    s.Name "=" e.Val =  <Br s.Name '=' <ConstExpr e.Val>> <Prout s.Name "==" e.Val>;
+    s.Name e.Val =  <Br s.Name '=' <ConstExpr e.Val>> <Prout s.Name "==" e.Val>;
+}
+/* Сохраняет функции вида которые записаны в vtbl для класса*/
+SetFunctions {
+    s.nameClass e.namesMethods = <Br "_Methods" '=' <Dg "_Methods"> (s.nameClass e.namesMethods)>;
+}
+SubMethods{
+    (e.0)(e.last1 e.0 e.1 e.past1) (e.last1 (e.1) e.last2) ,<Prout  (e.1)(e.last1  e.past1) (e.last1 (e.1) e.last2)>:= <SubMethods (e.0)(e.last1 e.past1) (e.last1 (e.1) e.last2)>;
+    (e.0)(e.1) (e.2),<Prout "ddd" (e.0)(e.1) (e.2)>: = e.1
 }
 Class{
-    "class" s.Name()("fields" e.fields) e.methods = <Struct s.Name ("-" 1) e.fields> <Prout <ClassMethods s.Name(e.methods)>>
-}
-ClassMethods{
-    s.Name (t.method e.others) = <ClassFunc s.Name t.method > <ClassMethods s.Name (e.others)>;
-    s.Name () =
-}
-ClassFunc{
-    s.Name("method" s.NameFunc ("this" e.params) e.body) =s.NameFunc <OutProgram <FunctionCompile ("function" <Implode_Ext <Explode s.Name>'_'<Explode s.NameFunc>> (e.params) e.body) >>
+    "class" s.Name()("fields" e.fields) e.methods,   
+    <Br 'return' '=' <NextId  'return'>>:,
+        <GetMethodsNames e.methods>: e.methodsChild, <CompileStructClass1 s.Name (1) e.fields>:,
+        <CompileStructClass2  <UnionStr  s.Name "_class__"> <GetNamesMethods e.methodsChild>>:,
+        <FunctionForClass (s.Name) e.methods>:,<CompileTable s.Name e.methodsChild ()>:,
+         :=  ;
 
+    "class" s.Name(s.Parent)("fields" e.fields) e.methods,
+    <Br 'return' '=' <NextId  'return'>>:,
+        <GetMethodsNames e.methods>: e.methodsChild, <CompileStructClass1 s.Name (s.Parent) e.fields>:,
+        <CompileStructClass2  <UnionStr  s.Name "_class__"> ("-" <UnionStr s.Parent "_class__">)<GetNamesMethods e.methodsChild>>:,
+        <FunctionForClass (s.Name) e.methods>:,<Prout s.Name <SubMethods (<UnionStr s.Parent "__">)(<Cp <UnionStr  s.Parent "_table">>) (e.methodsChild) >>:,
+         :=  ;
+}
+GetTableMethodsNames{
+    (s.Name) (s.MName) e.oth = <UnionStr  s.Name "__" s.MName> <GetTableMethodsNames (s.Name)  e.oth>;
+    e.0=;
+}
+CompileTable{
+    s.Name e.methodsNames (e.Parents),
+    e.Parents <GetTableMethodsNames (s.Name) e.methodsNames>: e.allMethods,
+    <Br <UnionStr  s.Name "_table">'=' e.allMethods>:,<Prout "tableCompile" <Cp <UnionStr  s.Name "_table">>>
+    :=<OutProgram <GlobalVar ("var"  <UnionStr  s.Name "_vtbl__"> 
+        <UnionStr  s.Name "_class__"> "=" <Cp <UnionStr  s.Name "_table">>)>>;
+}
+CompileStructClass1{
+    s.Name(s.Parent) e.fields=<OutProgram <Struct s.Name ("-" s.Parent) e.fields>>;
+}
+GetNamesMethods{
+    (s.Method) e.Methods = (s.Method 1) <GetNamesMethods e.Methods>;
+    =;
+}
+CompileStructClass2{
+    s.Name(s.Parent) e.fields=<OutProgram <Struct s.Name ("-" s.Parent) e.fields>>;
+    s.Name e.fields=<OutProgram <Struct s.Name e.fields>>;
+}
+GetMethodsNames{
+    ( "method" s.Name e.otherData) e.otherMethods = (s.Name) <GetMethodsNames e.otherMethods>;
+    =;   
+}
+FunctionForClass{
+    (s.name) ("method" s.methodName ("this" e.Params) e.Body) e.methods = <FunctionCompile ("function" <UnionStr s.name "__" s.methodName> (e.Params) e.Body) > 
+        <FunctionForClass (s.name) e.methods>;
+    e.0 = ;
 }
 Struct{
-    s.Name e.Fields =  <Br s.Name '=' <StructField (0) e.Fields> >;
+    s.Name e.Fields =  <Br s.Name '=' <StructField (0) e.Fields> > <Prout "Struct" s.Name <Cp s.Name> "was" e.Fields>;
 }
 StructField{
-    (s.allSize) ("-" s.size) e.oth  =<StructField (<+ s.allSize <GenExpr s.size>>) e.oth>;
-    (s.allSize) (s.name s.size) e.oth  = <Br s.name '=' <GenExpr s.allSize> > <StructField (<+ s.allSize <GenExpr s.size>>) e.oth>;
+    (s.allSize) ("-" s.size) e.oth  =<StructField (<+ s.allSize <ConstExpr s.size>>) e.oth>;
+    (s.allSize) (s.name s.size) e.oth  = <Br s.name '=' <ConstExpr s.allSize> > <StructField (<+ s.allSize <ConstExpr s.size>>) e.oth>;
     (s.allSize) = s.allSize;
     e.0 = <Prout e.0 "StructField">;
 }
@@ -171,14 +238,14 @@ CreateVars{
     e.0 = 0;
 }
 CreateInitVars{
-    e.0 =  e.0;
     s.val e.Any = s.val <CreateInitVars e.Any>;
      = ;
 }
 GlobalVar{
-    ("var" s.Name t.ConstExpr)  = ':_'s.Name <CreateVars <GenExpr t.ConstExpr>>;
+    ("var" s.Name t.ConstExpr)  = ':_'s.Name <CreateVars <ConstExpr t.ConstExpr>>;
     ("var" s.Name t.ConstExpr "=" e.Init)  = ':_'s.Name <CreateInitVars e.Init> ;
-    e.0 = <Prout e.0 "GlobalVar">
+    e.0 = <Prout e.0 "GlobalVar">;
+    
 
 }
 CalculateSizeVar{
@@ -198,9 +265,9 @@ Prolog{
 }
 Epilog{
     (e.Params) e.oth , <CalculateSizeParam (e.Params) 0>: {
-        1 = <OutProgram ':'<NextId 'return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
-        0 = <OutProgram ':'<NextId 'return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
-        t.Count= <OutProgram ':'<NextId 'return'>> <OutProgram "GETBP" "SETSP" "SETBP">
+        1 = <OutProgram ':'<Cp 'return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
+        0 = <OutProgram ':'<Cp 'return'>> <OutProgram "GETBP" "SETSP" "SETBP"> <OutProgram "JMP">;
+        t.Count= <OutProgram ':'<Cp 'return'>> <OutProgram "GETBP" "SETSP" "SETBP">
             <OutProgram t.Count "RETN">;
     };
 }
@@ -217,19 +284,29 @@ Instruction{
     "if" e.other1 "else" e.other2 = <IfElse "if" e.other1 "else" e.other2 >;
     "if" e.other1  = <If "if" e.other1>;
     "for" e.other = <For "for" e.other>;
-    "return" t.expr= <OutProgram <+ <Dg Npar> 1> " GETBP ADD"> <OutProgram <GenExpr t.expr>> <OutProgram "WRITE" <NextIdNotAdd 'return'> "JMP">;
+    "return" t.expr= <OutProgram <+ <Cp Npar> 1> " GETBP ADD"> <OutProgram <GenExpr t.expr>> <OutProgram "WRITE" <Cp 'return'> "JMP">;
+    "init" e.other = <Init "init" e.other>;
+    "mcall" e.other = <Mcall "mcall" e.other>;
     e.any = <OutProgram <GenExpr (e.any)>>;
 
 }
 Repeat{
-    "repeat" e.code "until" (e.cond) = <OutProgram ':repeat'<NextIdNotAdd 'start'>>  <OutProgram <Code (e.code)>> 
-    <OutProgram <CompileBool (e.cond) ('repeat'<NextIdNotAdd 'exit'>)>> <OutProgram 'repeat'<NextIdNotAdd 'start'> "JMP"> 
-    <OutProgram ':repeat'<NextIdNotAdd 'exit'>>  
+    "repeat" e.code "until" (e.cond), <NextId 'repeat'>:s.Id = <OutProgram <UnionStr ":" s.Id "start">>  <OutProgram <Code (e.code)>> 
+    <OutProgram <CompileBool (e.cond) (<UnionStr s.Id "exit">)>> <OutProgram <UnionStr s.Id "start"> "JMP"> 
+    <OutProgram <UnionStr ":" s.Id "exit">>  
 }
 While{
-    "while" (e.BoolExpr) e.Body=  <OutProgram ':cycle'<NextIdNotAdd 'while'>>  <OutProgram <CompileBool (e.BoolExpr) ('exit'<NextIdNotAdd 'while'>)>>
-     <OutProgram <Code (e.Body)>> <OutProgram 'cycle'<NextIdNotAdd 'while'> "JMP"> <OutProgram ':exit'<NextIdNotAdd 'while'>> ;
+    "while" (e.BoolExpr) e.Body, <NextId 'while'>:s.Id=  <OutProgram <UnionStr ":cycle" s.Id>>  <OutProgram <CompileBool (e.BoolExpr) (<UnionStr "exit" s.Id>)>>
+     <OutProgram <Code (e.Body)>> <OutProgram <UnionStr "cycle" s.Id> "JMP"> <OutProgram <UnionStr ":exit" s.Id>> ;
      e.0  = <Prout "Error in while, expr: "e.0>
+}
+Init{
+    "init" t.addr s.name = <OutProgram <Instruction t.addr "=" <UnionStr s.name "_vtbl__">>>;
+    e.0 = <Prout "error in Init" e.0>
+}
+Mcall{
+    "mcall" t.Obj s.Meth e.arg = <OutProgram <GenExpr ("mcall" t.Obj s.Meth e.arg) >>;
+    e.0 = <Prout "error in mcall" e.0>
 }
 For{
     "for" (L t.init) "=" t.Start "to" t.End "do" e.Body=
@@ -241,13 +318,13 @@ For{
 
 }
 IfElse{
-    "if" (e.BoolExpr) e.Body1 "else" e.Body2= <CompileBool (e.BoolExpr) ('ifelsecond'<NextIdNotAdd 'else'>)> 
-     <Code (e.Body1)> <OutProgram 'ifelsecond'<NextIdNotAdd 'exit'> "JMP"> <OutProgram ':ifelsecond'<NextIdNotAdd 'else'>> 
-     <Code (e.Body2)> <OutProgram ':ifelsecond'<NextIdNotAdd 'exit'>> ; 
+    "if" (e.BoolExpr) e.Body1 "else" e.Body2, <NextId 'ifelsecond'>:s.Id= <CompileBool (e.BoolExpr) (<UnionStr s.Id "else">)> 
+     <Code (e.Body1)> <OutProgram <UnionStr s.Id "exit"> "JMP"> <OutProgram <UnionStr ":" s.Id "else">> 
+     <Code (e.Body2)> <OutProgram <UnionStr ":" s.Id "exit">> ; 
 }
 If{
-    "if" (e.BoolExpr) e.Body1 = <OutProgram <CompileBool (e.BoolExpr) ('ifcond'<NextIdNotAdd 'exit'>)>>
-    <OutProgram <Code (e.Body1)>> <OutProgram ':ifcond'<NextIdNotAdd 'exit'>>;
+    "if" (e.BoolExpr) e.Body1, <NextId 'if'>:s.Id = <OutProgram <CompileBool (e.BoolExpr) (<UnionStr s.Id "exit">)>>
+    <OutProgram <Code (e.Body1)>> <OutProgram <UnionStr ":" s.Id "exit">>;
 }
 
 OutProgram{
@@ -269,21 +346,18 @@ Main{
     <OutProgram ":_outnum"> <OutProgram "SWAP"> <OutProgram "OUTNUM"> <OutProgram "DUP"> <OutProgram "JMP"> 
     <OutProgram ":_getbp"> <OutProgram "GETBP"> <OutProgram "SWAP"> <OutProgram "JMP">
     <OutProgram ":_halt"> <OutProgram "OVER"> <OutProgram "HALT"> 
-}
-Statement{
-    ( t.expr1 "=" t.expr2) = 
-    <OutProgram <GenExpr t.expr1>>
-        <OutProgram <GenExpr t.expr2>>
-            <OutProgram "WRITE">;
-    ("call" t.expr t.expr) = 
-            <OutProgram "Drop">; /*fix*/
-    ("return" t.expr) = 
-        <OutProgram "Return">;/*fix*/
-    ("if" t.BoolExpr e.Code) = 
-        <OutProgram "Return">;/*fix*/
-    ("if" t.BoolExpr e.Code1 "else" e.Code2) = 
-        <OutProgram "Return">;/*fix*/
-    ("while" t.BoolExpr e.Code) = 
-        <OutProgram "Return">;/*fix*/
-    e.0 = e.0;
+    <OutProgram 
+        <FunctionCompile 
+            (function instanceof__ (p class )
+            (var (i 1 ))
+            (i "=" (L (L (L p ))))
+            (while ((L i ) "<>" 0 )
+                (if ((L i ) "==" (L class ))
+                    (return (L i ))
+                )
+                (i "=" (L (L i )))
+            )
+            (return 0 ))
+
+    >>
 }

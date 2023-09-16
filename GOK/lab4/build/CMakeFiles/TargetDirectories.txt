@@ -1,0 +1,7 @@
+/home/xtoter/trash/compiler-touch-master/build/CMakeFiles/lab4.dir
+/home/xtoter/trash/compiler-touch-master/build/CMakeFiles/lexer.dir
+/home/xtoter/trash/compiler-touch-master/build/CMakeFiles/parser.dir
+/home/xtoter/trash/compiler-touch-master/build/CMakeFiles/irgeneration.dir
+/home/xtoter/trash/compiler-touch-master/build/CMakeFiles/cfg.dir
+/home/xtoter/trash/compiler-touch-master/build/CMakeFiles/edit_cache.dir
+/home/xtoter/trash/compiler-touch-master/build/CMakeFiles/rebuild_cache.dir

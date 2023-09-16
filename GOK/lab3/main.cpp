@@ -255,11 +255,6 @@ llvm::Value* Expr() {
     return val;
 }
 
-void Fact_bin() {
-    Expr();
-    NextToken(); // >
-    Expr();
-}
 
 
 token Expr(tree* root) {

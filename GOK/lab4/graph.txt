@@ -1,0 +1,40 @@
+digraph G {
+	"bb #0 entry" [label="bb #0 entry
+a_0 = 1
+b_0 = 2
+i_0 = 3
+bb #1 loop_cond
+"]
+	"bb #0 entry" -> "bb #1 loop_cond"
+	"bb #1 loop_cond" [label="bb #1 loop_cond
+i_1 = [i_0 bb #0 entry; i_2 bb #2 loop_body; ]
+a_1 = [a_0 bb #0 entry; a_2 bb #2 loop_body; ]
+branch on: b_0 - i_1 to: bb #2 loop_body or: bb #3 loop_cont
+"]
+	"bb #1 loop_cond" -> "bb #2 loop_body"
+	"bb #1 loop_cond" -> "bb #3 loop_cont"
+	"bb #2 loop_body" [label="bb #2 loop_body
+a_2 = a_1 + 4
+i_2 = i_1 + 1
+bb #1 loop_cond
+"]
+	"bb #2 loop_body" -> "bb #1 loop_cond"
+	"bb #3 loop_cont" [label="bb #3 loop_cont
+branch on: b_0 to: bb #5 else or: bb #4 then
+"]
+	"bb #3 loop_cont" -> "bb #5 else"
+	"bb #3 loop_cont" -> "bb #4 then"
+	"bb #4 then" [label="bb #4 then
+a_3 = a_1 - 5
+bb #6 if_cont
+"]
+	"bb #4 then" -> "bb #6 if_cont"
+	"bb #5 else" [label="bb #5 else
+a_4 = 6
+bb #6 if_cont
+"]
+	"bb #5 else" -> "bb #6 if_cont"
+	"bb #6 if_cont" [label="bb #6 if_cont
+a_5 = [a_3 bb #4 then; a_4 bb #5 else; ]
+"]
+}

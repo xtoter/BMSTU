@@ -1,0 +1,23 @@
+_main CALL 
+HALT 
+:_in 
+IN 
+SWAP 
+JMP 
+:_out 
+SWAP 
+OUT 
+DUP 
+JMP 
+:_outnum 
+SWAP 
+OUTNUM 
+DUP 
+JMP 
+:_getbp 
+GETBP 
+SWAP 
+JMP 
+:_halt 
+OVER 
+HALT 

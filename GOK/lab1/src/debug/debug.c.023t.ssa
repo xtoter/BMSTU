@@ -1,0 +1,88 @@
+
+;; Function power (power, funcdef_no=0, decl_uid=2346, cgraph_uid=1, symbol_order=0)
+
+double power (double x, long int n)
+{
+  double D.2358;
+  long int _1;
+  double _2;
+  long int _3;
+  double _4;
+  double _5;
+  double _11;
+  double _13;
+  double _14;
+
+  <bb 2> :
+  if (n_7(D) == 0)
+    goto <bb 3>; [INV]
+  else
+    goto <bb 4>; [INV]
+
+  <bb 3> :
+  _14 = 1.0e+0;
+  // predicted unlikely by early return (on trees) predictor.
+  goto <bb 7>; [INV]
+
+  <bb 4> :
+  if (n_7(D) < 0)
+    goto <bb 5>; [INV]
+  else
+    goto <bb 6>; [INV]
+
+  <bb 5> :
+  _1 = -n_7(D);
+  _2 = 1.0e+0 / x_9(D);
+  _13 = power (_2, _1);
+  // predicted unlikely by early return (on trees) predictor.
+  goto <bb 7>; [INV]
+
+  <bb 6> :
+  _3 = n_7(D) + -1;
+  _4 = power (x_9(D), _3);
+  _11 = x_9(D) * _4;
+
+  <bb 7> :
+  # _5 = PHI <_14(3), _13(5), _11(6)>
+<L4>:
+  return _5;
+
+}
+
+
+
+;; Function main (main, funcdef_no=1, decl_uid=2348, cgraph_uid=2, symbol_order=1)
+
+void main ()
+{
+  long int n;
+  double x;
+  long int n.0_1;
+  double x.1_2;
+  double _3;
+  int _4;
+
+  <bb 2> :
+  goto <bb 4>; [INV]
+
+  <bb 3> :
+  n.0_1 = n;
+  x.1_2 = x;
+  _3 = power (x.1_2, n.0_1);
+  printf ("%lf\n", _3);
+
+  <bb 4> :
+  _4 = scanf ("%lf %ld", &x, &n);
+  if (_4 == 2)
+    goto <bb 3>; [INV]
+  else
+    goto <bb 5>; [INV]
+
+  <bb 5> :
+  x ={v} {CLOBBER};
+  n ={v} {CLOBBER};
+  return;
+
+}
+
+

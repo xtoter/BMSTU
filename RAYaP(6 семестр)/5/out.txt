@@ -21,157 +21,98 @@ JMP
 :_halt 
 OVER 
 HALT 
-:_newline 
+:_instanceof__ 
 GETBP GETSP SETBP 
 1 PUSHN 
-10 _out  CALL DROP 
-2  GETBP ADD 
-0 
-WRITE return0 JMP 
-:return0 
-GETBP SETSP SETBP 
-JMP 
-:_space 
-GETBP GETSP SETBP 
-1 PUSHN 
-32 _out  CALL DROP 
-2  GETBP ADD 
-0 
-WRITE return1 JMP 
-:return1 
-GETBP SETSP SETBP 
-JMP 
-:_gcd 
-GETBP GETSP SETBP 
-1 PUSHN 
-:cyclewhile2 
-GETBP 3 ADD READ 
-exitwhile2 JEQ 
-
 GETBP 1 SUB 
-GETBP 2 ADD READ GETBP 3 ADD READ MOD 
+GETBP 2 ADD READ READ READ 
 WRITE 
-GETBP 2 ADD 
-GETBP 3 ADD READ 
-WRITE 
-GETBP 3 ADD 
+:cyclewhile0 
 GETBP 1 SUB READ 
+exitwhile0 JEQ 
+
+GETBP 1 SUB READ 
+GETBP 3 ADD READ 
+CMP if1exit JNE 
+
+3  GETBP ADD 
+GETBP 1 SUB READ 
+WRITE JMP 
+
+:if1exit 
+GETBP 1 SUB 
+GETBP 1 SUB READ READ 
 WRITE 
 
-cyclewhile2 JMP 
-:exitwhile2 
-GETBP 2 ADD READ _outnum  CALL DROP 
+cyclewhile0 JMP 
+:exitwhile0 
 3  GETBP ADD 
-GETBP 2 ADD READ 
+0 
+WRITE JMP 
+:
+GETBP SETSP SETBP 
+2 RETN 
+
+
+
+
+
+:_Parent__say 
+DUP
+GETBP GETSP SETBP 
+121 97 115 _out CALL DROP 
+:return2 
+GETBP SETSP SETBP 
+JMP 
+:_Parent__give 
+DUP
+GETBP GETSP SETBP 
+2  GETBP ADD 
+22 
 WRITE return2 JMP 
 :return2 
 GETBP SETSP SETBP 
-2 RETN 
-:_testfor1 
+JMP 
+:_Parent_vtbl__ Parent__say Parent__give 
+
+
+
+:_Child__say 
+DUP
 GETBP GETSP SETBP 
-1 PUSHN 
-GETBP 1 SUB 
-GETBP 2 ADD READ 
-WRITE 
-:cyclewhile3 
-GETBP 1 SUB READ 
-GETBP 3 ADD READ 
-CMP exitwhile3 JGE 
-
-GETBP 1 SUB READ _outnum  CALL DROP 
-1 _space  CALL DROP 
-GETBP 1 SUB 
-GETBP 1 SUB READ 1 ADD 
-WRITE 
-
-cyclewhile3 JMP 
-:exitwhile3 
-3  GETBP ADD 
-GETBP 2 ADD READ 
-WRITE return3 JMP 
+99 _out CALL DROP 
 :return3 
 GETBP SETSP SETBP 
-2 RETN 
-:_testifc 
+JMP 
+:_Child__saynumber 
 GETBP GETSP SETBP 
-1 PUSHN 
-GETBP 1 SUB 
-GETBP 2 ADD READ 
-GETBP 3 ADD READ 
-CMP ifelsecondelse4 JGE 
-GETBP 2 ADD READ 
-ifelsecondexit4 JMP 
-:ifelsecondelse4 
-GETBP 3 ADD READ 
-:ifelsecondexit4 
-
-WRITE 
-GETBP 1 SUB READ _outnum  CALL DROP 
-3  GETBP ADD 
-GETBP 2 ADD READ 
-WRITE return4 JMP 
-:return4 
+GETBP 2 ADD READ _outnum CALL DROP 
+:return3 
 GETBP SETSP SETBP 
-2 RETN 
-:_testfunc 
-GETBP GETSP SETBP 
-1 PUSHN 
-GETBP 1 SUB 
-GETBP 2 ADD READ 
-WRITE 
-1 _newline  CALL DROP 
-:repeatstart5 
-GETBP 1 SUB READ _outnum  CALL DROP 
-1 _space  CALL DROP 
-GETBP 1 SUB 
-GETBP 1 SUB READ 1 ADD 
-WRITE 
+JMP 
 
-GETBP 1 SUB READ 
-GETBP 3 ADD READ 
-CMP repeatexit5 JGE 
-
-repeatstart5 JMP 
-:repeatexit5 
-1 _newline  CALL DROP 
-GETBP 1 SUB 
-GETBP 2 ADD READ 
-WRITE 
-:cyclewhile5 
-GETBP 1 SUB READ 
-GETBP 3 ADD READ 
-CMP exitwhile5 JGE 
-
-GETBP 1 SUB READ _outnum  CALL DROP 
-1 _space  CALL DROP 
-GETBP 1 SUB 
-GETBP 1 SUB READ 1 ADD 
-WRITE 
-
-cyclewhile5 JMP 
-:exitwhile5 
-1 _newline  CALL DROP 
-10 5 _gcd  CALL DROP 
-1 _newline  CALL DROP 
-3  GETBP ADD 
-GETBP 2 ADD READ 
-WRITE return5 JMP 
-:return5 
-GETBP SETSP SETBP 
-2 RETN 
 :_main 
 DUP
 GETBP GETSP SETBP 
 1 PUSHN 
-GETBP 1 SUB 
-9 
+GETBP 0 ADD 
+_Parent_vtbl__ 
 WRITE 
-GETBP 1 SUB READ 5 _testfunc  CALL DROP 
-6 7 _testifc  CALL DROP 
-1 _newline  CALL DROP 
+
+GETBP 0 ADD DUP READ 2 ADD READ CALL 
+_c 
+_Child_vtbl__ 
+WRITE 
+
+_Parent_vtbl__ _c _instanceof__ CALL 
+if4exit JEQ 
+
+_c DUP READ 2 ADD READ CALL 
+
+:if4exit 
 2  GETBP ADD 
 0 
-WRITE return6 JMP 
-:return6 
+WRITE return3 JMP 
+:return3 
 GETBP SETSP SETBP 
 JMP 

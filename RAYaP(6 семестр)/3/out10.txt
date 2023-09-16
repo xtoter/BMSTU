@@ -1,0 +1,210 @@
+_main CALL 
+HALT 
+:_in 
+IN 
+SWAP 
+JMP 
+:_out 
+SWAP 
+OUT 
+DUP 
+JMP 
+:_outnum 
+SWAP 
+OUTNUM 
+DUP 
+JMP 
+:_getbp 
+GETBP 
+SWAP 
+JMP 
+:_halt 
+OVER 
+HALT 
+:_newline 
+GETBP GETSP SETBP 
+1 PUSHN 
+10 _out CALL DROP 
+2  GETBP ADD 
+0 
+WRITE return0 JMP 
+:return0 
+GETBP SETSP SETBP 
+JMP 
+:_space 
+GETBP GETSP SETBP 
+1 PUSHN 
+32 _out CALL DROP 
+2  GETBP ADD 
+0 
+WRITE return1 JMP 
+:return1 
+GETBP SETSP SETBP 
+JMP 
+:_gcd 
+GETBP GETSP SETBP 
+1 PUSHN 
+:cyclewhile3 
+GETBP 3 ADD READ 
+exitwhile3 JEQ 
+
+GETBP 1 SUB 
+GETBP 2 ADD READ GETBP 3 ADD READ MOD 
+WRITE 
+GETBP 2 ADD 
+GETBP 3 ADD READ 
+WRITE 
+GETBP 3 ADD 
+GETBP 1 SUB READ 
+WRITE 
+
+cyclewhile3 JMP 
+:exitwhile3 
+GETBP 2 ADD READ _outnum CALL DROP 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return2 JMP 
+:return2 
+GETBP SETSP SETBP 
+2 RETN 
+:_testfor1 
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+GETBP 2 ADD READ 
+WRITE 
+:cyclewhile5 
+GETBP 1 SUB READ 
+GETBP 3 ADD READ 
+CMP exitwhile5 JGE 
+
+GETBP 1 SUB READ _outnum CALL DROP 
+1 _space CALL DROP 
+GETBP 1 SUB 
+GETBP 1 SUB READ 1 ADD 
+WRITE 
+
+cyclewhile5 JMP 
+:exitwhile5 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return4 JMP 
+:return4 
+GETBP SETSP SETBP 
+2 RETN 
+:_testifc 
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+GETBP 2 ADD READ 
+GETBP 3 ADD READ 
+CMP ifelsecond7else JGE 
+GETBP 2 ADD READ 
+ifelsecond7exit JMP 
+:ifelsecond7else 
+GETBP 3 ADD READ 
+:ifelsecond7exit 
+
+WRITE 
+GETBP 1 SUB READ _outnum CALL DROP 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return6 JMP 
+:return6 
+GETBP SETSP SETBP 
+2 RETN 
+:_tern 
+GETBP GETSP SETBP 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+GETBP 3 ADD READ 
+CMP ifelsecond9else JGE 
+101 
+ifelsecond9exit JMP 
+:ifelsecond9else 
+5500 
+:ifelsecond9exit 
+
+WRITE return8 JMP 
+:return8 
+GETBP SETSP SETBP 
+2 RETN 
+:_withif 
+GETBP GETSP SETBP 
+GETBP 2 ADD READ 
+GETBP 3 ADD READ 
+CMP ifelsecond11else JGE 
+GETBP 2 ADD 
+101 
+WRITE 
+ifelsecond11exit JMP 
+:ifelsecond11else 
+GETBP 3 ADD 
+505 
+WRITE 
+:ifelsecond11exit 
+:return10 
+GETBP SETSP SETBP 
+2 RETN 
+:_testfunc 
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+GETBP 2 ADD READ 
+WRITE 
+1 _newline CALL DROP 
+:repeat13start 
+GETBP 1 SUB READ _outnum CALL DROP 
+1 _space CALL DROP 
+GETBP 1 SUB 
+GETBP 1 SUB READ 1 ADD 
+WRITE 
+
+GETBP 1 SUB READ 
+GETBP 3 ADD READ 
+CMP repeat13exit JGE 
+
+repeat13start JMP 
+:repeat13exit 
+1 _newline CALL DROP 
+GETBP 1 SUB 
+GETBP 2 ADD READ 
+WRITE 
+:cyclewhile14 
+GETBP 1 SUB READ 
+GETBP 3 ADD READ 
+CMP exitwhile14 JGE 
+
+GETBP 1 SUB READ _outnum CALL DROP 
+1 _space CALL DROP 
+GETBP 1 SUB 
+GETBP 1 SUB READ 1 ADD 
+WRITE 
+
+cyclewhile14 JMP 
+:exitwhile14 
+1 _newline CALL DROP 
+10 5 _gcd CALL DROP 
+1 _newline CALL DROP 
+3  GETBP ADD 
+GETBP 2 ADD READ 
+WRITE return12 JMP 
+:return12 
+GETBP SETSP SETBP 
+2 RETN 
+:_main 
+DUP
+GETBP GETSP SETBP 
+1 PUSHN 
+GETBP 1 SUB 
+9 
+WRITE 
+GETBP 1 SUB READ 5 _testfunc CALL DROP 
+6 7 _testifc CALL DROP 
+1 _newline CALL DROP 
+2  GETBP ADD 
+0 
+WRITE return15 JMP 
+:return15 
+GETBP SETSP SETBP 
+JMP 

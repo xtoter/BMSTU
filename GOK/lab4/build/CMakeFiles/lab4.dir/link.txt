@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/lab4.dir/main.cpp.o -o lab4  libparser.a liblexer.a libirgeneration.a libcfg.a 

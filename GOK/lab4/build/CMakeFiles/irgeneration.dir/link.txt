@@ -1,0 +1,2 @@
+/usr/bin/ar qc libirgeneration.a CMakeFiles/irgeneration.dir/IRGeneration/IRGenerator.cpp.o
+/usr/bin/ranlib libirgeneration.a
